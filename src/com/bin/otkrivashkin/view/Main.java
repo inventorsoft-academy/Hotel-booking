@@ -11,6 +11,7 @@ import java.util.Date;
 public class Main {
     public static void main(String[] args) {
 
+
         Hotel hotel = new Hotel("Babaca", 3);
 
         Client client = new Client("Igor", "Bondarenko");
