@@ -37,7 +37,10 @@ public class Booking {
                     System.out.println("enter the name of hotel");
                     command = scanner.nextLine();
                     Hotel hotel = hotelService.getHotelByName(command);
-
+                    hotel.addClient(client, 11);
+                }
+                else {
+                    // something for 'no'
                 }
 
             }

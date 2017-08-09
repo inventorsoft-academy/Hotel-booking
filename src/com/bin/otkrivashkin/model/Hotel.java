@@ -9,7 +9,7 @@ public class Hotel {
 
     private String name;
     private List<Room> rooms;
-
+    private Map<Room, Client> roomClientMap;
 
     public Hotel(String name) {
         this.name = name;
@@ -34,5 +34,27 @@ public class Hotel {
 
     public void addRoom(Room room) {
         rooms.add(room);
+    }
+
+    public Room getRoomByNumber(int number) {
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).getNumber() == number) {
+                return getRooms().get(i);
+            }
+        }
+        return null;
+    }
+
+
+    public void addClient(Client client, int numberOfRoom) {
+        Room room = getRoomByNumber(numberOfRoom);
+        if (room.isAvailable()) {
+            roomClientMap.put(room, client);
+            System.out.println("Client was added to the hotel!");
+        }
+        else {
+            System.out.println("Sorry, this room is not available, choose another one.");
+        }
+
     }
 }
