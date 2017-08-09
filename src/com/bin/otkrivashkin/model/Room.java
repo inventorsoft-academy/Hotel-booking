@@ -3,15 +3,17 @@ package com.bin.otkrivashkin.model;
 public class Room {
 
     private String type;
-    private int number;
+    private static int number;
     private double price;
     private boolean available;
 
-    public Room(String type, double price, int number) {
+
+
+    public Room(String type, double price) {
         this.type = type;
         this.price = price;
         this.available = true;
-        this.number = number;
+        number++;
     }
 
     public int getNumber() {
@@ -45,7 +47,7 @@ public class Room {
     @Override
     public String toString() {
         return "Room{" +
-                "type=" + type +
+                "type='" + type + '\'' +
                 ", price=" + price +
                 ", available=" + available +
                 '}';

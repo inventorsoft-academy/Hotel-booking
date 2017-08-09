@@ -8,11 +8,12 @@ import java.util.Map;
 public class Hotel {
 
     private String name;
-    private Map<Integer, Room> rooms;
+    private List<Room> rooms;
+
 
     public Hotel(String name) {
         this.name = name;
-        rooms = new HashMap<>();
+        rooms = new ArrayList<>();
     }
 
     public String getName() {
@@ -23,12 +24,15 @@ public class Hotel {
         this.name = name;
     }
 
-    public Map<Integer, Room> getRooms() {
+    public List<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(Map<Integer, Room> rooms) {
+    public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
 
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
 }
