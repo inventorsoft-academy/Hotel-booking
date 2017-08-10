@@ -33,7 +33,7 @@ public class Hotel {
         rooms.add(room);
     }
 
-    public void saveRoom(String type, double price) {
+    public void saveRoom(RoomType type, double price) {
         Room room = new Room(type, price);
     }
 

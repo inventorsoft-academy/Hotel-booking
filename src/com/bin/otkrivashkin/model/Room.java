@@ -2,12 +2,12 @@ package com.bin.otkrivashkin.model;
 
 public class Room {
 
-    private String type;
+    private RoomType type;
     private int number;
     private double price;
     private boolean available;
 
-    public Room(String type, double price) {
+    public Room(RoomType type, double price) {
         this.type = type;
         this.price = price;
         this.available = true;
@@ -18,11 +18,11 @@ public class Room {
         return number;
     }
 
-    public String getType() {
+    public RoomType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(RoomType type) {
         this.type = type;
     }
 

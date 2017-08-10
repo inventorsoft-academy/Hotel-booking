@@ -1,8 +1,10 @@
 package com.bin.otkrivashkin.main;
 
 import com.bin.otkrivashkin.model.Hotel;
+import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.HotelService;
 import com.bin.otkrivashkin.service.PrinterService;
+import com.bin.otkrivashkin.service.RoomService;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -11,6 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         HotelService hotelService = new HotelService();
         PrinterService printerService = new PrinterService();
+        RoomService roomService = new RoomService();
         System.out.println("0 - helpful options...");
         boolean hotelLevel = true;
         while (hotelLevel) {
@@ -27,7 +30,7 @@ public class Main {
                     break;
                 case 2:
                     if (hotelService.getHotels().size() == 1) {
-                        printerService.printList(hotelService.getHotels());
+                        printerService.print(hotelService.getHotels());
                         printerService.printSuccessMessage();
                         break;
                     }
@@ -48,6 +51,43 @@ public class Main {
                     String hotelToDelete = printerService.scanString();
                     hotelService.deleteHotel(hotelToDelete);
                     printerService.printSuccessMessage();
+                    break;
+                case 5:
+                    printerService.print("enter count of rooms.");
+                    int countOfRooms = printerService.scanInt();
+                    printerService.print("enter type for room(s).");
+                    printerService.printTypes();
+                    int typeOfRoom = printerService.scanInt();
+                    RoomType type = printerService.getRoomType(typeOfRoom);
+                    printerService.print("enter the price for room(s).");
+                    double price = printerService.scanDouble();
+                    roomService.createRooms(countOfRooms, type, price);
+                    hotelService.setRooms(roomService.getRooms());
+                    printerService.printSuccessMessage();
+                    break;
+                case 6:
+                    printerService.print(hotelService.getRooms());
+                    break;
+                case 7:
+                    printerService.print("choose old type of rooms.");
+                    printerService.printTypes();
+                    int oldTypeAsInt = printerService.scanInt();
+                    RoomType oldRoomType = printerService.getRoomType(oldTypeAsInt);
+                    printerService.print("choose new type of rooms.");
+                    printerService.printTypes();
+                    int newTypeAsInt = printerService.scanInt();
+                    RoomType newRoomType = printerService.getRoomType(newTypeAsInt);
+                    roomService.editTypeOfRooms(oldRoomType, newRoomType);
+                    printerService.printSuccessMessage();
+                    break;
+                case 8:
+                    printerService.print("enter type of rooms.");
+                    printerService.printTypes();
+                    int deleteTypeAsInt = printerService.scanInt();
+                    RoomType deletedRoomType = printerService.getRoomType(deleteTypeAsInt);
+                    roomService.deleteRooms(deletedRoomType);
+                    printerService.printSuccessMessage();
+                    break;
                 case 99:
                     hotelLevel = false;
                     break;
@@ -57,4 +97,6 @@ public class Main {
 
         }
     }
+
+
 }
