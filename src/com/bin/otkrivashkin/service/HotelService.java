@@ -1,27 +1,26 @@
 package com.bin.otkrivashkin.service;
 
-import com.bin.otkrivashkin.model.Hotel;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by otkrivashkin on 09.08.2017.
+ * Created by otkrivashkin on 10.08.2017.
  */
 public class HotelService {
 
-    private List<Hotel> hotels;
+    private List<String> listOfOptions;
 
     public HotelService() {
-        hotels = new ArrayList<>();
+
     }
 
-    public Hotel getHotelByName(String hotelName) {
-        for (Hotel hotel : hotels) {
-            if (hotel.getName().equals(hotelName)) {
-                return hotel;
-            }
-        }
-        return null;
+    public List<String> getOptions() {
+        List<String> stringList = new ArrayList<>();
+        stringList.add("0 - create hotel.");
+        stringList.add("1 - view hotel.");
+        stringList.add("2 - edit hotel.");
+        stringList.add("3 - delete hotel.");
+        return stringList;
     }
 }
