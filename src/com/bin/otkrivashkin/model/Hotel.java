@@ -8,8 +8,6 @@ public class Hotel {
     private String name;
     private List<Room> rooms;
 
-
-
     public Hotel(String name) {
         this.name = name;
         rooms = new ArrayList<>();
@@ -37,9 +35,7 @@ public class Hotel {
 
     public void saveRoom(String type, double price) {
         Room room = new Room(type, price);
-
     }
-
 
     @Override
     public String toString() {

@@ -43,4 +43,12 @@ public class HotelService {
     public List<Hotel> getHotels() {
         return listOfHotels;
     }
+
+    public void updateHotel(String oldName, String newName) {
+        getByName(oldName).setName(newName);
+    }
+
+    public void deleteHotel(String hotelToDelete) {
+        listOfHotels.remove(getByName(hotelToDelete));
+    }
 }

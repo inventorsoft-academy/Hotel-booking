@@ -39,7 +39,15 @@ public class Main {
                     printerService.print("enter old name of the hotel");
                     String oldName = printerService.scanString();
                     printerService.print("enter new name of the hotel");
-                    // stop here
+                    String newName = printerService.scanString();
+                    hotelService.updateHotel(oldName, newName);
+                    printerService.printSuccessMessage();
+                    break;
+                case 4:
+                    printerService.print("enter a name of the hotel");
+                    String hotelToDelete = printerService.scanString();
+                    hotelService.deleteHotel(hotelToDelete);
+                    printerService.printSuccessMessage();
                 case 99:
                     hotelLevel = false;
                     break;

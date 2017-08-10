@@ -17,8 +17,6 @@ public class Journal {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-
-
     public Journal(Hotel hotel, int roomNumber, LocalDateTime startDate, LocalDateTime endDate) {
         this.hotel = hotel;
         this.roomNumber = roomNumber;
@@ -27,7 +25,6 @@ public class Journal {
     }
 
     public Journal() {}
-
 
     public Hotel getHotel() {
         return hotel;

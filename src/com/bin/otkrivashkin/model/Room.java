@@ -3,17 +3,15 @@ package com.bin.otkrivashkin.model;
 public class Room {
 
     private String type;
-    private static int number;
+    private int number;
     private double price;
     private boolean available;
-
-
 
     public Room(String type, double price) {
         this.type = type;
         this.price = price;
         this.available = true;
-        number++;
+        number = 1; // how to use number right cause i don't set it in the constructor
     }
 
     public int getNumber() {
