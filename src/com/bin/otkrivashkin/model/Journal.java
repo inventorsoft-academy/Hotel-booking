@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
-public class Journal implements JournalInterface {
+public class Journal {
 
     private String HOTEL_FILE_PATH = "src\\resources\\";
     private Hotel hotel;
@@ -71,50 +71,6 @@ public class Journal implements JournalInterface {
                 '}';
     }
 
-    @Override
-    public boolean saveRoom(Room room) {
-        return false;
-    }
-
-    @Override
-    public boolean loadRooms() {
-        return false;
-    }
-
-    @Override
-    public boolean attachClientToRoom(Client client, int numberOfRoom) {
-        return false;
-    }
-
-    @Override
-    public boolean detachClientFromRoom(Client client) {
-        return false;
-    }
-
-    @Override
-    public boolean saveHotel(Hotel hotel) {
-        try {
-            File file = new File(HOTEL_FILE_PATH + "hotel_" + hotel.getName() + ".txt");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-            StringBuilder builder = new StringBuilder();
-            builder
-                    .append(hotel.getName())
-                    .append("|")
-                    .append(hotel.getRooms());
-            writer.append(builder.toString());
-            writer.newLine();
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
-    @Override
-    public boolean loadHotel(Hotel hotel) {
-        return false;
-    }
 
 
 }
