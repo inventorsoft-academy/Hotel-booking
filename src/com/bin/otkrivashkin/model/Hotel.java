@@ -2,13 +2,13 @@ package com.bin.otkrivashkin.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class Hotel {
+public class Hotel implements ClientInterface {
 
     private String name;
     private List<Room> rooms;
     private List<Client> clients;
+
 
     public Hotel() {
         rooms = new ArrayList<>();
@@ -71,5 +71,28 @@ public class Hotel {
         }
     }
 
+    @Override
+    public void addClient(Client cLient) {
+        clients.add(cLient);
+    }
 
+    @Override
+    public Client getClient(String firstName) {
+        for (Client client : clients) {
+            if (client.getFirstName().equals(firstName)) {
+                return client;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void editClient(String firstName) {
+        getClient(firstName).setFirstName(firstName);
+    }
+
+    @Override
+    public void deleteClient(String firstName) {
+        clients.remove(getClient(firstName));
+    }
 }

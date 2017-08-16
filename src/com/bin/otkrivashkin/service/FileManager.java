@@ -16,7 +16,7 @@ public class FileManager {
         this.hotelService = hotelService;
     }
 
-    List<String> rooms = new ArrayList<>();
+    private List<String> rooms = new ArrayList<>();
     private static final String HOTEL_PATH = "src\\resources\\hotels\\";
 
     public void saveHotel(Hotel hotel) {
