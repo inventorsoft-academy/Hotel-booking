@@ -2,18 +2,19 @@ package com.bin.otkrivashkin.main;
 
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
-import com.bin.otkrivashkin.service.HotelService;
-import com.bin.otkrivashkin.service.PrinterService;
-import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.service.*;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        String hotelName = "";
         HotelService hotelService = new HotelService();
         PrinterService printerService = new PrinterService();
-        RoomService roomService = new RoomService();
+
+        FileManager fileManager = new FileManager(hotelService);
+
+        Hotel hotel;
         System.out.println("0 - helpful options...");
         boolean hotelLevel = true;
         while (hotelLevel) {
@@ -24,8 +25,10 @@ public class Main {
                     break;
                 case 1:
                     printerService.print("enter a name of the hotel");
-                    String hotelName = printerService.scanString();
-                    hotelService.create(new Hotel(hotelName));
+                    hotelName = printerService.scanString();
+                    hotel = new Hotel();
+                    hotel.setName(hotelName);
+                    hotelService.add(hotel);
                     printerService.printSuccessMessage();
                     break;
                 case 2:
@@ -59,25 +62,21 @@ public class Main {
                     printerService.printTypes();
                     int typeOfRoom = printerService.scanInt();
                     RoomType type = printerService.getRoomType(typeOfRoom);
-                    printerService.print("enter the price for room(s).");
-                    double price = printerService.scanDouble();
-                    roomService.createRooms(countOfRooms, type, price);
-                    hotelService.setRooms(roomService.getRooms());
+                    hotel = hotelService.getByName(hotelName);
+                    hotel.addRooms(countOfRooms, type);
                     printerService.printSuccessMessage();
                     break;
                 case 6:
-                    printerService.print(hotelService.getRooms());
+                    hotel = hotelService.getByName(hotelName);
+                    printerService.print(hotel.getRooms());
                     break;
                 case 7:
-                    printerService.print("choose old type of rooms.");
-                    printerService.printTypes();
-                    int oldTypeAsInt = printerService.scanInt();
-                    RoomType oldRoomType = printerService.getRoomType(oldTypeAsInt);
                     printerService.print("choose new type of rooms.");
                     printerService.printTypes();
                     int newTypeAsInt = printerService.scanInt();
                     RoomType newRoomType = printerService.getRoomType(newTypeAsInt);
-                    roomService.editTypeOfRooms(oldRoomType, newRoomType);
+                    hotel = hotelService.getByName(hotelName);
+                    hotel.editTypeOfRooms(newRoomType);
                     printerService.printSuccessMessage();
                     break;
                 case 8:
@@ -85,11 +84,23 @@ public class Main {
                     printerService.printTypes();
                     int deleteTypeAsInt = printerService.scanInt();
                     RoomType deletedRoomType = printerService.getRoomType(deleteTypeAsInt);
-                    roomService.deleteRooms(deletedRoomType);
+                    hotel = hotelService.getByName(hotelName);
+                    hotel.deleteRooms(deletedRoomType);
+                    printerService.printSuccessMessage();
+                    break;
+                case 97:
+                    printerService.print("enter the hotel name");
+                    hotelName = printerService.scanString();
+                    fileManager.loadHotel(hotelName);
+                    printerService.printSuccessMessage();
+                    break;
+                case 98:
+                    fileManager.saveHotel(hotelService.getByName(hotelName));
                     printerService.printSuccessMessage();
                     break;
                 case 99:
                     hotelLevel = false;
+                    printerService.print("Good bye");
                     break;
                 default:
                     printerService.print("Wrong argument");

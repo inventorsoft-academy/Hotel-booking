@@ -57,7 +57,12 @@ public class PrinterService {
 
 
     public void print(List objects) {
-        System.out.println(objects.toString());
+        if (objects.isEmpty()) {
+            System.out.println("There are no rooms!");
+        }
+        else {
+            System.out.println(objects.toString());
+        }
     }
 
     public RoomType getRoomType(int typeOfRoom) {
@@ -70,7 +75,7 @@ public class PrinterService {
                 type = RoomType.CHEAP;
                 break;
             case 2:
-                type = RoomType.PREZIDENT;
+                type = RoomType.PRESIDENT;
                 break;
             case 3:
                 type = RoomType.COUNTRY;

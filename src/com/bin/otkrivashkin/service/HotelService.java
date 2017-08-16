@@ -5,7 +5,6 @@ import com.bin.otkrivashkin.model.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by otkrivashkin on 10.08.2017.
@@ -14,13 +13,9 @@ public class HotelService {
 
     private List<String> listOfOptions;
     private List<Hotel> listOfHotels;
-    private List<Room> listOfRooms;
-    private Object rooms;
-    private RoomServiceInterface roomServiceInterface;
 
     public HotelService() {
         listOfHotels = new ArrayList<>();
-        listOfRooms = new ArrayList<>();
     }
 
 
@@ -42,7 +37,7 @@ public class HotelService {
         return stringList;
     }
 
-    public void create(Hotel hotel) {
+    public void add(Hotel hotel) {
         listOfHotels.add(hotel);
     }
 
@@ -67,11 +62,4 @@ public class HotelService {
         listOfHotels.remove(getByName(hotelToDelete));
     }
 
-    public void setRooms(List<Room> listOfRooms) {
-        this.listOfRooms = listOfRooms;
-    }
-
-    public List<Room> getRooms() {
-        return listOfRooms;
-    }
 }

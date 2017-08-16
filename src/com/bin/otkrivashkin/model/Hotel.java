@@ -2,11 +2,17 @@ package com.bin.otkrivashkin.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Hotel {
 
     private String name;
     private List<Room> rooms;
+    private List<Client> clients;
+
+    public Hotel() {
+        rooms = new ArrayList<>();
+    }
 
     public Hotel(String name) {
         this.name = name;
@@ -44,4 +50,26 @@ public class Hotel {
                 ", rooms=" + rooms +
                 '}';
     }
+
+    public void addRooms(int countOfRooms, RoomType type) {
+        for (int i = 0; i < countOfRooms; i++) {
+            rooms.add(new Room(type));
+        }
+    }
+
+    public void editTypeOfRooms(RoomType newRoomType) {
+        for (Room room : rooms) {
+            room.setType(newRoomType);
+        }
+    }
+
+    public void deleteRooms(RoomType deletedRoomType) {
+        for (Room room : rooms) {
+            if (room.getType().equals(deletedRoomType)) {
+                rooms.remove(room);
+            }
+        }
+    }
+
+
 }
