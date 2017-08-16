@@ -4,10 +4,8 @@ import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.*;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String hotelName = "";
         HotelService hotelService = new HotelService();
         PrinterService printerService = new PrinterService();
@@ -71,12 +69,16 @@ public class Main {
                     printerService.print(hotel.getRooms());
                     break;
                 case 7:
+                    printerService.print("choose old type or rooms.");
+                    printerService.printTypes();
+                    int oldTypeAsInt = printerService.scanInt();
                     printerService.print("choose new type of rooms.");
                     printerService.printTypes();
                     int newTypeAsInt = printerService.scanInt();
+                    RoomType oldRoomType = printerService.getRoomType(oldTypeAsInt);
                     RoomType newRoomType = printerService.getRoomType(newTypeAsInt);
                     hotel = hotelService.getByName(hotelName);
-                    hotel.editTypeOfRooms(newRoomType);
+                    hotel.editRoom(oldRoomType, newRoomType);
                     printerService.printSuccessMessage();
                     break;
                 case 8:
@@ -105,9 +107,7 @@ public class Main {
                 default:
                     printerService.print("Wrong argument");
             }
-
         }
     }
-
 
 }
