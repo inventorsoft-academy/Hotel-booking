@@ -6,6 +6,8 @@ public interface ClientInterface {
 
     Client getClient(String firstName);
 
+    Client getClient(Client client);
+
     void editClient(String firstName);
 
     void deleteClient(String firstName);

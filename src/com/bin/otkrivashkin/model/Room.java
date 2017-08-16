@@ -78,4 +78,29 @@ public class Room {
                 available
                 + "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Room room = (Room) o;
+
+        if (number != room.number) return false;
+        if (Double.compare(room.price, price) != 0) return false;
+        if (available != room.available) return false;
+        return type == room.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = type != null ? type.hashCode() : 0;
+        result = 31 * result + number;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (available ? 1 : 0);
+        return result;
+    }
 }

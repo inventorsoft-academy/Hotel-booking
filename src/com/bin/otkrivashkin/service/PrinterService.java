@@ -55,7 +55,6 @@ public class PrinterService {
         }
     }
 
-
     public void print(List objects) {
         if (objects.isEmpty()) {
             System.out.println("There are no rooms!");

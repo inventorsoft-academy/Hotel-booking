@@ -16,6 +16,8 @@ public interface RoomInterface {
 
     Room getRoom(RoomType type);
 
+    Room getRoom(Room room);
+
     List<Room> getRooms();
 
     List<Room> getAvailableRooms();

@@ -1,10 +1,11 @@
 package com.bin.otkrivashkin.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Hotel implements ClientInterface, RoomInterface {
+public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
 
     private String name;
     private List<Room> rooms;
@@ -18,6 +19,8 @@ public class Hotel implements ClientInterface, RoomInterface {
     public Hotel(String name) {
         this.name = name;
         rooms = new ArrayList<>();
+        clients = new ArrayList<>();
+        clientRoomMap = new HashMap<>();
     }
 
     public String getName() {
@@ -100,6 +103,16 @@ public class Hotel implements ClientInterface, RoomInterface {
     }
 
     @Override
+    public Room getRoom(Room room) {
+        for (Room groom : rooms) {
+            if (groom.equals(room)) {
+                return groom;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void editRoom(RoomType oldType, RoomType newType) {
         getRoom(oldType).setType(newType);
     }
@@ -158,6 +171,16 @@ public class Hotel implements ClientInterface, RoomInterface {
     }
 
     @Override
+    public Client getClient(Client client) {
+        for (Client visitor : clients) {
+            if (visitor.equals(client)) {
+                return visitor;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void editClient(String firstName) {
         getClient(firstName).setFirstName(firstName);
     }
@@ -168,5 +191,29 @@ public class Hotel implements ClientInterface, RoomInterface {
     }
 
 
+    @Override
+    public void bookClient(Client client) {
+        Room room = getRoom(RoomType.COUNTRY);
+        room.setAvailable(false);
+        clientRoomMap.put(getClient(client), room);
+    }
 
+    @Override
+    public void bookClient(Client client, RoomType type) {
+        Room room = getRoom(type);
+        room.setAvailable(false);
+        clientRoomMap.put(getClient(client), room);
+    }
+
+    @Override
+    public void bookClient(Client client, double price) {
+        //implement
+    }
+
+    @Override
+    public void unBookClient(Client client) {
+        Room room = clientRoomMap.getOrDefault(client, new Room(RoomType.CHEAP));
+        getRoom(room).setAvailable(true);
+        clientRoomMap.remove(client);
+    }
 }
