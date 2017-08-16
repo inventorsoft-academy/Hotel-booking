@@ -145,6 +145,11 @@ public class Main {
                                 printerService.printSuccessMessage();
                                 break;
                             case 4: // delete client
+                                printerService.print("Enter first name of the client");
+                                firstName = printerService.scanString();
+                                hotel = hotelService.getByName(hotelName);
+                                hotel.deleteClient(firstName);
+                                printerService.printSuccessMessage();
                                 break;
                             default:
                                 inClient = false;
@@ -156,11 +161,10 @@ public class Main {
                     while (inBooking) {
                         int boolingOption = printerService.scanInt();
                         switch (boolingOption) {
-                            case 1:
-                                // book client
+                            case 1: // book client
+
                                 break;
-                            case 2:
-                                // unbook client
+                            case 2: // unbook client
                                 break;
                             default:
                                 inBooking = false;
