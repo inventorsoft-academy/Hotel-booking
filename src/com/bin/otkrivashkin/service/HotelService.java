@@ -4,6 +4,7 @@ import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,21 +21,50 @@ public class HotelService {
 
 
 
-    public List<String> getOptions() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("1 - add hotel\n");
-        stringList.add("2 - view hotel\n");
-        stringList.add("3 - edit hotel\n");
-        stringList.add("4 - delete hotel\n");
+    public List<String> getHotelOptions() {
+        return Arrays.asList(
+                "1 - add hotel\n",
+                "2 - view hotel\n",
+                "3 - edit hotel\n",
+                "4 - delete hotel\n",
+                "200 - save",
+                "300 - load <hotelName>",
+                "100 - quit"
+        );
+    }
 
-        stringList.add("5 - add rooms\n");
-        stringList.add("6 - view rooms\n");
-        stringList.add("7 - edit rooms\n");
-        stringList.add("8 - delete rooms\n");
+    public List<String> getRoomOptions() {
+        return Arrays.asList(
+                "1 - add rooms\n",
+                "2 - view rooms\n",
+                "3 - edit rooms\n",
+                "4 - delete rooms\n"
+        );
+    }
 
-        stringList.add("99 - quit|save.");
+    public List<String> getClientOptions(){
+        return Arrays.asList(
+                "1 - add client\n",
+                "2 - view client\n",
+                "3 - edit client\n",
+                "4 - delete client\n"
+        );
+    }
 
-        return stringList;
+    public List<String> getBookingOptions() {
+        return Arrays.asList(
+                "1 - book client\n",
+                "2 - unbook client\n"
+        );
+    }
+
+    public List<String> getJournalOptions() {
+        return Arrays.asList(
+                "1 - print client\n",
+                "2 - print room\n",
+                "3 - print rooms\n",
+                "4 - print available rooms\n"
+        );
     }
 
     public void add(Hotel hotel) {

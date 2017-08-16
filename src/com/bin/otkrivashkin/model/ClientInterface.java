@@ -8,7 +8,7 @@ public interface ClientInterface {
 
     Client getClient(Client client);
 
-    void editClient(String firstName);
+    void editClient(String oldFirstName, String newFirstName);
 
     void deleteClient(String firstName);
 }

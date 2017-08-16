@@ -181,8 +181,8 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     }
 
     @Override
-    public void editClient(String firstName) {
-        getClient(firstName).setFirstName(firstName);
+    public void editClient(String oldFirstName, String newFirstName) {
+        getClient(oldFirstName).setFirstName(newFirstName);
     }
 
     @Override
