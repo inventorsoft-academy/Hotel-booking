@@ -2,13 +2,14 @@ package com.bin.otkrivashkin.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class Hotel implements ClientInterface {
+public class Hotel implements ClientInterface, RoomInterface {
 
     private String name;
     private List<Room> rooms;
     private List<Client> clients;
-
+    private Map<Client, Room> clientRoomMap;
 
     public Hotel() {
         rooms = new ArrayList<>();
@@ -27,22 +28,6 @@ public class Hotel implements ClientInterface {
         this.name = name;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-    }
-
-    public void addRoom(Room room) {
-        rooms.add(room);
-    }
-
-    public void saveRoom(RoomType type, double price) {
-        Room room = new Room(type, price);
-    }
-
     @Override
     public String toString() {
         return "Hotel{" +
@@ -51,24 +36,110 @@ public class Hotel implements ClientInterface {
                 '}';
     }
 
+    @Override
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    @Override
+    public List<Room> getAvailableRooms() {
+        List<Room> temp = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.isAvailable()) {
+                temp.add(room);
+            }
+        }
+        return temp;
+    }
+
+    @Override
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
+
+    @Override
+    public void addRoom(RoomType type) {
+        rooms.add(new Room(type));
+    }
+
+    @Override
     public void addRooms(int countOfRooms, RoomType type) {
         for (int i = 0; i < countOfRooms; i++) {
             rooms.add(new Room(type));
         }
     }
 
-    public void editTypeOfRooms(RoomType newRoomType) {
+    @Override
+    public Room getRoom(int numberOfRoom) {
         for (Room room : rooms) {
-            room.setType(newRoomType);
+            if (room.getNumber() == numberOfRoom) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Room getRoom(double price) {
+        for (Room room : rooms) {
+            if (room.getPrice() == price) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Room getRoom(RoomType type) {
+        for (Room room : rooms) {
+            if (room.getType().equals(type)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void editRoom(RoomType oldType, RoomType newType) {
+        getRoom(oldType).setType(newType);
+    }
+
+    @Override
+    public void editRoom(int oldNumberOfRoom, int newNumberOfRoom) {
+        getRoom(oldNumberOfRoom).setNumber(newNumberOfRoom);
+    }
+
+    @Override
+    public void editRooms(RoomType oldType, RoomType newType) {
+        for (Room room : rooms) {
+            if (room.getType().equals(oldType)) {
+                room.setType(newType);
+            }
         }
     }
 
+    @Override
+    public void deleteRoom(int numberOfRoom) {
+        rooms.remove(getRoom(numberOfRoom));
+    }
+
+    @Override
+    public void deleteRoom(RoomType type) {
+        rooms.remove(getRoom(type));
+    }
+
+    @Override
     public void deleteRooms(RoomType deletedRoomType) {
         for (Room room : rooms) {
             if (room.getType().equals(deletedRoomType)) {
                 rooms.remove(room);
             }
         }
+    }
+
+    @Override
+    public void deleteRooms() {
+        rooms.clear();
     }
 
     @Override
@@ -95,4 +166,7 @@ public class Hotel implements ClientInterface {
     public void deleteClient(String firstName) {
         clients.remove(getClient(firstName));
     }
+
+
+
 }
