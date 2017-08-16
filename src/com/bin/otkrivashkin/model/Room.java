@@ -7,21 +7,16 @@ public class Room {
     private double price;
     private boolean available;
 
-    public Room(RoomType type, double price, boolean available) {
+    public Room(RoomType type, int number, double price, boolean available) {
         this.type = type;
+        this.number = number;
         this.price = price;
         this.available = available;
     }
 
-    public Room(RoomType type, double price) {
+    Room(RoomType type, int number) {
         this.type = type;
-        this.price = price;
-        this.available = true;
-        number = 1; // how to use number right cause i don't set it in the constructor
-    }
-
-    public Room(RoomType type) {
-        this.type = type;
+        this.number = number;
         this.price = setPrice(type);
         this.available = true;
     }
@@ -74,9 +69,11 @@ public class Room {
     public String toString() {
         return "{" +
                 type + "," +
+                number + "," +
                 price + "," +
                 available
-                + "}";
+                + "}"
+                ;
     }
 
     @Override

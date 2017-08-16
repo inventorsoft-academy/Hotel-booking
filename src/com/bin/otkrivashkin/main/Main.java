@@ -12,18 +12,24 @@ public class Main {
         PrinterService printerService = new PrinterService();
         FileManager fileManager = new FileManager(hotelService);
         Hotel hotel;
-        System.out.println("0 - helpful options...");
         boolean inMain = true;
         while (inMain) {
+            printerService.print("main branch");
             int mainIOption = printerService.scanInt();
             switch (mainIOption) {
-                case 0: // hotel options
+                case 0:
+                    printerService.print(hotelService.getMainOptions());
+                    break;
+                case 1: // hotel options
                     boolean inHotel = true;
                     while (inHotel) {
+                        printerService.print("hotel branch");
                         int hotelOption = printerService.scanInt();
                         switch (hotelOption) {
-                            case 1:
-                                // create hotel
+                            case 0:
+                                printerService.print(hotelService.getHotelOptions());
+                                break;
+                            case 1: // create hotel
                                 printerService.print("enter a name of the hotel");
                                 hotelName = printerService.scanString();
                                 hotel = new Hotel();
@@ -31,8 +37,7 @@ public class Main {
                                 hotelService.add(hotel);
                                 printerService.printSuccessMessage();
                                 break;
-                            case 2:
-                                // get hotel
+                            case 2: // get hotel
                                 if (hotelService.getHotels().size() == 1) {
                                     printerService.print(hotelService.getHotels());
                                     printerService.printSuccessMessage();
@@ -42,8 +47,7 @@ public class Main {
                                 String hotelByName = printerService.scanString();
                                 printerService.print(hotelService.getByName(hotelByName));
                                 break;
-                            case 3:
-                                // edit hotel
+                            case 3: // edit hotel
                                 printerService.print("enter old name of the hotel");
                                 String oldName = printerService.scanString();
                                 printerService.print("enter new name of the hotel");
@@ -51,12 +55,14 @@ public class Main {
                                 hotelService.updateHotel(oldName, newName);
                                 printerService.printSuccessMessage();
                                 break;
-                            case 4:
-                                // delete hotel
+                            case 4: // delete hotel
                                 printerService.print("enter a name of the hotel");
                                 String hotelToDelete = printerService.scanString();
                                 hotelService.deleteHotel(hotelToDelete);
                                 printerService.printSuccessMessage();
+                                break;
+                            case 300:
+                                inHotel = false;
                                 break;
                             default:
                                 inHotel = false;
@@ -64,13 +70,16 @@ public class Main {
                     }
                     break;
 
-                case 2:
+                case 2: // room options
                     boolean inRoom = true;
                     while (inRoom) {
+                        printerService.print("room branch");
                         int roomOption = printerService.scanInt();
                         switch (roomOption) {
-                            case 1:
-                                // add room-s
+                            case 0:
+                                printerService.print(hotelService.getRoomOptions());
+                                break;
+                            case 1: // add room-s
                                 printerService.print("enter count of rooms.");
                                 int countOfRooms = printerService.scanInt();
                                 printerService.print("enter type for room(s).");
@@ -81,13 +90,11 @@ public class Main {
                                 hotel.addRooms(countOfRooms, type);
                                 printerService.printSuccessMessage();
                                 break;
-                            case 2:
-                                // get room-s
+                            case 2: // get room-s
                                 hotel = hotelService.getByName(hotelName);
                                 printerService.print(hotel.getRooms());
                                 break;
-                            case 3:
-                                // edit room-s
+                            case 3: // edit room-s
                                 printerService.print("choose old type or rooms.");
                                 printerService.printTypes();
                                 int oldTypeAsInt = printerService.scanInt();
@@ -100,8 +107,7 @@ public class Main {
                                 hotel.editRoom(oldRoomType, newRoomType);
                                 printerService.printSuccessMessage();
                                 break;
-                            case 4:
-                                // delete room-s
+                            case 4: // delete room-s
                                 printerService.print("enter type of rooms.");
                                 printerService.printTypes();
                                 int deleteTypeAsInt = printerService.scanInt();
@@ -110,16 +116,23 @@ public class Main {
                                 hotel.deleteRooms(deletedRoomType);
                                 printerService.printSuccessMessage();
                                 break;
+                            case 300:
+                                inRoom = false;
+                                break;
                             default:
                                 inRoom = false;
                         }
                     }
                     break;
-                case 3:
+                case 3: // client options
                     boolean inClient = true;
                     while (inClient) {
+                        printerService.print("client branch");
                         int clientOption = printerService.scanInt();
                         switch (clientOption) {
+                            case 0:
+                                printerService.print(hotelService.getClientOptions());
+                                break;
                             case 1: // add client
                                 printerService.print("Enter first name");
                                 String firstName = printerService.scanString();
@@ -151,55 +164,74 @@ public class Main {
                                 hotel.deleteClient(firstName);
                                 printerService.printSuccessMessage();
                                 break;
+                            case 300:
+                                inClient = false;
+                                break;
                             default:
                                 inClient = false;
                         }
                     }
                     break;
-                case 4:
+                case 4: // booking options
                     boolean inBooking = true;
                     while (inBooking) {
+                        printerService.print("booking branch");
                         int boolingOption = printerService.scanInt();
                         switch (boolingOption) {
+                            case 0:
+                                printerService.print(hotelService.getBookingOptions());
+                                break;
                             case 1: // book client
+                                printerService.print("Enter a first name");
+                                String firstName = printerService.scanString();
 
                                 break;
                             case 2: // unbook client
+                                break;
+                            case 300:
+                                inBooking = false;
                                 break;
                             default:
                                 inBooking = false;
                         }
                     }
                     break;
-                case 5:
+                case 5: // journal options
                     boolean inJournal = true;
                     while (inJournal) {
+                        printerService.print("journal branch");
                         int journalOption = printerService.scanInt();
                         switch (journalOption) {
-                            case 1:
-                                // print client
+                            case 0:
+                                printerService.print(hotelService.getJournalOptions());
                                 break;
-                            case 2:
-                                // print rooms
+                            case 1: // print client
+
                                 break;
-                            case 3:
-                                // print available rooms
+                            case 2: // print rooms
+
+                                break;
+                            case 3: // print available rooms
+
+                                break;
+                            case 300:
+                                inJournal = false;
                                 break;
                             default:
                                 inJournal = false;
                         }
                     }
-                case 97: // load
+                case 100: // save
+                    fileManager.saveHotel(hotelService.getByName(hotelName));
+                    printerService.printSuccessMessage();
+                    break;
+                case 200: // load
                     printerService.print("enter the hotel name");
                     hotelName = printerService.scanString();
                     fileManager.loadHotel(hotelName);
                     printerService.printSuccessMessage();
                     break;
-                case 98: // save
-                    fileManager.saveHotel(hotelService.getByName(hotelName));
-                    printerService.printSuccessMessage();
-                    break;
-                case 99: // exit
+                case 300: // exit
                     inMain = false;
                     printerService.print("Good bye");
                     break;

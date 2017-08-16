@@ -8,6 +8,8 @@ public interface RoomInterface {
 
     void addRoom(RoomType type);
 
+    void addRoom(RoomType type, int number);
+
     void addRooms(int count, RoomType type);
 
     Room getRoom(int numberOfRoom);

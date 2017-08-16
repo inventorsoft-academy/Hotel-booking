@@ -9,5 +9,9 @@ public interface BookingInterface {
 
     void bookClient(Client client, double price);
 
+    void bookClient(String firstName);
+
+    void bookClient(String firstName, RoomType type);
+
     void unBookClient(Client client);
 }

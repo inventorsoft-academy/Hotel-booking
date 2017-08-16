@@ -3,6 +3,7 @@ package com.bin.otkrivashkin.service;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,18 @@ public class HotelService {
         listOfHotels = new ArrayList<>();
     }
 
-
+    public List<String> getMainOptions() {
+        return Arrays.asList(
+                "1 - hotel options\n",
+                "2 - room options\n",
+                "3 - client options\n",
+                "4 - booking options\n",
+                "5 - journal options\n",
+                "100 - save\n",
+                "200 - load <hotelName>\n",
+                "300 - exit"
+        );
+    }
 
     public List<String> getHotelOptions() {
         return Arrays.asList(
@@ -27,9 +39,9 @@ public class HotelService {
                 "2 - view hotel\n",
                 "3 - edit hotel\n",
                 "4 - delete hotel\n",
-                "200 - save",
-                "300 - load <hotelName>",
-                "100 - quit"
+                "100 - save\n",
+                "200 - load <hotelName>\n",
+                "300 - quit"
         );
     }
 

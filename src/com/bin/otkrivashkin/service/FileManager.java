@@ -37,14 +37,15 @@ public class FileManager {
     }
 
     public void loadHotel(String hotelName) {
+        String[] currentLine = new String[0];
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(HOTEL_PATH + hotelName + ".txt")))) {
             String line;
-            String[] currentLine;
             while ((line = reader.readLine()) != null) {
-                currentLine = line.split("[[]{},]]");
-
+                currentLine = line.split("[[]{},]]"); // Как это у меня получилось?!!!
                 for (int i = 0; i < currentLine.length;i++) {
-                    if (currentLine[i].length() > 1) {
+                    if (!currentLine[i].startsWith("[")
+                            && !currentLine[i].isEmpty()
+                            && !currentLine[i].equals(" ")) { // хотя последнюю закорючку не смог убрать с помощью regexp
                         rooms.add(currentLine[i]);
                     }
                 }
@@ -53,8 +54,8 @@ public class FileManager {
             e.printStackTrace();
         }
         Hotel hotel = new Hotel(hotelName);
-        for (int i = 0; i < rooms.size(); i+=3) {
-            hotel.addRoom(new Room(Enum.valueOf(RoomType.class, rooms.get(i)), Double.parseDouble(rooms.get(i+1)), Boolean.parseBoolean(rooms.get(i+2))));
+        for (int i = 0; i < rooms.size(); i+=4) {
+            hotel.addRoom(new Room(Enum.valueOf(RoomType.class, rooms.get(i)), Integer.parseInt(rooms.get(i+1)), Double.parseDouble(rooms.get(i+2)), Boolean.parseBoolean(rooms.get(i+3))));
         }
         hotelService.add(hotel);
     }
