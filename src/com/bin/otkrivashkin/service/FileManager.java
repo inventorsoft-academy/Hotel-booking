@@ -5,6 +5,8 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +27,38 @@ public class FileManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             StringBuilder builder = new StringBuilder();
             builder
-                    .append(hotel.getRooms()).append("\n")
-                    .append(hotel.getClients()).append("\n")
-                    .append(hotel.getClientRoomMap()).append("\n");
+                    .append(hotel.getRooms()).append("/")
+                    .append(hotel.getClients()).append("/")
+                    .append(hotel.getClientRoomMap());
             writer.append(builder.toString());
             writer.newLine();
             writer.flush();
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+
+    public void loadHotel() {
+        File file = new File(HOTEL_PATH + "test.txt");
+        List<String> list = new ArrayList<>();
+        List<String> rooms = new ArrayList<>();
+        List<String> clients = new ArrayList<>();
+        List<String> roomViaClient = new ArrayList<>();
+        if(file.exists()){
+            try {
+                list = Files.readAllLines(file.toPath(), Charset.defaultCharset());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if(list.isEmpty())
+                return;
+        }
+        for(String line : list){
+            String [] res = line.split("/");
+            rooms.add(res[0]);
+            clients.add(res[1]);
+            roomViaClient.add(res[2]);
         }
     }
 

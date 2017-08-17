@@ -245,6 +245,16 @@ public class Main {
                     inMain = false;
                     printerService.print("Good bye");
                     break;
+                case -1:
+                    Factory factory = new Factory(hotelService);
+                    factory.initHotel();
+                    printerService.printSuccessMessage();
+                    hotel = hotelService.getByName("test");
+                    hotelName = hotel.getName();
+                    break;
+                case -2:
+                    fileManager.loadHotel();
+                    break;
                 default:
                     printerService.print("Wrong argument");
             }

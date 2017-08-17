@@ -217,15 +217,16 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     }
 
     private void booking(Client client, Room room) {
-        if (room.isAvailable()) {
-            clientRoomMap.put(room.getNumber(), getClient(client));
-            room.setAvailable(false);
-            clients.remove(client);
-            System.out.println("Client is in the room.");
+        for (Room apartment : rooms) {
+            if (room.getType().equals(apartment.getType()) && apartment.isAvailable()) {
+                clientRoomMap.put(apartment.getNumber(), getClient(client));
+                room.setAvailable(false);
+                clients.remove(client);
+                System.out.println("Client is in the room.");
+                return;
+            }
         }
-        else {
-            System.out.println("This room is not available.");
-        }
+        System.out.println("This room is not available.");
     }
 
     @Override
@@ -237,6 +238,11 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     public void bookClient(String firstName) {
         Client client = getClient(firstName);
         Room room = getRoom(RoomType.COUNTRY);
+        booking(client, room);
+    }
+
+    @Override
+    public void bookClient(Client client, Room room) {
         booking(client, room);
     }
 

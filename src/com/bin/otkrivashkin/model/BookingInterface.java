@@ -11,6 +11,8 @@ public interface BookingInterface {
 
     void bookClient(String firstName);
 
+    void bookClient(Client client, Room room);
+
     void bookClient(String firstName, RoomType type);
 
     void unBookClient(Client client);

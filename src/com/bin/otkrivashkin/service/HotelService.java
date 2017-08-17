@@ -29,7 +29,8 @@ public class HotelService {
                 "5 - journal options\n",
                 "100 - save\n",
                 "200 - load <hotelName>\n",
-                "300 - exit"
+                "300 - exit\n",
+                "-1 - hotel in one click!\n"
         );
     }
 
