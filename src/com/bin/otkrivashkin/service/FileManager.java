@@ -25,8 +25,9 @@ public class FileManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             StringBuilder builder = new StringBuilder();
             builder
-                    .append(hotel.getRooms()
-                    );
+                    .append(hotel.getRooms()).append("\n")
+                    .append(hotel.getClients()).append("\n")
+                    .append(hotel.getClientRoomMap()).append("\n");
             writer.append(builder.toString());
             writer.newLine();
             writer.flush();
@@ -37,7 +38,7 @@ public class FileManager {
     }
 
     public void loadHotel(String hotelName) {
-        String[] currentLine = new String[0];
+        String[] currentLine;
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(HOTEL_PATH + hotelName + ".txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -55,9 +56,17 @@ public class FileManager {
         }
         Hotel hotel = new Hotel(hotelName);
         for (int i = 0; i < rooms.size(); i+=4) {
-            hotel.addRoom(new Room(Enum.valueOf(RoomType.class, rooms.get(i)), Integer.parseInt(rooms.get(i+1)), Double.parseDouble(rooms.get(i+2)), Boolean.parseBoolean(rooms.get(i+3))));
+
+            RoomType type = Enum.valueOf(RoomType.class, rooms.get(i));
+            int number = Integer.parseInt(rooms.get(i + 1));
+            double price = Double.parseDouble(rooms.get(i + 2));
+            boolean available = Boolean.parseBoolean(rooms.get(i + 3));
+            hotel.addRoom(new Room(
+                    type,
+                    number,
+                    price,
+                    available));
         }
         hotelService.add(hotel);
     }
-
 }

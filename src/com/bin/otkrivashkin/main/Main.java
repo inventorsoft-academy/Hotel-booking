@@ -15,8 +15,9 @@ public class Main {
         boolean inMain = true;
         while (inMain) {
             printerService.print("main branch");
-            int mainIOption = printerService.scanInt();
-            switch (mainIOption) {
+            int mainOption = printerService.scanInt();
+            //TODO how to check is it a number?
+            switch (mainOption) {
                 case 0:
                     printerService.print(hotelService.getMainOptions());
                     break;
@@ -65,7 +66,7 @@ public class Main {
                                 inHotel = false;
                                 break;
                             default:
-                                inHotel = false;
+                                printerService.print("Wrong argument!");
                         }
                     }
                     break;
@@ -120,7 +121,7 @@ public class Main {
                                 inRoom = false;
                                 break;
                             default:
-                                inRoom = false;
+                                printerService.print("Wrong argument!");
                         }
                     }
                     break;
@@ -143,10 +144,8 @@ public class Main {
                                 printerService.printSuccessMessage();
                                 break;
                             case 2: // get client
-                                printerService.print("Enter first name");
                                 hotel = hotelService.getByName(hotelName);
-                                firstName = printerService.scanString();
-                                printerService.print(hotel.getClient(firstName).toString());
+                                printerService.print(hotel.getClients());
                                 break;
                             case 3: // edit client
                                 printerService.print("Enter old first name");
@@ -168,7 +167,7 @@ public class Main {
                                 inClient = false;
                                 break;
                             default:
-                                inClient = false;
+                                printerService.print("Wrong argument!");
                         }
                     }
                     break;
@@ -184,15 +183,26 @@ public class Main {
                             case 1: // book client
                                 printerService.print("Enter a first name");
                                 String firstName = printerService.scanString();
-
+                                printerService.print("Choose type of the room");
+                                printerService.printTypes();
+                                int typeAsInt = printerService.scanInt();
+                                RoomType type = printerService.getRoomType(typeAsInt);
+                                hotel = hotelService.getByName(hotelName);
+                                hotel.bookClient(firstName, type);
+                                printerService.printSuccessMessage();
                                 break;
                             case 2: // unbook client
+                                // impl
+                                break;
+                            case 3:
+                                hotel = hotelService.getByName(hotelName);
+                                printerService.print(hotel.getClientRoomMap().toString());
                                 break;
                             case 300:
                                 inBooking = false;
                                 break;
                             default:
-                                inBooking = false;
+                                printerService.print("Wrong argument!");
                         }
                     }
                     break;
@@ -218,7 +228,7 @@ public class Main {
                                 inJournal = false;
                                 break;
                             default:
-                                inJournal = false;
+                                printerService.print("Wrong argument!");
                         }
                     }
                 case 100: // save

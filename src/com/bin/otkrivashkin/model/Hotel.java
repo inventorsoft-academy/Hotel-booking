@@ -10,10 +10,12 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     private String name;
     private List<Room> rooms;
     private List<Client> clients;
-    private Map<Room, Client> clientRoomMap;
+    private Map<Integer, Client> clientRoomMap;
 
     public Hotel() {
         rooms = new ArrayList<>();
+        clients = new ArrayList<>();
+        clientRoomMap = new HashMap<>();
     }
 
     public Hotel(String name) {
@@ -21,6 +23,10 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
         rooms = new ArrayList<>();
         clients = new ArrayList<>();
         clientRoomMap = new HashMap<>();
+    }
+
+    public Map<Integer, Client> getClientRoomMap() {
+        return clientRoomMap;
     }
 
     public String getName() {
@@ -182,6 +188,10 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
         return null;
     }
 
+    public List<Client> getClients() {
+        return clients;
+    }
+
     @Override
     public void editClient(String oldFirstName, String newFirstName) {
         getClient(oldFirstName).setFirstName(newFirstName);
@@ -196,32 +206,45 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     @Override
     public void bookClient(Client client) {
         Room room = getRoom(RoomType.COUNTRY);
-        room.setAvailable(false);
-        clientRoomMap.put(room, getClient(client));
+        booking(client, room);
+
     }
 
     @Override
     public void bookClient(Client client, RoomType type) {
         Room room = getRoom(type);
-        room.setAvailable(false);
-        clientRoomMap.put(room, getClient(client));
+        booking(client, room);
+    }
+
+    private void booking(Client client, Room room) {
+        if (room.isAvailable()) {
+            clientRoomMap.put(room.getNumber(), getClient(client));
+            room.setAvailable(false);
+            clients.remove(client);
+            System.out.println("Client is in the room.");
+        }
+        else {
+            System.out.println("This room is not available.");
+        }
     }
 
     @Override
     public void bookClient(Client client, double price) {
-        //TODO
+        // TODO add cash var to Client for working
     }
 
     @Override
     public void bookClient(String firstName) {
         Client client = getClient(firstName);
         Room room = getRoom(RoomType.COUNTRY);
-        clientRoomMap.put(room, client);
+        booking(client, room);
     }
 
     @Override
     public void bookClient(String firstName, RoomType type) {
-        //TODO
+        Client client = getClient(firstName);
+        Room room = getRoom(type);
+        booking(client, room);
     }
 
     @Override
@@ -231,7 +254,9 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
 
     @Override
     public String toString() {
-        return "" +
-                rooms;
+        return    rooms + "/"
+                + clients + "/"
+                + clientRoomMap
+                ;
     }
 }
