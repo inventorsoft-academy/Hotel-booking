@@ -1,6 +1,9 @@
 package com.bin.otkrivashkin.model;
 
-public class Room {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Room implements Validator {
 
     private RoomType type;
     private int number;
@@ -99,5 +102,16 @@ public class Room {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (available ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public Map<String, String> validate() {
+        Map<String,String> res = new HashMap<>();
+
+        if (type == null) res.put("type", "Room type is empty!");
+        if (price <= 0) res.put("price", "The price is less than must to be");
+
+
+        return res;
     }
 }

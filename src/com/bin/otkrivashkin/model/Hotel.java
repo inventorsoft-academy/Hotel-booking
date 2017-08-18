@@ -1,11 +1,12 @@
 package com.bin.otkrivashkin.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
+public class Hotel implements ClientInterface, RoomInterface, BookingInterface, Validator {
 
     private String name;
     private List<Room> rooms;
@@ -55,6 +56,7 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
 
     @Override
     public void addRoom(Room room) {
+        room.validate();
         int roomNumber = rooms.size() + 1;
         room.setNumber(roomNumber);
         rooms.add(room);
@@ -164,8 +166,13 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
     }
 
     @Override
-    public void addClient(Client cLient) {
-        clients.add(cLient);
+    public void addClient(Client cLient) throws IOException {
+        if (cLient.validate().keySet().isEmpty()) {
+            clients.add(cLient);
+        }
+        else {
+            throw new IOException(cLient.validate().values().stream().findAny().get());
+        }
     }
 
     @Override
@@ -264,5 +271,11 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface {
                 + clients + "/"
                 + clientRoomMap
                 ;
+    }
+
+    @Override
+    public Map<String, String> validate() {
+
+        return null;
     }
 }

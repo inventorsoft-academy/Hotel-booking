@@ -5,6 +5,8 @@ import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 
+import java.io.IOException;
+
 public class Factory {
 
     private HotelService hotelService;
@@ -35,11 +37,15 @@ public class Factory {
         Client client4 = new Client("Aulio", "zorro");
         Client client5 = new Client("Kent", "fine");
 
-        hotel.addClient(client1);
-        hotel.addClient(client2);
-        hotel.addClient(client3);
-        hotel.addClient(client4);
-        hotel.addClient(client5);
+        try {
+            hotel.addClient(client1);
+            hotel.addClient(client2);
+            hotel.addClient(client3);
+            hotel.addClient(client4);
+            hotel.addClient(client5);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         hotel.bookClient(client1, room1);
         hotel.bookClient(client2, room2);

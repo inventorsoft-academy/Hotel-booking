@@ -3,7 +3,10 @@ package com.bin.otkrivashkin.main;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.model.Validator;
 import com.bin.otkrivashkin.service.*;
+
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -140,8 +143,13 @@ public class Main {
                                 printerService.print("Enter last name");
                                 String lastName = printerService.scanString();
                                 hotel = hotelService.getByName(hotelName);
-                                hotel.addClient(new Client(firstName, lastName));
-                                printerService.printSuccessMessage();
+                                try {
+                                    hotel.addClient(new Client(firstName, lastName));
+                                    printerService.printSuccessMessage();
+                                } catch (IOException e) {
+                                    String message = e.getMessage();
+                                    System.out.println(message);
+                                }
                                 break;
                             case 2: // get client
                                 hotel = hotelService.getByName(hotelName);

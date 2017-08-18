@@ -1,6 +1,9 @@
 package com.bin.otkrivashkin.model;
 
-public class Client {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Client implements Validator {
 
     private String firstName;
     private String lastName;
@@ -50,5 +53,17 @@ public class Client {
         int result = firstName.hashCode();
         result = 31 * result + lastName.hashCode();
         return result;
+    }
+
+    @Override
+    public Map<String, String> validate() {
+        Map<String, String> res = new HashMap<>();
+
+        if (firstName.length() < 4) res.put(firstName, "The first name must be longer than 4 chars!");
+        if (firstName.length() > 15) res.put(firstName, "The first name is too long! Maximum is 14!");
+        if (lastName.length() < 4) res.put(lastName, "The last name is too short! Minimum length is 4!");
+        if (firstName.length() > 15) res.put(firstName, "The first name is too long! Maximum is 14!");
+
+        return res;
     }
 }
