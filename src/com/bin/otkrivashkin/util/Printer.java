@@ -1,7 +1,6 @@
-package com.bin.otkrivashkin.service;
+package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.Hotel;
-import com.bin.otkrivashkin.model.Room;
+import com.bin.otkrivashkin.model.impl.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
 
 import java.util.ArrayList;
@@ -12,11 +11,11 @@ import java.util.Scanner;
 /**
  * Created by otkrivashkin on 10.08.2017.
  */
-public class PrinterService {
+public class Printer {
 
     private Scanner scanner;
 
-    public PrinterService() {
+    public Printer() {
         scanner = new Scanner(System.in);
     }
 

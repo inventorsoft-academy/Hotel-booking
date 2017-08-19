@@ -1,18 +1,21 @@
-package com.bin.otkrivashkin.service;
+package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.Client;
-import com.bin.otkrivashkin.model.Hotel;
-import com.bin.otkrivashkin.model.Room;
+import com.bin.otkrivashkin.exception.NotFoundException;
+import com.bin.otkrivashkin.exception.WrongArgumentException;
+import com.bin.otkrivashkin.model.impl.Client;
+import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.impl.Room;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 
 import java.io.IOException;
 
 public class Factory {
 
-    private HotelService hotelService;
+    private HotelServiceImpl hotelServiceImpl;
 
-    public Factory(HotelService hotelService) {
-        this.hotelService = hotelService;
+    public Factory(HotelServiceImpl hotelServiceImpl) {
+        this.hotelServiceImpl = hotelServiceImpl;
     }
 
     public void initHotel() throws IOException {
@@ -47,10 +50,14 @@ public class Factory {
             e.printStackTrace();
         }
 
-        hotel.bookClient(client1, room1);
-        hotel.bookClient(client2, room2);
-        hotel.bookClient(client3, room3);
+        try {
+            hotel.bookClient(client1, room1);
+            hotel.bookClient(client2, room2);
+            hotel.bookClient(client3, room3);
+        } catch (NotFoundException | WrongArgumentException e) {
+            e.printStackTrace();
+        }
 
-        hotelService.add(hotel);
+        hotelServiceImpl.add(hotel);
     }
 }

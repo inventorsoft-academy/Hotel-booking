@@ -1,6 +1,7 @@
-package com.bin.otkrivashkin.model;
+package com.bin.otkrivashkin.model.impl;
 
 import com.bin.otkrivashkin.exception.*;
+import com.bin.otkrivashkin.model.*;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Hotel implements ClientInterface, RoomInterface, BookingInterface, Validator {
+public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkrivashkin.model.Room, Booking, Validator {
 
     private Logger logger = Logger.getLogger(Hotel.class.getName());
 
@@ -43,7 +44,8 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface, 
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws WrongNumberArgsException {
+        if (name.length() <= 3) throw new WrongNumberArgsException("The name of the hotel is too short, make it longer.");
         this.name = name;
     }
 
@@ -331,7 +333,6 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface, 
 
     @Override
     public void bookClient(Client client) throws NotFoundException, WrongArgumentException {
-
         Room room = getRoom(RoomType.COUNTRY);
         booking(client, room);
 

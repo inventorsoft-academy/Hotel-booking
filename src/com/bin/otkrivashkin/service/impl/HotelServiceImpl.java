@@ -1,23 +1,24 @@
-package com.bin.otkrivashkin.service;
+package com.bin.otkrivashkin.service.impl;
 
-import com.bin.otkrivashkin.model.Hotel;
-import com.bin.otkrivashkin.model.Room;
+import com.bin.otkrivashkin.exception.NotFoundException;
+import com.bin.otkrivashkin.model.impl.Hotel;
+import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by otkrivashkin on 10.08.2017.
  */
-public class HotelService {
+public class HotelServiceImpl {
 
-    private List<String> listOfOptions;
+    private Logger logger = Logger.getLogger(HotelServiceImpl.class.getName());
     private List<Hotel> listOfHotels;
 
-    public HotelService() {
+    public HotelServiceImpl() {
         listOfHotels = new ArrayList<>();
     }
 
@@ -92,24 +93,26 @@ public class HotelService {
 
     }
 
-    public Hotel getByName(String hotelByName) {
+    public Hotel getByName(String hotelByName) throws NotFoundException {
+        if (hotelByName == null) throw new NullPointerException("We need a name of the hotel.");
         for (Hotel hotel: listOfHotels) {
             if (hotel.getName().equals(hotelByName)) {
                 return hotel;
             }
         }
-        return null;
+        throw new NotFoundException("Hotel not found or doesn't exist.");
     }
 
     public List<Hotel> getHotels() {
+        logger.info("return list of hotels.");
         return listOfHotels;
     }
 
-    public void updateHotel(String oldName, String newName) {
+    public void updateHotel(String oldName, String newName) throws NotFoundException, WrongNumberArgsException {
         getByName(oldName).setName(newName);
     }
 
-    public void deleteHotel(String hotelToDelete) {
+    public void deleteHotel(String hotelToDelete) throws NotFoundException {
         listOfHotels.remove(getByName(hotelToDelete));
     }
 

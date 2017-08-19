@@ -1,8 +1,9 @@
-package com.bin.otkrivashkin.service;
+package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.Hotel;
-import com.bin.otkrivashkin.model.Room;
+import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.impl.Room;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -12,10 +13,10 @@ import java.util.List;
 
 public class FileManager {
 
-    private HotelService hotelService;
+    private HotelServiceImpl hotelServiceImpl;
 
-    public FileManager(HotelService hotelService) {
-        this.hotelService = hotelService;
+    public FileManager(HotelServiceImpl hotelServiceImpl) {
+        this.hotelServiceImpl = hotelServiceImpl;
     }
 
     private List<String> rooms = new ArrayList<>();
@@ -92,6 +93,6 @@ public class FileManager {
                     price,
                     available));
         }
-        hotelService.add(hotel);
+        hotelServiceImpl.add(hotel);
     }
 }

@@ -4,11 +4,13 @@ import com.bin.otkrivashkin.exception.NegativePriceException;
 import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
+import com.bin.otkrivashkin.model.impl.Client;
+import com.bin.otkrivashkin.model.impl.Room;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
 
-public interface BookingInterface {
+public interface Booking {
 
 
     void bookClient(Client client) throws NotFoundException, WrongArgumentException;
