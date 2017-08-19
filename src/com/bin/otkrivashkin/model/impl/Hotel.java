@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkrivashkin.model.Room, Booking, Validator {
+public class Hotel implements Client, Room, Booking, Validator {
 
     private Logger logger = Logger.getLogger(Hotel.class.getName());
 
     private String name;
-    private List<Room> rooms;
-    private List<Client> clients;
-    private Map<Integer, Client> clientRoomMap;
+    private List<RoomImpl> rooms;
+    private List<ClientImpl> clients;
+    private Map<Integer, ClientImpl> clientRoomMap;
 
     public Hotel() {
         rooms = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
         logger.info(Hotel.class.getName() + " was created.");
     }
 
-    public Map<Integer, Client> getClientRoomMap() {
+    public Map<Integer, ClientImpl> getClientRoomMap() {
         logger.info("map of rooms via clients.");
         return clientRoomMap;
     }
@@ -50,15 +50,15 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public List<Room> getRooms() {
+    public List<RoomImpl> getRooms() {
         return rooms;
     }
 
     @Override
-    public List<Room> getAvailableRooms() {
+    public List<RoomImpl> getAvailableRooms() {
 
-        List<Room> temp = new ArrayList<>();
-        for (Room room : rooms) {
+        List<RoomImpl> temp = new ArrayList<>();
+        for (RoomImpl room : rooms) {
             if (room.isAvailable()) {
                 temp.add(room);
             }
@@ -67,7 +67,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public void addRoom(Room room) {
+    public void addRoom(RoomImpl room) {
 
         if (room.validate().keySet().isEmpty()) {
             int roomNumber = rooms.size() + 1;
@@ -76,7 +76,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! Room is not added!");
+            logger.info("Error! RoomImpl is not added!");
         }
 
     }
@@ -86,11 +86,11 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (type != null) {
             int roomNumber = rooms.size() + 1;
-            rooms.add(new Room(type, roomNumber));
+            rooms.add(new RoomImpl(type, roomNumber));
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! Room is not added!");
+            logger.info("Error! RoomImpl is not added!");
         }
 
     }
@@ -100,11 +100,11 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (type != null && number > 0) {
             int roomNumber = rooms.size() + 1;
-            rooms.add(new Room(type, roomNumber));
+            rooms.add(new RoomImpl(type, roomNumber));
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! Room is not added!");
+            logger.info("Error! RoomImpl is not added!");
         }
     }
 
@@ -115,22 +115,22 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
         if (type != null) {
             for (int i = 0; i < countOfRooms; i++) {
                 int roomNumber = rooms.size() + 1;
-                rooms.add(new Room(type, roomNumber));
+                rooms.add(new RoomImpl(type, roomNumber));
             }
             logger.info("room(s) was(were) added!");
         }
         else {
-            logger.info("Error! Room(s) is(are) not added!");
+            logger.info("Error! RoomImpl(s) is(are) not added!");
         }
     }
 
     @Override
-    public Room getRoom(int numberOfRoom) throws WrongNumberArgsException, NotFoundException {
+    public RoomImpl getRoom(int numberOfRoom) throws WrongNumberArgsException, NotFoundException {
 
         if (numberOfRoom <= 0) throw new WrongNumberArgsException("the number must be greater than zero!");
-        for (Room room : rooms) {
+        for (RoomImpl room : rooms) {
             if (room.getNumber() == numberOfRoom) {
-                logger.info("Success! Room was found.");
+                logger.info("Success! RoomImpl was found.");
                 return room;
             }
         }
@@ -138,37 +138,37 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public Room getRoom(double price) throws NegativePriceException, NotFoundException {
+    public RoomImpl getRoom(double price) throws NegativePriceException, NotFoundException {
         if (price <= 0) throw new NegativePriceException("The price must be greater than zero!");
-        for (Room room : rooms) {
+        for (RoomImpl room : rooms) {
             if (room.getPrice() == price) {
                 logger.info("room with price " + price + " was found!");
                 return room;
             }
         }
-        throw new NotFoundException("Room with price " + price + "does not exist");
+        throw new NotFoundException("RoomImpl with price " + price + "does not exist");
     }
 
     @Override
-    public Room getRoom(RoomType type) throws WrongArgumentException, NotFoundException {
+    public RoomImpl getRoom(RoomType type) throws WrongArgumentException, NotFoundException {
 
         if (type == null) throw new WrongArgumentException("The room type doesn't selected.");
 
-        for (Room room : rooms) {
+        for (RoomImpl room : rooms) {
             if (room.getType().equals(type)) {
                 logger.info("The room with type " + type + " returned.");
                 return room;
             }
         }
-        throw new NotFoundException("Room with type " + type + "not found.");
+        throw new NotFoundException("RoomImpl with type " + type + "not found.");
     }
 
     @Override
-    public Room getRoom(Room room) throws NotFoundException {
+    public RoomImpl getRoom(RoomImpl room) throws NotFoundException {
         if (room.validate().keySet().isEmpty()) {
-            for (Room groom : rooms) {
+            for (RoomImpl groom : rooms) {
                 if (groom.equals(room)) {
-                    logger.info("Success! Room was returned.");
+                    logger.info("Success! RoomImpl was returned.");
                     return groom;
                 }
             }
@@ -180,7 +180,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     public void editRoom(RoomType oldType, RoomType newType) throws NotFoundException, WrongArgumentException {
         if (newType == null) throw new WrongArgumentException("New type is wrong!");
         getRoom(oldType).setType(newType);
-        logger.info("Room was updated!");
+        logger.info("RoomImpl was updated!");
     }
 
     @Override
@@ -188,9 +188,9 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (newNumberOfRoom <= 0 || oldNumberOfRoom <= 0) throw new WrongNumberArgsException("Error! Number of room must be greater than zero!");
 
-        Room room = getRoom(newNumberOfRoom);
+        RoomImpl room = getRoom(newNumberOfRoom);
 
-        if (room != null) throw new ChooseAnotherOneException("Room with number " + newNumberOfRoom + " is already exist, choose another one.");
+        if (room != null) throw new ChooseAnotherOneException("RoomImpl with number " + newNumberOfRoom + " is already exist, choose another one.");
         getRoom(oldNumberOfRoom).setNumber(newNumberOfRoom);
         logger.info("room was updated");
     }
@@ -200,7 +200,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (oldType == null || newType == null) throw new WrongArgumentException("Error! Wrong type!");
 
-        for (Room room : rooms) {
+        for (RoomImpl room : rooms) {
             if (room.getType().equals(oldType)) {
                 room.setType(newType);
                 logger.info("rooms was updated.");
@@ -219,7 +219,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
             logger.info("room with number " + numberOfRoom + " was deleted.");
         }
         else {
-            logger.info("Room with number " + numberOfRoom + " does not exist.");
+            logger.info("RoomImpl with number " + numberOfRoom + " does not exist.");
         }
     }
 
@@ -240,7 +240,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (deletedRoomType == null) throw new WrongArgumentException("Error! Problem with type...");
         int count = 0;
-        for (Room room : rooms) {
+        for (RoomImpl room : rooms) {
             if (room.getType().equals(deletedRoomType)) {
                 rooms.remove(room);
                 count++;
@@ -268,7 +268,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public void addClient(Client cLient) throws IOException {
+    public void addClient(ClientImpl cLient) throws IOException {
         if (cLient.validate().keySet().isEmpty()) {
             clients.add(cLient);
         }
@@ -278,12 +278,12 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public Client getClient(String firstName) throws IOException, NotFoundException {
+    public ClientImpl getClient(String firstName) throws IOException, NotFoundException {
         if (firstName == null || firstName.length() < 3) throw new IOException("The first name is too short!");
 
-        for (Client client : clients) {
+        for (ClientImpl client : clients) {
             if (client.getFirstName().equalsIgnoreCase(firstName)) {
-                logger.info("Client " + firstName + " was found!");
+                logger.info("ClientImpl " + firstName + " was found!");
                 return client;
             }
         }
@@ -291,11 +291,11 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     }
 
     @Override
-    public Client getClient(Client client) throws WrongArgumentException, NotFoundException {
+    public ClientImpl getClient(ClientImpl client) throws WrongArgumentException, NotFoundException {
         if (client.validate().keySet().isEmpty()) {
-            for (Client visitor : clients) {
+            for (ClientImpl visitor : clients) {
                 if (visitor.equals(client)) {
-                    logger.info("Client " + client.getFirstName() + " was found.");
+                    logger.info("ClientImpl " + client.getFirstName() + " was found.");
                     return visitor;
                 }
             }
@@ -303,10 +303,10 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
         else {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
-        throw new NotFoundException("Client with first name " + client.getFirstName() + " not found");
+        throw new NotFoundException("ClientImpl with first name " + client.getFirstName() + " not found");
     }
 
-    public List<Client> getClients() {
+    public List<ClientImpl> getClients() {
         logger.info("List of the clients.");
         return clients;
     }
@@ -314,7 +314,7 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
     @Override
     public void editClient(String oldFirstName, String newFirstName) throws IOException, NotFoundException, WrongArgumentException {
         getClient(oldFirstName).setFirstName(newFirstName);
-        logger.info("Client was updated.");
+        logger.info("ClientImpl was updated.");
     }
 
     @Override
@@ -322,29 +322,29 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         boolean isRemoved = clients.remove(getClient(firstName));
         if (isRemoved) {
-            logger.info("Client was deleted.");
+            logger.info("ClientImpl was deleted.");
         }
         else {
-            logger.info("Client does not exist.");
+            logger.info("ClientImpl does not exist.");
         }
 
     }
 
 
     @Override
-    public void bookClient(Client client) throws NotFoundException, WrongArgumentException {
-        Room room = getRoom(RoomType.COUNTRY);
+    public void bookClient(ClientImpl client) throws NotFoundException, WrongArgumentException {
+        RoomImpl room = getRoom(RoomType.COUNTRY);
         booking(client, room);
 
     }
 
     @Override
-    public void bookClient(Client client, RoomType type) throws NotFoundException, WrongArgumentException {
-        Room room = getRoom(type);
+    public void bookClient(ClientImpl client, RoomType type) throws NotFoundException, WrongArgumentException {
+        RoomImpl room = getRoom(type);
         booking(client, room);
     }
 
-    private void booking(Client client, Room room) throws NotFoundException, WrongArgumentException {
+    private void booking(ClientImpl client, RoomImpl room) throws NotFoundException, WrongArgumentException {
         if (!client.validate().keySet().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
@@ -353,23 +353,23 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
             throw new WrongArgumentException(room.validate().values().stream().findAny().get());
         }
 
-        for (Room apartment : rooms) {
+        for (RoomImpl apartment : rooms) {
             if (room.getType().equals(apartment.getType()) && apartment.isAvailable()) {
                 clientRoomMap.put(apartment.getNumber(), getClient(client));
                 room.setAvailable(false);
                 clients.remove(client);
-                logger.info("Client " + client.getFirstName() + " is in the room with number " + room.getNumber());
+                logger.info("ClientImpl " + client.getFirstName() + " is in the room with number " + room.getNumber());
                 return;
             }
             else {
-                logger.info("Room with " + room.getType() + " type is not available. Sorry.");
+                logger.info("RoomImpl with " + room.getType() + " type is not available. Sorry.");
             }
         }
-        logger.info("Client not found.");
+        logger.info("ClientImpl not found.");
     }
 
     @Override
-    public void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
+    public void bookClient(ClientImpl client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
 
         if (!client.validate().keySet().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
@@ -377,8 +377,8 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
         if (price <= 0) throw new WrongNumberArgsException("price can`t be lower or equal to zero.");
 
-        Room roomByPrice = getRoom(price);
-        if (roomByPrice == null) throw new NotFoundException("Room with price " + price + " not found.");
+        RoomImpl roomByPrice = getRoom(price);
+        if (roomByPrice == null) throw new NotFoundException("RoomImpl with price " + price + " not found.");
 
         booking(client, roomByPrice);
 
@@ -387,25 +387,25 @@ public class Hotel implements com.bin.otkrivashkin.model.Client, com.bin.otkriva
 
     @Override
     public void bookClient(String firstName) throws IOException, NotFoundException, WrongArgumentException {
-        Client client = getClient(firstName);
-        Room room = getRoom(RoomType.COUNTRY);
+        ClientImpl client = getClient(firstName);
+        RoomImpl room = getRoom(RoomType.COUNTRY);
         booking(client, room);
     }
 
     @Override
-    public void bookClient(Client client, Room room) throws NotFoundException, WrongArgumentException {
+    public void bookClient(ClientImpl client, RoomImpl room) throws NotFoundException, WrongArgumentException {
         booking(client, room);
     }
 
     @Override
     public void bookClient(String firstName, RoomType type) throws IOException, NotFoundException, WrongArgumentException {
-        Client client = getClient(firstName);
-        Room room = getRoom(type);
+        ClientImpl client = getClient(firstName);
+        RoomImpl room = getRoom(type);
         booking(client, room);
     }
 
     @Override
-    public void unBookClient(Room room, Client client) throws WrongArgumentException {
+    public void unBookClient(RoomImpl room, ClientImpl client) throws WrongArgumentException {
 
         if (room.validate().keySet().isEmpty()) {
             throw new WrongArgumentException("Problem with room.");

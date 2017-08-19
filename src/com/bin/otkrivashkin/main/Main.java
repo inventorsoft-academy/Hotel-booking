@@ -2,7 +2,7 @@ package com.bin.otkrivashkin.main;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
-import com.bin.otkrivashkin.model.impl.Client;
+import com.bin.otkrivashkin.model.impl.ClientImpl;
 import com.bin.otkrivashkin.model.impl.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 public class Main {
     private static Logger logger = Logger.getLogger(Main.class.getName());
     public static void main(String[] args) {
-
 
         String hotelName = "";
         HotelServiceImpl hotelServiceImpl = new HotelServiceImpl();
@@ -332,7 +331,7 @@ public class Main {
         String lastName = printer.scanString();
         try {
             hotel = hotelServiceImpl.getByName(hotelName);
-            hotel.addClient(new Client(firstName, lastName));
+            hotel.addClient(new ClientImpl(firstName, lastName));
         } catch (IOException | NotFoundException e) {
             logger.info(e.getMessage());
         }

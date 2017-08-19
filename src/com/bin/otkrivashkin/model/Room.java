@@ -4,14 +4,14 @@ import com.bin.otkrivashkin.exception.ChooseAnotherOneException;
 import com.bin.otkrivashkin.exception.NegativePriceException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
-import com.bin.otkrivashkin.model.impl.Room;
+import com.bin.otkrivashkin.model.impl.RoomImpl;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.util.List;
 
 public interface Room {
 
-    void addRoom(com.bin.otkrivashkin.model.impl.Room room);
+    void addRoom(RoomImpl room);
 
     void addRoom(RoomType type);
 
@@ -19,17 +19,17 @@ public interface Room {
 
     void addRooms(int count, RoomType type) throws WrongNumberArgsException;
 
-    com.bin.otkrivashkin.model.impl.Room getRoom(int numberOfRoom) throws Exception;
+    RoomImpl getRoom(int numberOfRoom) throws Exception;
 
-    com.bin.otkrivashkin.model.impl.Room getRoom(double price) throws NegativePriceException, NotFoundException;
+    RoomImpl getRoom(double price) throws NegativePriceException, NotFoundException;
 
-    com.bin.otkrivashkin.model.impl.Room getRoom(RoomType type) throws WrongArgumentException, NotFoundException;
+    RoomImpl getRoom(RoomType type) throws WrongArgumentException, NotFoundException;
 
-    com.bin.otkrivashkin.model.impl.Room getRoom(com.bin.otkrivashkin.model.impl.Room room) throws NotFoundException;
+    RoomImpl getRoom(RoomImpl room) throws NotFoundException;
 
-    List<com.bin.otkrivashkin.model.impl.Room> getRooms();
+    List<RoomImpl> getRooms();
 
-    List<com.bin.otkrivashkin.model.impl.Room> getAvailableRooms();
+    List<RoomImpl> getAvailableRooms();
 
 
 

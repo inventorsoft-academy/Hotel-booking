@@ -1,7 +1,7 @@
 package com.bin.otkrivashkin.util;
 
 import com.bin.otkrivashkin.model.impl.Hotel;
-import com.bin.otkrivashkin.model.impl.Room;
+import com.bin.otkrivashkin.model.impl.RoomImpl;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 
@@ -87,7 +87,7 @@ public class FileManager {
             int number = Integer.parseInt(rooms.get(i + 1));
             double price = Double.parseDouble(rooms.get(i + 2));
             boolean available = Boolean.parseBoolean(rooms.get(i + 3));
-            hotel.addRoom(new Room(
+            hotel.addRoom(new RoomImpl(
                     type,
                     number,
                     price,

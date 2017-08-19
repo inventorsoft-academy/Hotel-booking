@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Client implements Validator {
+public class ClientImpl implements Validator {
 
     private String firstName;
     private String lastName;
@@ -15,13 +15,13 @@ public class Client implements Validator {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public Client(String firstName, String lastName) {
+    public ClientImpl(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
 
     }
 
-    public Client(double cash) {
+    public ClientImpl(double cash) {
         super();
         this.cash = cash;
     }
@@ -77,7 +77,7 @@ public class Client implements Validator {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Client client = (Client) o;
+        ClientImpl client = (ClientImpl) o;
 
         if (!firstName.equals(client.firstName)) return false;
         return lastName.equals(client.lastName);

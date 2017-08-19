@@ -6,21 +6,21 @@ import com.bin.otkrivashkin.model.Validator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Room implements Validator {
+public class RoomImpl implements Validator {
 
     private RoomType type;
     private int number;
     private double price;
     private boolean available;
 
-    public Room(RoomType type, int number, double price, boolean available) {
+    public RoomImpl(RoomType type, int number, double price, boolean available) {
         this.type = type;
         this.number = number;
         this.price = price;
         this.available = available;
     }
 
-    Room(RoomType type, int number) {
+    RoomImpl(RoomType type, int number) {
         this.type = type;
         this.number = number;
         this.price = setPrice(type);
@@ -87,7 +87,7 @@ public class Room implements Validator {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Room room = (Room) o;
+        RoomImpl room = (RoomImpl) o;
 
         if (number != room.number) return false;
         if (Double.compare(room.price, price) != 0) return false;
@@ -111,7 +111,7 @@ public class Room implements Validator {
     public Map<String, String> validate() {
         Map<String,String> res = new HashMap<>();
 
-        if (type == null) res.put("type", "Room type is empty!");
+        if (type == null) res.put("type", "RoomImpl type is empty!");
         if (price <= 0) res.put("price", "The price is less than must to be");
 
 

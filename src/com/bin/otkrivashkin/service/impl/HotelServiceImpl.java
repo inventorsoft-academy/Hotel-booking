@@ -2,6 +2,7 @@ package com.bin.otkrivashkin.service.impl;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.service.HotelService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 /**
  * Created by otkrivashkin on 10.08.2017.
  */
-public class HotelServiceImpl {
+public class HotelServiceImpl implements HotelService {
 
     private Logger logger = Logger.getLogger(HotelServiceImpl.class.getName());
     private List<Hotel> listOfHotels;
@@ -30,9 +31,10 @@ public class HotelServiceImpl {
                 "4 - booking options\n",
                 "5 - journal options\n",
                 "100 - save\n",
-                "200 - load <hotelName>\n",
+                "200 - load\n",
                 "300 - exit\n",
-                "-1 - hotel in one click!\n"
+                "-1 - hotel in one click!\n",
+                "-2 - load default hotel\n"
         );
     }
 
