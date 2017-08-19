@@ -368,47 +368,52 @@ public class Hotel implements ClientInterface, RoomInterface, BookingInterface, 
     }
 
     @Override
-    public void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotEnoughMoneyException {
-        // validate client
+    public void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
+
         if (!client.validate().keySet().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
-        // validate price
+
         if (price <= 0) throw new WrongNumberArgsException("price can`t be lower or equal to zero.");
-        // loop by min and max price
-        for (Room room : rooms) {
-            if (room.getPrice() > client.getCash()) {
-                throw new NotEnoughMoneyException("Client doesn't have enough money. Get a job!");
-            }
-            // if room with that price is not available
-        }
-        // book client in the first available room
+
+        Room roomByPrice = getRoom(price);
+        if (roomByPrice == null) throw new NotFoundException("Room with price " + price + " not found.");
+
+        booking(client, roomByPrice);
 
 
     }
 
     @Override
-    public void bookClient(String firstName) throws IOException {
+    public void bookClient(String firstName) throws IOException, NotFoundException, WrongArgumentException {
         Client client = getClient(firstName);
         Room room = getRoom(RoomType.COUNTRY);
         booking(client, room);
     }
 
     @Override
-    public void bookClient(Client client, Room room) {
+    public void bookClient(Client client, Room room) throws NotFoundException, WrongArgumentException {
         booking(client, room);
     }
 
     @Override
-    public void bookClient(String firstName, RoomType type) throws IOException {
+    public void bookClient(String firstName, RoomType type) throws IOException, NotFoundException, WrongArgumentException {
         Client client = getClient(firstName);
         Room room = getRoom(type);
         booking(client, room);
     }
 
     @Override
-    public void unBookClient(Client client) {
-        //TODO
+    public void unBookClient(Room room, Client client) throws WrongArgumentException {
+
+        if (room.validate().keySet().isEmpty()) {
+            throw new WrongArgumentException("Problem with room.");
+        }
+
+        if (client.validate().keySet().isEmpty()) {
+            throw new WrongArgumentException("Problem with client.");
+        }
+        clientRoomMap.remove(room.getNumber(), client);
     }
 
     @Override

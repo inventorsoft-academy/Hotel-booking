@@ -9,10 +9,24 @@ public class Client implements Validator {
 
     private String firstName;
     private String lastName;
+    private double cash;
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Client(double cash) {
+        super();
+        this.cash = cash;
+    }
+
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
     }
 
     public String getFirstName() {
