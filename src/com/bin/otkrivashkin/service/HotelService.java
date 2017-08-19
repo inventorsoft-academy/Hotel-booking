@@ -3,6 +3,7 @@ package com.bin.otkrivashkin.service;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,8 +81,15 @@ public class HotelService {
         );
     }
 
-    public void add(Hotel hotel) {
-        listOfHotels.add(hotel);
+    public void add(Hotel hotel) throws IOException {
+        if (hotel.validate().keySet().isEmpty()) {
+            listOfHotels.add(hotel);
+            System.out.println("hotel with name " + hotel.getName() + " was created!");
+        }
+        else {
+            throw new IOException(hotel.validate().values().stream().findAny().get());
+        }
+
     }
 
     public Hotel getByName(String hotelByName) {

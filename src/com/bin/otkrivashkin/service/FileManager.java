@@ -62,7 +62,7 @@ public class FileManager {
         }
     }
 
-    public void loadHotel(String hotelName) {
+    public void loadHotel(String hotelName) throws IOException {
         String[] currentLine;
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(HOTEL_PATH + hotelName + ".txt")))) {
             String line;

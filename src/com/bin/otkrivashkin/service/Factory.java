@@ -15,7 +15,7 @@ public class Factory {
         this.hotelService = hotelService;
     }
 
-    public void initHotel() {
+    public void initHotel() throws IOException {
         Hotel hotel = new Hotel();
         hotel.setName("test");
 

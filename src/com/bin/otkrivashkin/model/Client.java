@@ -1,5 +1,7 @@
 package com.bin.otkrivashkin.model;
 
+import com.bin.otkrivashkin.exception.WrongArgumentException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +23,13 @@ public class Client implements Validator {
         return lastName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) throws WrongArgumentException {
+        if (firstName.length() < 3) throw new WrongArgumentException("First name is too short!");
         this.firstName = firstName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName) throws WrongArgumentException {
+        if (firstName.length() < 3) throw new WrongArgumentException("Last name is too short!");
         this.lastName = lastName;
     }
 
