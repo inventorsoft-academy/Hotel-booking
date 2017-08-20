@@ -18,7 +18,7 @@ public class Hotel implements Client, Room, Booking, Validator {
     private String name;
     private List<RoomImpl> rooms;
     private List<ClientImpl> clients;
-    private Map<Integer, ClientImpl> clientRoomMap;
+    private Map<RoomImpl, ClientImpl> clientRoomMap;
 
     public Hotel() {
         rooms = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Hotel implements Client, Room, Booking, Validator {
         logger.info(Hotel.class.getName() + " was created.");
     }
 
-    public Map<Integer, ClientImpl> getClientRoomMap() {
+    public Map<RoomImpl, ClientImpl> getClientRoomMap() {
         logger.info("map of rooms via clients.");
         return clientRoomMap;
     }
@@ -263,17 +263,15 @@ public class Hotel implements Client, Room, Booking, Validator {
             rooms.clear();
             logger.info("Rooms deleted!");
         }
-
-
     }
 
     @Override
-    public void addClient(ClientImpl cLient) throws IOException {
-        if (cLient.validate().keySet().isEmpty()) {
-            clients.add(cLient);
+    public void addClient(ClientImpl client) throws IOException {
+        if (client.validate().keySet().isEmpty()) {
+            clients.add(client);
         }
         else {
-            throw new IOException(cLient.validate().values().stream().findAny().get());
+            throw new IOException(client.validate().values().stream().findAny().get());
         }
     }
 
@@ -322,10 +320,10 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         boolean isRemoved = clients.remove(getClient(firstName));
         if (isRemoved) {
-            logger.info("ClientImpl was deleted.");
+            logger.info("Client was deleted.");
         }
         else {
-            logger.info("ClientImpl does not exist.");
+            logger.info("Client does not exist.");
         }
 
     }
@@ -355,7 +353,7 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         for (RoomImpl apartment : rooms) {
             if (room.getType().equals(apartment.getType()) && apartment.isAvailable()) {
-                clientRoomMap.put(apartment.getNumber(), getClient(client));
+                clientRoomMap.put(apartment, getClient(client));
                 room.setAvailable(false);
                 clients.remove(client);
                 logger.info("ClientImpl " + client.getFirstName() + " is in the room with number " + room.getNumber());

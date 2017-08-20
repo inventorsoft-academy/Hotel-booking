@@ -2,9 +2,11 @@ package com.bin.otkrivashkin.main;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
+import com.bin.otkrivashkin.model.Journal;
 import com.bin.otkrivashkin.model.impl.ClientImpl;
 import com.bin.otkrivashkin.model.impl.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.model.impl.JournalImpl;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 import com.bin.otkrivashkin.util.Factory;
 import com.bin.otkrivashkin.util.FileManager;
@@ -25,6 +27,7 @@ public class Main {
         Printer printer = new Printer();
         FileManager fileManager = new FileManager(hotelServiceImpl);
         Scanner scanner = new Scanner(System.in);
+        Journal journal = new JournalImpl(hotelServiceImpl);
 
         boolean inMain = true;
         while (inMain) {
@@ -176,13 +179,16 @@ public class Main {
                                 break;
                             case 1: // book client
                                 bookClient(hotelName, hotelServiceImpl, printer);
-                                printer.printSuccessMessage();
                                 break;
                             case 2: // unbook client
                                 // impl
                                 break;
                             case 3: // get rooms with clients
-                                getRoomWithClients(hotelName, hotelServiceImpl, printer);
+                                try {
+                                    journal.printAll(hotelName);
+                                } catch (NotFoundException e) {
+                                    logger.info(e.getMessage());
+                                }
                                 break;
                             case 300:
                                 inBooking = false;

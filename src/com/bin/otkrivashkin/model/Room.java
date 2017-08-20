@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface Room {
 
+
+
     void addRoom(RoomImpl room);
 
     void addRoom(RoomType type);

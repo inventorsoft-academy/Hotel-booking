@@ -105,9 +105,35 @@ public class HotelServiceImpl implements HotelService {
         throw new NotFoundException("Hotel not found or doesn't exist.");
     }
 
+    public Hotel getHotel(String hotelName) throws NotFoundException {
+        for (Hotel hotel : listOfHotels) {
+            if (hotel.getName().equalsIgnoreCase(hotelName)) {
+                return hotel;
+            }
+        }
+        throw new NotFoundException("something goes wrong...");
+    }
+
+    @Override
     public List<Hotel> getHotels() {
         logger.info("return list of hotels.");
         return listOfHotels;
+    }
+
+    @Override
+    public Hotel getHotel(Hotel hotel) throws NotFoundException {
+        if (hotel.validate().keySet().isEmpty()) {
+            for (Hotel hotl : listOfHotels) {
+                if (hotl.equals(hotel)) {
+                    logger.info("Return hotel.");
+                    return hotl;
+                }
+            }
+        }
+        else {
+            throw new NotFoundException(hotel.validate().values().stream().findAny().get());
+        }
+        throw new NotFoundException("Not found.");
     }
 
     public void updateHotel(String oldName, String newName) throws NotFoundException, WrongNumberArgsException {
