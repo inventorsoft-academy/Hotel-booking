@@ -98,18 +98,15 @@ public class Main {
                                 break;
                             case 1:
                                 addRooms(hotelName, hotelServiceImpl, printer);
-                                printer.printSuccessMessage();
                                 break;
                             case 2:
                                 getRooms(hotelName, hotelServiceImpl, printer);
                                 break;
                             case 3:
                                 editRooms(hotelName, hotelServiceImpl, printer);
-                                printer.printSuccessMessage();
                                 break;
                             case 4:
                                 deleteRooms(hotelName, hotelServiceImpl, printer);
-                                printer.printSuccessMessage();
                                 break;
                             case 300:
                                 inRoom = false;

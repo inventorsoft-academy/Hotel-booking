@@ -4,6 +4,8 @@ import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.service.BookingService;
+import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.HotelService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
@@ -19,15 +21,19 @@ import java.util.Map;
 public class TextFileManager implements FileManager {
 
     private HotelService hotelService;
+    private ClientService clientService;
+    private BookingService bookingService;
 
-    public TextFileManager(HotelService hotelService) {
+    public TextFileManager(HotelService hotelService, ClientService clientService, BookingService bookingService) {
         this.hotelService = hotelService;
+        this.clientService = clientService;
+        this.bookingService = bookingService;
     }
 
     private static final String HOTEL_PATH = "src\\main\\java\\resources\\hotels\\";
-    public static final String ROOM_PREFIX = "Room/";
-    public static final String CLIENT_PREFIX = "Client/";
-    public static final String BOOKING_PREFIX = "Booking/";
+    private static final String ROOM_PREFIX = "Room/";
+    private static final String CLIENT_PREFIX = "Client/";
+    private static final String BOOKING_PREFIX = "Booking/";
 
 
     @Override
@@ -50,7 +56,7 @@ public class TextFileManager implements FileManager {
                 writer.newLine();
             }
 
-            for (Client client : hotel.getClients()) {
+            for (Client client : clientService.getClients()) {
                 writer.write(CLIENT_PREFIX +
                         client.getFirstName() + "," +
                         client.getLastName() + "," +
@@ -58,7 +64,7 @@ public class TextFileManager implements FileManager {
                 writer.newLine();
             }
 
-            for (Map.Entry<Room, Client> entry : hotel.getClientRoomMap().entrySet()) {
+            for (Map.Entry<Room, Client> entry : bookingService.getBooking().entrySet()) {
                 Room room = entry.getKey();
                 Client client = entry.getValue();
                 writer.write(BOOKING_PREFIX +
@@ -148,8 +154,8 @@ public class TextFileManager implements FileManager {
             }
         }
         hotel.addRooms(rooms);
-        hotel.addClients(clients);
-        hotel.addBooking(roomViaClient);
+        clientService.addClients(clients);
+        bookingService.addBooking(roomViaClient);
 
         try {
             hotelService.add(hotel);

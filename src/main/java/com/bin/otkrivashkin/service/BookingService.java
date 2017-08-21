@@ -10,6 +10,7 @@ import com.bin.otkrivashkin.model.Room;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface BookingService {
 
@@ -32,5 +33,7 @@ public interface BookingService {
 
     void unBookClient(Room room, Client client) throws WrongArgumentException;
 
+    Map<Room, Client> getBooking();
 
+    void addBooking(Map<Room, Client> roomViaClient);
 }
