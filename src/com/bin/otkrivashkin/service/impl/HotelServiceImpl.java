@@ -95,7 +95,8 @@ public class HotelServiceImpl implements HotelService {
 
     }
 
-    public Hotel getByName(String hotelByName) throws NotFoundException {
+    @Override
+    public Hotel getHotel(String hotelByName) throws NotFoundException {
         if (hotelByName == null) throw new NullPointerException("We need a name of the hotel.");
         for (Hotel hotel: listOfHotels) {
             if (hotel.getName().equals(hotelByName)) {
@@ -103,15 +104,6 @@ public class HotelServiceImpl implements HotelService {
             }
         }
         throw new NotFoundException("Hotel not found or doesn't exist.");
-    }
-
-    public Hotel getHotel(String hotelName) throws NotFoundException {
-        for (Hotel hotel : listOfHotels) {
-            if (hotel.getName().equalsIgnoreCase(hotelName)) {
-                return hotel;
-            }
-        }
-        throw new NotFoundException("something goes wrong...");
     }
 
     @Override
@@ -137,11 +129,11 @@ public class HotelServiceImpl implements HotelService {
     }
 
     public void updateHotel(String oldName, String newName) throws NotFoundException, WrongNumberArgsException {
-        getByName(oldName).setName(newName);
+        this.getHotel(oldName).setName(newName);
     }
 
     public void deleteHotel(String hotelToDelete) throws NotFoundException {
-        listOfHotels.remove(getByName(hotelToDelete));
+        listOfHotels.remove(this.getHotel(hotelToDelete));
     }
 
 }

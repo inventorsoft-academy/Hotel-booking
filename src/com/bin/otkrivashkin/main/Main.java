@@ -258,7 +258,7 @@ public class Main {
 
     private static void saveTxtFile(String hotelName, HotelServiceImpl hotelServiceImpl, FileManager fileManager) {
         try {
-            fileManager.saveHotel(hotelServiceImpl.getByName(hotelName));
+            fileManager.saveHotel(hotelServiceImpl.getHotel(hotelName));
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -267,7 +267,7 @@ public class Main {
     private static void getRoomWithClients(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
         Hotel hotel;
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             printer.print(hotel.getClientRoomMap().toString());
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -283,7 +283,7 @@ public class Main {
         int typeAsInt = printer.scanInt();
         RoomType type = printer.getRoomType(typeAsInt);
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.bookClient(firstName, type);
         } catch (NotFoundException | WrongArgumentException | IOException e) {
             logger.info(e.getMessage());
@@ -296,7 +296,7 @@ public class Main {
         printer.print("Enter first name of the client");
         firstName = printer.scanString();
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.deleteClient(firstName);
         } catch (NotFoundException | IOException e) {
             logger.info(e.getMessage());
@@ -310,7 +310,7 @@ public class Main {
         printer.print("Enter new first name");
         String newFirstName = printer.scanString();
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.editClient(oldFirstName, newFirstName);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -322,7 +322,7 @@ public class Main {
     private static void getClients(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
         Hotel hotel;
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             printer.print(hotel.getClients());
         } catch (NotFoundException e) {
             logger.info(e.getMessage());
@@ -336,7 +336,7 @@ public class Main {
         printer.print("Enter last name");
         String lastName = printer.scanString();
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.addClient(new ClientImpl(firstName, lastName));
         } catch (IOException | NotFoundException e) {
             logger.info(e.getMessage());
@@ -350,7 +350,7 @@ public class Main {
         int deleteTypeAsInt = printer.scanInt();
         RoomType deletedRoomType = printer.getRoomType(deleteTypeAsInt);
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.deleteRooms(deletedRoomType);
         } catch (NotFoundException | WrongArgumentException e) {
             logger.info(e.getMessage());
@@ -368,7 +368,7 @@ public class Main {
         RoomType oldRoomType = printer.getRoomType(oldTypeAsInt);
         RoomType newRoomType = printer.getRoomType(newTypeAsInt);
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.editRoom(oldRoomType, newRoomType);
         } catch (NotFoundException | WrongArgumentException e) {
             logger.info(e.getMessage());
@@ -378,7 +378,7 @@ public class Main {
     private static void getRooms(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
         Hotel hotel;
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             printer.print(hotel.getRooms());
         } catch (NotFoundException e) {
             logger.info(e.getMessage());
@@ -394,7 +394,7 @@ public class Main {
         int typeOfRoom = printer.scanInt();
         RoomType type = printer.getRoomType(typeOfRoom);
         try {
-            hotel = hotelServiceImpl.getByName(hotelName);
+            hotel = hotelServiceImpl.getHotel(hotelName);
             hotel.addRooms(countOfRooms, type);
         } catch (NotFoundException | WrongNumberArgsException e) {
             logger.info(e.getMessage());
@@ -416,7 +416,7 @@ public class Main {
         printer.print("enter a name of the hotel");
         hotelName = printer.scanString();
         try {
-            printer.print(hotelServiceImpl.getByName(hotelName));
+            printer.print(hotelServiceImpl.getHotel(hotelName));
         } catch (NotFoundException e) {
             logger.info(e.getMessage());
         }
@@ -460,7 +460,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
         try {
-            hotel = hotelServiceImpl.getByName("test");
+            hotel = hotelServiceImpl.getHotel("test");
             hotelName = hotel.getName();
         } catch (NotFoundException e) {
             logger.info(e.getMessage());
