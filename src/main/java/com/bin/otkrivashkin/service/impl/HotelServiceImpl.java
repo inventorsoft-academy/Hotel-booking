@@ -26,63 +26,84 @@ public class HotelServiceImpl implements HotelService {
     public void getMainOptions() {
 
         List<String> strings = Arrays.asList(
-                "1 - hotel options\n",
-                "2 - room options\n",
-                "3 - client options\n",
-                "4 - booking options\n",
-                "5 - journal options\n",
-                "100 - save\n",
-                "200 - load\n",
-                "300 - exit\n",
-                "-1 - hotel in one click!\n"
+                "1 - hotel options",
+                "2 - room options",
+                "3 - client options",
+                "4 - booking options",
+                "5 - journal options",
+                "100 - save",
+                "200 - load",
+                "300 - exit",
+                "-1 - hotel in one click!"
         );
-        System.out.println(strings);
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
-    public List<String> getHotelOptions() {
-        return Arrays.asList(
-                "1 - add hotel\n",
-                "2 - view hotel\n",
-                "3 - edit hotel\n",
-                "4 - delete hotel\n",
-                "100 - save\n",
-                "200 - load <hotelName>\n",
+    public void getHotelOptions() {
+        List<String> strings = Arrays.asList(
+                "1 - add hotel",
+                "2 - view hotel",
+                "3 - edit hotel",
+                "4 - delete hotel",
+                "100 - save",
+                "200 - load <hotelName>",
                 "300 - quit"
         );
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
-    public List<String> getRoomOptions() {
-        return Arrays.asList(
-                "1 - add rooms\n",
-                "2 - view rooms\n",
-                "3 - edit rooms\n",
-                "4 - delete rooms\n"
+    public void getRoomOptions() {
+        List<String> strings = Arrays.asList(
+                "1 - add rooms",
+                "2 - view rooms",
+                "3 - edit rooms",
+                "4 - delete rooms"
         );
+
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
-    public List<String> getClientOptions(){
-        return Arrays.asList(
-                "1 - add client\n",
-                "2 - view client\n",
-                "3 - edit client\n",
-                "4 - delete client\n"
+    public void getClientOptions(){
+        List<String> strings = Arrays.asList(
+                "1 - add client",
+                "2 - view client",
+                "3 - edit client",
+                "4 - delete client"
         );
+
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
-    public List<String> getBookingOptions() {
-        return Arrays.asList(
-                "1 - book client\n",
-                "2 - unbook client\n"
+    public void getBookingOptions() {
+        List<String> strings = Arrays.asList(
+                "1 - book client",
+                "2 - unbook client"
         );
+
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
-    public List<String> getJournalOptions() {
-        return Arrays.asList(
-                "1 - print client\n",
-                "2 - print room\n",
-                "3 - print rooms\n",
-                "4 - print available rooms\n"
+    public void getJournalOptions() {
+        List<String> strings = Arrays.asList(
+                "1 - print client",
+                "2 - print room",
+                "3 - print rooms",
+                "4 - print available rooms"
         );
+
+        for (String string: strings) {
+            System.out.println(string);
+        }
     }
 
     @Override

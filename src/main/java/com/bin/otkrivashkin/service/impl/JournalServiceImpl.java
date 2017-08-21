@@ -29,6 +29,8 @@ public class JournalServiceImpl {
         this.hotelService = hotelService;
     }
 
+
+
     public void printAll(String hotelName) throws NotFoundException {
 
         Hotel hotelAsPrint = hotelService.getHotel(hotelName);

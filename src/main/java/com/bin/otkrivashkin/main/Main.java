@@ -5,7 +5,6 @@ import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
-import com.bin.otkrivashkin.service.JournalService;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 import com.bin.otkrivashkin.service.impl.JournalServiceImpl;
 import com.bin.otkrivashkin.util.Factory;
@@ -59,7 +58,7 @@ public class Main {
 
                         switch (hotelOption) {
                             case 0:
-                                printer.print(hotelServiceImpl.getHotelOptions());
+                                hotelServiceImpl.getHotelOptions();
                                 break;
                             case 1:
                                 hotelName = createHotel(hotelServiceImpl, printer);
@@ -95,7 +94,7 @@ public class Main {
 
                         switch (roomOption) {
                             case 0:
-                                printer.print(hotelServiceImpl.getRoomOptions());
+                                hotelServiceImpl.getRoomOptions();
                                 break;
                             case 1:
                                 addRooms(hotelName, hotelServiceImpl, printer);
@@ -136,7 +135,7 @@ public class Main {
 
                         switch (clientOption) {
                             case 0:
-                                printer.print(hotelServiceImpl.getClientOptions());
+                                hotelServiceImpl.getClientOptions();
                                 break;
                             case 1:
                                 addClient(hotelName, hotelServiceImpl, printer);
@@ -174,7 +173,7 @@ public class Main {
 
                         switch (bookingOption) {
                             case 0:
-                                printer.print(hotelServiceImpl.getBookingOptions());
+                                hotelServiceImpl.getBookingOptions();
                                 break;
                             case 1:
                                 bookClient(hotelName, hotelServiceImpl, printer);
@@ -206,7 +205,7 @@ public class Main {
 
                         switch (journalOption) {
                             case 0:
-                                printer.print(hotelServiceImpl.getJournalOptions());
+                                hotelServiceImpl.getJournalOptions();
                                 break;
                             case 1:
                                 JournalServiceImpl journalService = new JournalServiceImpl(hotelServiceImpl);
