@@ -1,8 +1,8 @@
-package com.bin.otkrivashkin.model.impl;
+package com.bin.otkrivashkin.model;
 
 import java.time.LocalDateTime;
 
-public class JournalImpl {
+public class Journal {
 
     private String HOTEL_FILE_PATH = "src\\resources\\";
     private Hotel hotel;
@@ -10,14 +10,14 @@ public class JournalImpl {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public JournalImpl(Hotel hotel, int roomNumber, LocalDateTime endDate) {
+    public Journal(Hotel hotel, int roomNumber, LocalDateTime endDate) {
         this.hotel = hotel;
         this.roomNumber = roomNumber;
         this.startDate = LocalDateTime.now();
         this.endDate = endDate;
     }
 
-    public JournalImpl() {}
+    public Journal() {}
 
     public Hotel getHotel() {
         return hotel;
@@ -53,7 +53,7 @@ public class JournalImpl {
 
     @Override
     public String toString() {
-        return "JournalImpl{" +
+        return "Journal{" +
                 "hotel=" + hotel.getName() +
                 ", roomNumber=" + roomNumber +
                 ", startDate=" + startDate +

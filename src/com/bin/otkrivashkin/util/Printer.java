@@ -1,6 +1,6 @@
 package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
 
 import java.util.ArrayList;

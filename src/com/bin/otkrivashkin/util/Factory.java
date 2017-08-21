@@ -2,11 +2,12 @@ package com.bin.otkrivashkin.util;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
-import com.bin.otkrivashkin.model.impl.ClientImpl;
-import com.bin.otkrivashkin.model.impl.Hotel;
-import com.bin.otkrivashkin.model.impl.RoomImpl;
+import com.bin.otkrivashkin.model.Client;
+import com.bin.otkrivashkin.model.Hotel;
+import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
+import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
 
@@ -18,15 +19,15 @@ public class Factory {
         this.hotelServiceImpl = hotelServiceImpl;
     }
 
-    public void initHotel() throws IOException {
+    public void initHotel() throws IOException, WrongNumberArgsException {
         Hotel hotel = new Hotel();
         hotel.setName("test");
 
-        RoomImpl room1 = new RoomImpl(RoomType.CHEAP, 1, 250.0, true);
-        RoomImpl room2 = new RoomImpl(RoomType.LUX, 2, 1250.0, true);
-        RoomImpl room3 = new RoomImpl(RoomType.INDIAN, 3, 2250.0, true);
-        RoomImpl room4 = new RoomImpl(RoomType.COUNTRY, 4, 3250.0, true);
-        RoomImpl room5 = new RoomImpl(RoomType.PRESIDENT, 5, 4250.0, true);
+        Room room1 = new Room(RoomType.CHEAP, 1, 250.0, true);
+        Room room2 = new Room(RoomType.LUX, 2, 1250.0, true);
+        Room room3 = new Room(RoomType.INDIAN, 3, 2250.0, true);
+        Room room4 = new Room(RoomType.COUNTRY, 4, 3250.0, true);
+        Room room5 = new Room(RoomType.PRESIDENT, 5, 4250.0, true);
 
         hotel.addRoom(room1);
         hotel.addRoom(room2);
@@ -34,11 +35,11 @@ public class Factory {
         hotel.addRoom(room4);
         hotel.addRoom(room5);
 
-        ClientImpl client1 = new ClientImpl("Igor", "bin");
-        ClientImpl client2 = new ClientImpl("Evgen", "bon");
-        ClientImpl client3 = new ClientImpl("Bro", "gud");
-        ClientImpl client4 = new ClientImpl("Aulio", "zorro");
-        ClientImpl client5 = new ClientImpl("Kent", "fine");
+        Client client1 = new Client("Igor", "bin");
+        Client client2 = new Client("Evgen", "bon");
+        Client client3 = new Client("Bro", "gud");
+        Client client4 = new Client("Aulio", "zorro");
+        Client client5 = new Client("Kent", "fine");
 
         try {
             hotel.addClient(client1);

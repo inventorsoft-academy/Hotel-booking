@@ -1,7 +1,9 @@
-package com.bin.otkrivashkin.model.impl;
+package com.bin.otkrivashkin.model;
 
 import com.bin.otkrivashkin.exception.*;
-import com.bin.otkrivashkin.model.*;
+import com.bin.otkrivashkin.service.BookingService;
+import com.bin.otkrivashkin.service.ClientService;
+import com.bin.otkrivashkin.service.RoomInterface;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
@@ -11,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Hotel implements Client, Room, Booking, Validator {
+public class Hotel implements ClientService, RoomInterface, BookingService, Validator {
 
     private Logger logger = Logger.getLogger(Hotel.class.getName());
 
     private String name;
-    private List<RoomImpl> rooms;
-    private List<ClientImpl> clients;
-    private Map<Integer, ClientImpl> clientRoomMap;
+    private List<Room> rooms;
+    private List<Client> clients;
+    private Map<Room, Client> clientRoomMap;
 
     public Hotel() {
         rooms = new ArrayList<>();
@@ -35,7 +37,7 @@ public class Hotel implements Client, Room, Booking, Validator {
         logger.info(Hotel.class.getName() + " was created.");
     }
 
-    public Map<Integer, ClientImpl> getClientRoomMap() {
+    public Map<Room, Client> getClientRoomMap() {
         logger.info("map of rooms via clients.");
         return clientRoomMap;
     }
@@ -50,15 +52,15 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public List<RoomImpl> getRooms() {
+    public List<Room> getRooms() {
         return rooms;
     }
 
     @Override
-    public List<RoomImpl> getAvailableRooms() {
+    public List<Room> getAvailableRooms() {
 
-        List<RoomImpl> temp = new ArrayList<>();
-        for (RoomImpl room : rooms) {
+        List<Room> temp = new ArrayList<>();
+        for (Room room : rooms) {
             if (room.isAvailable()) {
                 temp.add(room);
             }
@@ -67,7 +69,7 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public void addRoom(RoomImpl room) {
+    public void addRoom(Room room) {
 
         if (room.validate().keySet().isEmpty()) {
             int roomNumber = rooms.size() + 1;
@@ -76,7 +78,7 @@ public class Hotel implements Client, Room, Booking, Validator {
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! RoomImpl is not added!");
+            logger.info("Error! Room is not added!");
         }
 
     }
@@ -86,11 +88,11 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (type != null) {
             int roomNumber = rooms.size() + 1;
-            rooms.add(new RoomImpl(type, roomNumber));
+            rooms.add(new Room(type, roomNumber));
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! RoomImpl is not added!");
+            logger.info("Error! Room is not added!");
         }
 
     }
@@ -100,11 +102,11 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (type != null && number > 0) {
             int roomNumber = rooms.size() + 1;
-            rooms.add(new RoomImpl(type, roomNumber));
+            rooms.add(new Room(type, roomNumber));
             logger.info("room was added.");
         }
         else {
-            logger.info("Error! RoomImpl is not added!");
+            logger.info("Error! Room is not added!");
         }
     }
 
@@ -115,22 +117,22 @@ public class Hotel implements Client, Room, Booking, Validator {
         if (type != null) {
             for (int i = 0; i < countOfRooms; i++) {
                 int roomNumber = rooms.size() + 1;
-                rooms.add(new RoomImpl(type, roomNumber));
+                rooms.add(new Room(type, roomNumber));
             }
             logger.info("room(s) was(were) added!");
         }
         else {
-            logger.info("Error! RoomImpl(s) is(are) not added!");
+            logger.info("Error! Room(s) is(are) not added!");
         }
     }
 
     @Override
-    public RoomImpl getRoom(int numberOfRoom) throws WrongNumberArgsException, NotFoundException {
+    public Room getRoom(int numberOfRoom) throws WrongNumberArgsException, NotFoundException {
 
         if (numberOfRoom <= 0) throw new WrongNumberArgsException("the number must be greater than zero!");
-        for (RoomImpl room : rooms) {
+        for (Room room : rooms) {
             if (room.getNumber() == numberOfRoom) {
-                logger.info("Success! RoomImpl was found.");
+                logger.info("Success! Room was found.");
                 return room;
             }
         }
@@ -138,37 +140,37 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public RoomImpl getRoom(double price) throws NegativePriceException, NotFoundException {
+    public Room getRoom(double price) throws NegativePriceException, NotFoundException {
         if (price <= 0) throw new NegativePriceException("The price must be greater than zero!");
-        for (RoomImpl room : rooms) {
+        for (Room room : rooms) {
             if (room.getPrice() == price) {
                 logger.info("room with price " + price + " was found!");
                 return room;
             }
         }
-        throw new NotFoundException("RoomImpl with price " + price + "does not exist");
+        throw new NotFoundException("Room with price " + price + "does not exist");
     }
 
     @Override
-    public RoomImpl getRoom(RoomType type) throws WrongArgumentException, NotFoundException {
+    public Room getRoom(RoomType type) throws WrongArgumentException, NotFoundException {
 
         if (type == null) throw new WrongArgumentException("The room type doesn't selected.");
 
-        for (RoomImpl room : rooms) {
+        for (Room room : rooms) {
             if (room.getType().equals(type)) {
                 logger.info("The room with type " + type + " returned.");
                 return room;
             }
         }
-        throw new NotFoundException("RoomImpl with type " + type + "not found.");
+        throw new NotFoundException("Room with type " + type + "not found.");
     }
 
     @Override
-    public RoomImpl getRoom(RoomImpl room) throws NotFoundException {
+    public Room getRoom(Room room) throws NotFoundException {
         if (room.validate().keySet().isEmpty()) {
-            for (RoomImpl groom : rooms) {
+            for (Room groom : rooms) {
                 if (groom.equals(room)) {
-                    logger.info("Success! RoomImpl was returned.");
+                    logger.info("Success! Room was returned.");
                     return groom;
                 }
             }
@@ -180,7 +182,7 @@ public class Hotel implements Client, Room, Booking, Validator {
     public void editRoom(RoomType oldType, RoomType newType) throws NotFoundException, WrongArgumentException {
         if (newType == null) throw new WrongArgumentException("New type is wrong!");
         getRoom(oldType).setType(newType);
-        logger.info("RoomImpl was updated!");
+        logger.info("Room was updated!");
     }
 
     @Override
@@ -188,9 +190,9 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (newNumberOfRoom <= 0 || oldNumberOfRoom <= 0) throw new WrongNumberArgsException("Error! Number of room must be greater than zero!");
 
-        RoomImpl room = getRoom(newNumberOfRoom);
+        Room room = getRoom(newNumberOfRoom);
 
-        if (room != null) throw new ChooseAnotherOneException("RoomImpl with number " + newNumberOfRoom + " is already exist, choose another one.");
+        if (room != null) throw new ChooseAnotherOneException("Room with number " + newNumberOfRoom + " is already exist, choose another one.");
         getRoom(oldNumberOfRoom).setNumber(newNumberOfRoom);
         logger.info("room was updated");
     }
@@ -200,7 +202,7 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (oldType == null || newType == null) throw new WrongArgumentException("Error! Wrong type!");
 
-        for (RoomImpl room : rooms) {
+        for (Room room : rooms) {
             if (room.getType().equals(oldType)) {
                 room.setType(newType);
                 logger.info("rooms was updated.");
@@ -219,7 +221,7 @@ public class Hotel implements Client, Room, Booking, Validator {
             logger.info("room with number " + numberOfRoom + " was deleted.");
         }
         else {
-            logger.info("RoomImpl with number " + numberOfRoom + " does not exist.");
+            logger.info("Room with number " + numberOfRoom + " does not exist.");
         }
     }
 
@@ -240,7 +242,7 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (deletedRoomType == null) throw new WrongArgumentException("Error! Problem with type...");
         int count = 0;
-        for (RoomImpl room : rooms) {
+        for (Room room : rooms) {
             if (room.getType().equals(deletedRoomType)) {
                 rooms.remove(room);
                 count++;
@@ -268,7 +270,7 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public void addClient(ClientImpl cLient) throws IOException {
+    public void addClient(Client cLient) throws IOException {
         if (cLient.validate().keySet().isEmpty()) {
             clients.add(cLient);
         }
@@ -278,12 +280,12 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public ClientImpl getClient(String firstName) throws IOException, NotFoundException {
+    public Client getClient(String firstName) throws IOException, NotFoundException {
         if (firstName == null || firstName.length() < 3) throw new IOException("The first name is too short!");
 
-        for (ClientImpl client : clients) {
+        for (Client client : clients) {
             if (client.getFirstName().equalsIgnoreCase(firstName)) {
-                logger.info("ClientImpl " + firstName + " was found!");
+                logger.info("Client " + firstName + " was found!");
                 return client;
             }
         }
@@ -291,11 +293,11 @@ public class Hotel implements Client, Room, Booking, Validator {
     }
 
     @Override
-    public ClientImpl getClient(ClientImpl client) throws WrongArgumentException, NotFoundException {
+    public Client getClient(Client client) throws WrongArgumentException, NotFoundException {
         if (client.validate().keySet().isEmpty()) {
-            for (ClientImpl visitor : clients) {
+            for (Client visitor : clients) {
                 if (visitor.equals(client)) {
-                    logger.info("ClientImpl " + client.getFirstName() + " was found.");
+                    logger.info("Client " + client.getFirstName() + " was found.");
                     return visitor;
                 }
             }
@@ -303,10 +305,10 @@ public class Hotel implements Client, Room, Booking, Validator {
         else {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
-        throw new NotFoundException("ClientImpl with first name " + client.getFirstName() + " not found");
+        throw new NotFoundException("Client with first name " + client.getFirstName() + " not found");
     }
 
-    public List<ClientImpl> getClients() {
+    public List<Client> getClients() {
         logger.info("List of the clients.");
         return clients;
     }
@@ -314,7 +316,7 @@ public class Hotel implements Client, Room, Booking, Validator {
     @Override
     public void editClient(String oldFirstName, String newFirstName) throws IOException, NotFoundException, WrongArgumentException {
         getClient(oldFirstName).setFirstName(newFirstName);
-        logger.info("ClientImpl was updated.");
+        logger.info("Client was updated.");
     }
 
     @Override
@@ -322,29 +324,27 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         boolean isRemoved = clients.remove(getClient(firstName));
         if (isRemoved) {
-            logger.info("ClientImpl was deleted.");
+            logger.info("Client was deleted.");
         }
         else {
-            logger.info("ClientImpl does not exist.");
+            logger.info("Client does not exist.");
         }
-
     }
 
 
     @Override
-    public void bookClient(ClientImpl client) throws NotFoundException, WrongArgumentException {
-        RoomImpl room = getRoom(RoomType.COUNTRY);
+    public void bookClient(Client client) throws NotFoundException, WrongArgumentException {
+        Room room = getRoom(RoomType.COUNTRY);
         booking(client, room);
-
     }
 
     @Override
-    public void bookClient(ClientImpl client, RoomType type) throws NotFoundException, WrongArgumentException {
-        RoomImpl room = getRoom(type);
+    public void bookClient(Client client, RoomType type) throws NotFoundException, WrongArgumentException {
+        Room room = getRoom(type);
         booking(client, room);
     }
 
-    private void booking(ClientImpl client, RoomImpl room) throws NotFoundException, WrongArgumentException {
+    private void booking(Client client, Room room) throws NotFoundException, WrongArgumentException {
         if (!client.validate().keySet().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
@@ -353,23 +353,23 @@ public class Hotel implements Client, Room, Booking, Validator {
             throw new WrongArgumentException(room.validate().values().stream().findAny().get());
         }
 
-        for (RoomImpl apartment : rooms) {
+        for (Room apartment : rooms) {
             if (room.getType().equals(apartment.getType()) && apartment.isAvailable()) {
-                clientRoomMap.put(apartment.getNumber(), getClient(client));
+                clientRoomMap.put(apartment, getClient(client));
                 room.setAvailable(false);
                 clients.remove(client);
-                logger.info("ClientImpl " + client.getFirstName() + " is in the room with number " + room.getNumber());
+                logger.info("Client " + client.getFirstName() + " is in the room with number " + room.getNumber());
                 return;
             }
             else {
-                logger.info("RoomImpl with " + room.getType() + " type is not available. Sorry.");
+                logger.info("Room with " + room.getType() + " type is not available. Sorry.");
             }
         }
-        logger.info("ClientImpl not found.");
+        logger.info("Client not found.");
     }
 
     @Override
-    public void bookClient(ClientImpl client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
+    public void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
 
         if (!client.validate().keySet().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
@@ -377,8 +377,8 @@ public class Hotel implements Client, Room, Booking, Validator {
 
         if (price <= 0) throw new WrongNumberArgsException("price can`t be lower or equal to zero.");
 
-        RoomImpl roomByPrice = getRoom(price);
-        if (roomByPrice == null) throw new NotFoundException("RoomImpl with price " + price + " not found.");
+        Room roomByPrice = getRoom(price);
+        if (roomByPrice == null) throw new NotFoundException("Room with price " + price + " not found.");
 
         booking(client, roomByPrice);
 
@@ -387,25 +387,25 @@ public class Hotel implements Client, Room, Booking, Validator {
 
     @Override
     public void bookClient(String firstName) throws IOException, NotFoundException, WrongArgumentException {
-        ClientImpl client = getClient(firstName);
-        RoomImpl room = getRoom(RoomType.COUNTRY);
+        Client client = getClient(firstName);
+        Room room = getRoom(RoomType.COUNTRY);
         booking(client, room);
     }
 
     @Override
-    public void bookClient(ClientImpl client, RoomImpl room) throws NotFoundException, WrongArgumentException {
+    public void bookClient(Client client, Room room) throws NotFoundException, WrongArgumentException {
         booking(client, room);
     }
 
     @Override
     public void bookClient(String firstName, RoomType type) throws IOException, NotFoundException, WrongArgumentException {
-        ClientImpl client = getClient(firstName);
-        RoomImpl room = getRoom(type);
+        Client client = getClient(firstName);
+        Room room = getRoom(type);
         booking(client, room);
     }
 
     @Override
-    public void unBookClient(RoomImpl room, ClientImpl client) throws WrongArgumentException {
+    public void unBookClient(Room room, Client client) throws WrongArgumentException {
 
         if (room.validate().keySet().isEmpty()) {
             throw new WrongArgumentException("Problem with room.");

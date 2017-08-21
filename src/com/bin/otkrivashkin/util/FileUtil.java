@@ -1,8 +1,8 @@
 package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.Hotel;
 
-public interface File {
+public interface FileUtil {
 
     void saveHotel(Hotel hotel);
 

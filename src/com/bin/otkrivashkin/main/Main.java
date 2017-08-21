@@ -2,8 +2,8 @@ package com.bin.otkrivashkin.main;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
-import com.bin.otkrivashkin.model.impl.ClientImpl;
-import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.Client;
+import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
 import com.bin.otkrivashkin.util.Factory;
@@ -176,7 +176,6 @@ public class Main {
                                 break;
                             case 1: // book client
                                 bookClient(hotelName, hotelServiceImpl, printer);
-                                printer.printSuccessMessage();
                                 break;
                             case 2: // unbook client
                                 // impl
@@ -331,7 +330,7 @@ public class Main {
         String lastName = printer.scanString();
         try {
             hotel = hotelServiceImpl.getByName(hotelName);
-            hotel.addClient(new ClientImpl(firstName, lastName));
+            hotel.addClient(new Client(firstName, lastName));
         } catch (IOException | NotFoundException e) {
             logger.info(e.getMessage());
         }
@@ -452,6 +451,8 @@ public class Main {
             factory.initHotel();
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        } catch (WrongNumberArgsException e) {
+            e.printStackTrace();
         }
         try {
             hotel = hotelServiceImpl.getByName("test");

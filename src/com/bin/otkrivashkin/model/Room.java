@@ -1,49 +1,116 @@
 package com.bin.otkrivashkin.model;
 
-import com.bin.otkrivashkin.exception.ChooseAnotherOneException;
-import com.bin.otkrivashkin.exception.NegativePriceException;
-import com.bin.otkrivashkin.exception.NotFoundException;
-import com.bin.otkrivashkin.exception.WrongArgumentException;
-import com.bin.otkrivashkin.model.impl.RoomImpl;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.List;
+public class Room implements Validator {
 
-public interface Room {
+    private RoomType type;
+    private int number;
+    private double price;
+    private boolean available;
 
-    void addRoom(RoomImpl room);
+    public Room(RoomType type, int number, double price, boolean available) {
+        this.type = type;
+        this.number = number;
+        this.price = price;
+        this.available = available;
+    }
 
-    void addRoom(RoomType type);
+    Room(RoomType type, int number) {
+        this.type = type;
+        this.number = number;
+        this.price = setPrice(type);
+        this.available = true;
+    }
 
-    void addRoom(RoomType type, int number);
+    private double setPrice(RoomType type) {
+        switch (type) {
+            case CHEAP: return 100;
+            case LUX: return 200;
+            case INDIAN: return 300;
+            case COUNTRY: return 500;
+            case PRESIDENT: return 1000;
+            default:
+                return 0;
+        }
+    }
 
-    void addRooms(int count, RoomType type) throws WrongNumberArgsException;
+    public int getNumber() {
+        return number;
+    }
 
-    RoomImpl getRoom(int numberOfRoom) throws Exception;
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-    RoomImpl getRoom(double price) throws NegativePriceException, NotFoundException;
+    public RoomType getType() {
+        return type;
+    }
 
-    RoomImpl getRoom(RoomType type) throws WrongArgumentException, NotFoundException;
+    public void setType(RoomType type) {
+        this.type = type;
+    }
 
-    RoomImpl getRoom(RoomImpl room) throws NotFoundException;
+    public double getPrice() {
+        return price;
+    }
 
-    List<RoomImpl> getRooms();
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-    List<RoomImpl> getAvailableRooms();
+    public boolean isAvailable() {
+        return available;
+    }
 
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
+    @Override
+    public String toString() {
+        return "{" +
+                type + "," +
+                number + "," +
+                price + "," +
+                available
+                + "}"
+                ;
+    }
 
-    void editRoom(RoomType oldType, RoomType newType) throws NotFoundException, WrongArgumentException;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    void editRoom(int oldNumberOfRoom, int newNumberOfRoom) throws NotFoundException, WrongNumberArgsException, ChooseAnotherOneException;
+        Room room = (Room) o;
 
-    void editRooms(RoomType oldType, RoomType newType) throws WrongArgumentException;
+        if (number != room.number) return false;
+        if (Double.compare(room.price, price) != 0) return false;
+        if (available != room.available) return false;
+        return type == room.type;
+    }
 
-    void deleteFirstRoom(int numberOfRoom) throws NotFoundException, WrongNumberArgsException;
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = type != null ? type.hashCode() : 0;
+        result = 31 * result + number;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (available ? 1 : 0);
+        return result;
+    }
 
-    void deleteFirstRoom(RoomType type) throws NotFoundException, WrongArgumentException;
+    @Override
+    public Map<String, String> validate() {
+        Map<String,String> res = new HashMap<>();
 
-    void deleteRooms(RoomType type) throws WrongArgumentException, NotFoundException;
+        if (type == null) res.put("type", "Room type is empty!");
+        if (price <= 0) res.put("price", "The price is less than must to be");
 
-    void deleteRooms();
+        return res;
+    }
 }

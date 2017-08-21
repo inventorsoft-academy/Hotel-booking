@@ -1,7 +1,7 @@
 package com.bin.otkrivashkin.service.impl;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
-import com.bin.otkrivashkin.model.impl.Hotel;
+import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.service.HotelService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
@@ -92,9 +92,9 @@ public class HotelServiceImpl implements HotelService {
         else {
             throw new IOException(hotel.validate().values().stream().findAny().get());
         }
-
     }
 
+    @Override
     public Hotel getByName(String hotelByName) throws NotFoundException {
         if (hotelByName == null) throw new NullPointerException("We need a name of the hotel.");
         for (Hotel hotel: listOfHotels) {
@@ -105,15 +105,18 @@ public class HotelServiceImpl implements HotelService {
         throw new NotFoundException("Hotel not found or doesn't exist.");
     }
 
+    @Override
     public List<Hotel> getHotels() {
         logger.info("return list of hotels.");
         return listOfHotels;
     }
 
+    @Override
     public void updateHotel(String oldName, String newName) throws NotFoundException, WrongNumberArgsException {
         getByName(oldName).setName(newName);
     }
 
+    @Override
     public void deleteHotel(String hotelToDelete) throws NotFoundException {
         listOfHotels.remove(getByName(hotelToDelete));
     }
