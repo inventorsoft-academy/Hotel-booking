@@ -10,7 +10,7 @@ import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.util.List;
 
-public interface RoomInterface {
+public interface RoomService {
 
     void addRoom(Room room);
 

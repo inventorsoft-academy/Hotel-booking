@@ -5,25 +5,27 @@ import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.service.JournalService;
 import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
+import com.bin.otkrivashkin.service.impl.JournalServiceImpl;
 import com.bin.otkrivashkin.util.Factory;
-import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.util.TextFileManager;
 import com.bin.otkrivashkin.util.Printer;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 public class Main {
-    private static Logger logger = Logger.getLogger(Main.class.getName());
+    private static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
 
         String hotelName = "";
         HotelServiceImpl hotelServiceImpl = new HotelServiceImpl();
         Printer printer = new Printer();
-        FileManager fileManager = new FileManager(hotelServiceImpl);
+        TextFileManager fileManager = new TextFileManager(hotelServiceImpl);
         Scanner scanner = new Scanner(System.in);
 
         boolean inMain = true;
@@ -34,15 +36,15 @@ public class Main {
             try {
                 mainOption = scanner.nextInt();
             } catch (InputMismatchException e) {
-                logger.warning("wrong argument! Only Integer type.");
+                logger.info("wrong argument! Only Integer type.");
                 scanner.next();
             }
 
             switch (mainOption) {
                 case 0:
-                    printer.print(hotelServiceImpl.getMainOptions());
+                    hotelServiceImpl.getMainOptions();
                     break;
-                case 1: // hotel options
+                case 1:
                     boolean inHotel = true;
                     while (inHotel) {
                         logger.info("hotel branch");
@@ -59,16 +61,16 @@ public class Main {
                             case 0:
                                 printer.print(hotelServiceImpl.getHotelOptions());
                                 break;
-                            case 1: // create hotel
+                            case 1:
                                 hotelName = createHotel(hotelServiceImpl, printer);
                                 break;
-                            case 2: // get hotel
+                            case 2:
                                 hotelName = getHotel(hotelServiceImpl, printer);
                                 break;
-                            case 3: // edit hotel
+                            case 3:
                                 editHotel(hotelServiceImpl, printer);
                                 break;
-                            case 4: // delete hotel
+                            case 4:
                                 deleteHotel(hotelServiceImpl, printer);
                                 break;
                             case 300:
@@ -79,7 +81,7 @@ public class Main {
                         }
                     }
                     break;
-                case 2: // room options
+                case 2:
                     boolean inRoom = true;
                     while (inRoom) {
                         printer.print("room branch");
@@ -95,18 +97,18 @@ public class Main {
                             case 0:
                                 printer.print(hotelServiceImpl.getRoomOptions());
                                 break;
-                            case 1: // add room-s
+                            case 1:
                                 addRooms(hotelName, hotelServiceImpl, printer);
                                 printer.printSuccessMessage();
                                 break;
-                            case 2: // get room-s
+                            case 2:
                                 getRooms(hotelName, hotelServiceImpl, printer);
                                 break;
-                            case 3: // edit room-s
+                            case 3:
                                 editRooms(hotelName, hotelServiceImpl, printer);
                                 printer.printSuccessMessage();
                                 break;
-                            case 4: // delete room-s
+                            case 4:
                                 deleteRooms(hotelName, hotelServiceImpl, printer);
                                 printer.printSuccessMessage();
                                 break;
@@ -118,7 +120,7 @@ public class Main {
                         }
                     }
                     break;
-                case 3: // client options
+                case 3:
                     boolean inClient = true;
                     while (inClient) {
                         printer.print("client branch");
@@ -136,16 +138,16 @@ public class Main {
                             case 0:
                                 printer.print(hotelServiceImpl.getClientOptions());
                                 break;
-                            case 1: // add client
+                            case 1:
                                 addClient(hotelName, hotelServiceImpl, printer);
                                 break;
-                            case 2: // get client
+                            case 2:
                                 getClients(hotelName, hotelServiceImpl, printer);
                                 break;
-                            case 3: // edit client
+                            case 3:
                                 editClient(hotelName, hotelServiceImpl, printer);
                                 break;
-                            case 4: // delete client
+                            case 4:
                                 deleteClient(hotelName, hotelServiceImpl, printer);
                                 break;
                             case 300:
@@ -156,7 +158,7 @@ public class Main {
                         }
                     }
                     break;
-                case 4: // booking options
+                case 4:
                     boolean inBooking = true;
                     while (inBooking) {
                         printer.print("booking branch");
@@ -174,13 +176,10 @@ public class Main {
                             case 0:
                                 printer.print(hotelServiceImpl.getBookingOptions());
                                 break;
-                            case 1: // book client
+                            case 1:
                                 bookClient(hotelName, hotelServiceImpl, printer);
                                 break;
-                            case 2: // unbook client
-                                // impl
-                                break;
-                            case 3: // get rooms with clients
+                            case 2:
                                 getRoomWithClients(hotelName, hotelServiceImpl, printer);
                                 break;
                             case 300:
@@ -191,7 +190,7 @@ public class Main {
                         }
                     }
                     break;
-                case 5: // journal options
+                case 5:
                     boolean inJournal = true;
                     while (inJournal) {
                         printer.print("journal branch");
@@ -209,14 +208,13 @@ public class Main {
                             case 0:
                                 printer.print(hotelServiceImpl.getJournalOptions());
                                 break;
-                            case 1: // print client
-
-                                break;
-                            case 2: // print rooms
-
-                                break;
-                            case 3: // print available rooms
-
+                            case 1:
+                                JournalService journalService = new JournalServiceImpl(hotelServiceImpl);
+                                try {
+                                    journalService.printAll(hotelName);
+                                } catch (NotFoundException e) {
+                                    logger.info(e.getMessage());
+                                }
                                 break;
                             case 300:
                                 inJournal = false;
@@ -230,7 +228,11 @@ public class Main {
                     printer.printSuccessMessage();
                     break;
                 case 200: // load
-                    hotelName = loadTxtFile(printer, fileManager);
+                    try {
+                        hotelName = loadTxtFile(printer, fileManager);
+                    } catch (WrongNumberArgsException e) {
+                        logger.info(e.getMessage());
+                    }
                     printer.printSuccessMessage();
                     break;
                 case 300: // exit
@@ -238,10 +240,7 @@ public class Main {
                     printer.print("Good bye");
                     break;
                 case -1: // get default hotel
-                    hotelName = initDefaultHotel(hotelServiceImpl, printer);
-                    break;
-                case -2: // load default hotel
-                    fileManager.loadHotel();
+                    hotelName = initDefaultHotel(hotelServiceImpl);
                     break;
                 default:
                     printer.print("Wrong argument");
@@ -249,7 +248,7 @@ public class Main {
         }
     }
 
-    private static void saveTxtFile(String hotelName, HotelServiceImpl hotelServiceImpl, FileManager fileManager) {
+    private static void saveTxtFile(String hotelName, HotelServiceImpl hotelServiceImpl, TextFileManager fileManager) {
         try {
             fileManager.saveHotel(hotelServiceImpl.getHotel(hotelName));
         } catch (NotFoundException e) {
@@ -443,7 +442,7 @@ public class Main {
         return hotelName;
     }
 
-    private static String initDefaultHotel(HotelServiceImpl hotelServiceImpl, Printer printer) {
+    private static String initDefaultHotel(HotelServiceImpl hotelServiceImpl) {
         Hotel hotel;
         String hotelName = "";
         Factory factory = new Factory(hotelServiceImpl);
@@ -455,7 +454,7 @@ public class Main {
             e.printStackTrace();
         }
         try {
-            hotel = hotelServiceImpl.getHotel("test");
+            hotel = hotelServiceImpl.getHotel("testhotel");
             hotelName = hotel.getName();
         } catch (NotFoundException e) {
             logger.info(e.getMessage());
@@ -463,15 +462,11 @@ public class Main {
         return hotelName;
     }
 
-    private static String loadTxtFile(Printer printer, FileManager fileManager) {
+    private static String loadTxtFile(Printer printer, TextFileManager fileManager) throws WrongNumberArgsException {
         printer.print("enter the hotel name");
         String hotelName;
         hotelName = printer.scanString();
-        try {
-            fileManager.loadHotel(hotelName);
-        } catch (IOException e) {
-            logger.info(e.getMessage());
-        }
+        fileManager.loadHotel(hotelName);
         return hotelName;
     }
 }

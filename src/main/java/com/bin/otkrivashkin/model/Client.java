@@ -2,7 +2,7 @@ package com.bin.otkrivashkin.model;
 
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,30 +11,39 @@ public class Client implements Validator {
     private String firstName;
     private String lastName;
     private double cash;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-
     }
 
-    public Client(double cash) {
-        super();
+    public Client(String firstName, String lastName, double cash) {
+        this(firstName, lastName);
         this.cash = cash;
     }
 
-    public LocalDateTime getStartDate() {
+    public Client(String firstName, String lastName, double cash, LocalDate startDate, LocalDate endDate) {
+        this(firstName, lastName, cash);
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(long days) {
-        this.endDate.plusDays(days);
+    public void setEndDate(LocalDate date) {
+        this.endDate = date;
+    }
+
+    public void setStartDate() {
+        this.startDate = LocalDate.now();
     }
 
     public double getCash() {
@@ -65,10 +74,13 @@ public class Client implements Validator {
 
     @Override
     public String toString() {
-        return "" +
-                firstName
-                + "," +
-                lastName;
+        return "Client{" +
+                firstName + ',' +
+                lastName + ',' +
+                cash + ',' +
+                startDate  + ',' +
+                endDate +
+                '}';
     }
 
     @Override

@@ -70,7 +70,7 @@ public class Room implements Validator {
 
     @Override
     public String toString() {
-        return "{" +
+        return "Room{" +
                 type + "," +
                 number + "," +
                 price + "," +

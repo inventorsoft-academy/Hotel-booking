@@ -23,8 +23,9 @@ public class HotelServiceImpl implements HotelService {
         listOfHotels = new ArrayList<>();
     }
 
-    public List<String> getMainOptions() {
-        return Arrays.asList(
+    public void getMainOptions() {
+
+        List<String> strings = Arrays.asList(
                 "1 - hotel options\n",
                 "2 - room options\n",
                 "3 - client options\n",
@@ -33,9 +34,9 @@ public class HotelServiceImpl implements HotelService {
                 "100 - save\n",
                 "200 - load\n",
                 "300 - exit\n",
-                "-1 - hotel in one click!\n",
-                "-2 - load default hotel\n"
+                "-1 - hotel in one click!\n"
         );
+        System.out.println(strings);
     }
 
     public List<String> getHotelOptions() {
@@ -88,7 +89,6 @@ public class HotelServiceImpl implements HotelService {
     public void add(Hotel hotel) throws IOException {
         if (hotel.validate().keySet().isEmpty()) {
             listOfHotels.add(hotel);
-            System.out.println("hotel with name " + hotel.getName() + " was created!");
         }
         else {
             throw new IOException(hotel.validate().values().stream().findAny().get());

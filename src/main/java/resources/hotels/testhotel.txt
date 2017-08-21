@@ -1,0 +1,9 @@
+Room/CHEAP,1,250.0,false
+Room/LUX,2,1250.0,false
+Room/INDIAN,3,2250.0,false
+Room/COUNTRY,4,3250.0,true
+Room/PRESIDENT,5,4250.0,true
+Client/kotop,kotop,5400.78
+Booking/LUX,2,1250.0,false,Evgen,evgen,9000.5,2017-08-21,2017-08-24
+Booking/CHEAP,1,250.0,false,joejoe,joejoe,7000.0,2017-08-21,2017-08-26
+Booking/INDIAN,3,2250.0,false,brobro,brobro,6500.2,2017-08-21,2017-08-22

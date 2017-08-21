@@ -3,17 +3,18 @@ package com.bin.otkrivashkin.model;
 import com.bin.otkrivashkin.exception.*;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
-import com.bin.otkrivashkin.service.RoomInterface;
+import com.bin.otkrivashkin.service.RoomService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Hotel implements ClientService, RoomInterface, BookingService, Validator {
+public class Hotel implements ClientService, RoomService, BookingService, Validator {
 
     private Logger logger = Logger.getLogger(Hotel.class.getName());
 
@@ -71,7 +72,7 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
     @Override
     public void addRoom(Room room) {
 
-        if (room.validate().keySet().isEmpty()) {
+        if (room.validate().isEmpty()) {
             int roomNumber = rooms.size() + 1;
             room.setNumber(roomNumber);
             rooms.add(room);
@@ -167,7 +168,7 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
 
     @Override
     public Room getRoom(Room room) throws NotFoundException {
-        if (room.validate().keySet().isEmpty()) {
+        if (room.validate().isEmpty()) {
             for (Room groom : rooms) {
                 if (groom.equals(room)) {
                     logger.info("Success! Room was returned.");
@@ -271,7 +272,7 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
 
     @Override
     public void addClient(Client cLient) throws IOException {
-        if (cLient.validate().keySet().isEmpty()) {
+        if (cLient.validate().isEmpty()) {
             clients.add(cLient);
         }
         else {
@@ -344,12 +345,30 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
         booking(client, room);
     }
 
+    @Override
+    public void bookClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException {
+        client.setStartDate();
+        LocalDate end = LocalDate.now().plusDays(days);
+        client.setEndDate(end);
+        booking(client, room);
+    }
+
+    @Override
+    public void bookClient(String firstName, RoomType type, long days) throws IOException, NotFoundException, WrongArgumentException {
+        Client client = this.getClient(firstName);
+        Room room = this.getRoom(type);
+        client.setStartDate();
+        LocalDate end = LocalDate.now().plusDays(days);
+        client.setEndDate(end);
+        booking(client, room);
+    }
+
     private void booking(Client client, Room room) throws NotFoundException, WrongArgumentException {
-        if (!client.validate().keySet().isEmpty()) {
+        if (!client.validate().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
 
-        if (!room.validate().keySet().isEmpty()) {
+        if (!room.validate().isEmpty()) {
             throw new WrongArgumentException(room.validate().values().stream().findAny().get());
         }
 
@@ -371,7 +390,7 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
     @Override
     public void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotFoundException, NegativePriceException {
 
-        if (!client.validate().keySet().isEmpty()) {
+        if (!client.validate().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
 
@@ -381,8 +400,6 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
         if (roomByPrice == null) throw new NotFoundException("Room with price " + price + " not found.");
 
         booking(client, roomByPrice);
-
-
     }
 
     @Override
@@ -407,11 +424,11 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
     @Override
     public void unBookClient(Room room, Client client) throws WrongArgumentException {
 
-        if (room.validate().keySet().isEmpty()) {
+        if (room.validate().isEmpty()) {
             throw new WrongArgumentException("Problem with room.");
         }
 
-        if (client.validate().keySet().isEmpty()) {
+        if (client.validate().isEmpty()) {
             throw new WrongArgumentException("Problem with client.");
         }
         clientRoomMap.remove(room.getNumber(), client);
@@ -430,8 +447,20 @@ public class Hotel implements ClientService, RoomInterface, BookingService, Vali
         Map<String,String> res = new HashMap<>();
 
         if (name.length() < 3) res.put(name, "The hotel name is too short! Make it longer.");
-        if (name.length() > 8) res.put(name, "The hotel name is too long! Maximum is eight chars!");
+        if (name.length() > 16) res.put(name, "The hotel name is too long! Maximum is 16 chars!");
 
         return res;
+    }
+
+    public void addRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public void addClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public void addBooking(Map<Room, Client> roomViaClient) {
+        this.clientRoomMap = roomViaClient;
     }
 }

@@ -21,7 +21,7 @@ public class Factory {
 
     public void initHotel() throws IOException, WrongNumberArgsException {
         Hotel hotel = new Hotel();
-        hotel.setName("test");
+        hotel.setName("testhotel");
 
         Room room1 = new Room(RoomType.CHEAP, 1, 250.0, true);
         Room room2 = new Room(RoomType.LUX, 2, 1250.0, true);
@@ -35,26 +35,24 @@ public class Factory {
         hotel.addRoom(room4);
         hotel.addRoom(room5);
 
-        Client client1 = new Client("Igor", "bin");
-        Client client2 = new Client("Evgen", "bon");
-        Client client3 = new Client("Bro", "gud");
-        Client client4 = new Client("Aulio", "zorro");
-        Client client5 = new Client("Kent", "fine");
+        Client client1 = new Client("joejoe", "joejoe", 7000.0);
+        Client client2 = new Client("Evgen", "evgen", 9000.5);
+        Client client3 = new Client("brobro", "brobro", 6500.2);
+        Client client4 = new Client("kotop", "kotop", 5400.78);
 
         try {
             hotel.addClient(client1);
             hotel.addClient(client2);
             hotel.addClient(client3);
             hotel.addClient(client4);
-            hotel.addClient(client5);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            hotel.bookClient(client1, room1);
-            hotel.bookClient(client2, room2);
-            hotel.bookClient(client3, room3);
+            hotel.bookClient(client1, room1, 5);
+            hotel.bookClient(client2, room2, 3);
+            hotel.bookClient(client3, room3, 1);
         } catch (NotFoundException | WrongArgumentException e) {
             e.printStackTrace();
         }
