@@ -84,6 +84,7 @@ public class HotelServiceImpl implements HotelService {
         );
     }
 
+    @Override
     public void add(Hotel hotel) throws IOException {
         if (hotel.validate().keySet().isEmpty()) {
             listOfHotels.add(hotel);
@@ -95,7 +96,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Hotel getByName(String hotelByName) throws NotFoundException {
+    public Hotel getHotel(String hotelByName) throws NotFoundException {
         if (hotelByName == null) throw new NullPointerException("We need a name of the hotel.");
         for (Hotel hotel: listOfHotels) {
             if (hotel.getName().equals(hotelByName)) {
@@ -113,12 +114,12 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void updateHotel(String oldName, String newName) throws NotFoundException, WrongNumberArgsException {
-        getByName(oldName).setName(newName);
+        getHotel(oldName).setName(newName);
     }
 
     @Override
     public void deleteHotel(String hotelToDelete) throws NotFoundException {
-        listOfHotels.remove(getByName(hotelToDelete));
+        listOfHotels.remove(getHotel(hotelToDelete));
     }
 
 }

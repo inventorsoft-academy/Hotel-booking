@@ -11,7 +11,7 @@ public interface HotelService {
 
     void add(Hotel hotel) throws IOException;
 
-    Hotel getByName(String hotelName) throws NotFoundException;
+    Hotel getHotel(String hotelName) throws NotFoundException;
 
     List<Hotel> getHotels();
 
