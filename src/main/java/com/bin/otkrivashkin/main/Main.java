@@ -209,7 +209,7 @@ public class Main {
                                 printer.print(hotelServiceImpl.getJournalOptions());
                                 break;
                             case 1:
-                                JournalService journalService = new JournalServiceImpl(hotelServiceImpl);
+                                JournalServiceImpl journalService = new JournalServiceImpl(hotelServiceImpl);
                                 try {
                                     journalService.printAll(hotelName);
                                 } catch (NotFoundException e) {

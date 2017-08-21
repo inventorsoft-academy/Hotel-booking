@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TextFileManager {
+public class TextFileManager implements FileManager {
 
     private HotelService hotelService;
 
@@ -29,6 +29,8 @@ public class TextFileManager {
     public static final String CLIENT_PREFIX = "Client/";
     public static final String BOOKING_PREFIX = "Booking/";
 
+
+    @Override
     public void saveHotel(Hotel hotel) {
 
         File file = new File(HOTEL_PATH + hotel.getName() + ".txt");
@@ -80,7 +82,8 @@ public class TextFileManager {
         }
     }
 
-    public void loadHotel(String hotelName) throws WrongNumberArgsException {
+    @Override
+    public Hotel loadHotel(String hotelName) throws WrongNumberArgsException {
         File file = new File(HOTEL_PATH + hotelName + ".txt");
 
         List<String> list = new ArrayList<>();
@@ -94,7 +97,7 @@ public class TextFileManager {
                 ex.printStackTrace();
             }
             if(list.isEmpty())
-                return;
+                return null;
         }
         Hotel hotel = new Hotel();
         hotel.setName(hotelName);
@@ -153,5 +156,7 @@ public class TextFileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return hotel;
     }
 }
