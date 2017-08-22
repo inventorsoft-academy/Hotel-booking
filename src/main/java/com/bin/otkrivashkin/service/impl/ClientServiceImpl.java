@@ -36,8 +36,11 @@ public class ClientServiceImpl implements ClientService {
                 return client;
             }
         }
+
         throw new NotFoundException("The client is not exist");
     }
+
+
 
     @Override
     public Client getClient(Client client) throws WrongArgumentException, NotFoundException {
@@ -77,5 +80,40 @@ public class ClientServiceImpl implements ClientService {
         else {
             throw  new NotFoundException(String.valueOf(client.validate().values()));
         }
+    }
+
+    @Override
+    public int addClients(List<Client> clients) {
+        this.clients.addAll(clients);
+        return clients.size();
+    }
+
+    @Override
+    public void printClients() {
+
+    }
+
+    @Override
+    public int getClientIndex(Client client) {
+        return clients.indexOf(client);
+    }
+
+    @Override
+    public int getClientId(Client clientToEdit) {
+        return clients.stream()
+                .filter(client -> client.equals(clientToEdit))
+                .findFirst()
+                .get()
+                .getClientId();
+    }
+
+    @Override
+    public void setClient(int clientIndex, Client client) {
+        clients.set(clientIndex, client);
+    }
+
+    @Override
+    public void deleteClients() {
+        clients.clear();
     }
 }

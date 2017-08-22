@@ -1,12 +1,13 @@
 package com.bin.otkrivashkin.model;
 
 import com.bin.otkrivashkin.exception.WrongArgumentException;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
+@Component
 public class Client implements Validator {
 
     private int clientId;
@@ -32,12 +33,14 @@ public class Client implements Validator {
     public Client(String firstName, String lastName, double cash) {
         this(firstName, lastName);
         this.cash = cash;
+        clientId = uniqueId.getAndIncrement();
     }
 
     public Client(String firstName, String lastName, double cash, LocalDate startDate, LocalDate endDate) {
         this(firstName, lastName, cash);
         this.startDate = startDate;
         this.endDate = endDate;
+        this.clientId = uniqueId.getAndIncrement();
     }
 
     public LocalDate getStartDate() {

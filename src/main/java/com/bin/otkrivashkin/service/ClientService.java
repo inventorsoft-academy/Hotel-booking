@@ -23,11 +23,15 @@ public interface ClientService {
 
     void deleteClient(Client client) throws NotFoundException;
 
-    void addClients(List<Client> clients);
+    int addClients(List<Client> clients);
 
     void printClients();
 
+    int getClientIndex(Client client);
+
     int getClientId(Client clientToEdit);
 
-    void setClient(int clientId, Client clientToEdit);
+    void setClient(int clientIndex, Client clientToEdit);
+
+    void deleteClients();
 }

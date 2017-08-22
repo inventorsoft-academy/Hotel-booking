@@ -6,6 +6,7 @@ import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
+import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.HotelService;
 import com.bin.otkrivashkin.service.JournalService;
 import com.bin.otkrivashkin.util.FileManager;
@@ -25,8 +26,10 @@ public class JournalServiceImpl {
 
     private HotelService hotelService;
 
-    public JournalServiceImpl(HotelService hotelService) {
+    private BookingService bookingService;
+    public JournalServiceImpl(HotelService hotelService, BookingService bookingService) {
         this.hotelService = hotelService;
+        this.bookingService = bookingService;
     }
 
 
@@ -34,7 +37,7 @@ public class JournalServiceImpl {
     public void printAll(String hotelName) throws NotFoundException {
 
         Hotel hotelAsPrint = hotelService.getHotel(hotelName);
-        Map<Room, Client> clientRoomMap = hotelAsPrint.getClientRoomMap();
+        Map<Room, Client> clientRoomMap = bookingService.getBooking();
 
         List<Room> rooms = new ArrayList<>(clientRoomMap.keySet());
         List<Client> clients = new ArrayList<>(clientRoomMap.values());

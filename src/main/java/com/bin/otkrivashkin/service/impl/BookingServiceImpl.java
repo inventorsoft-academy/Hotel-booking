@@ -109,6 +109,31 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    @Override
+    public Map<Room, Client> getBooking() {
+        return null;
+    }
+
+    @Override
+    public void addBooking(Map<Room, Client> roomViaClient) {
+
+    }
+
+    @Override
+    public void registrationClients() {
+
+    }
+
+    @Override
+    public void cancelRegistration(String name) {
+
+    }
+
+    @Override
+    public void cancelRegistration(int roomNumber) {
+
+    }
+
     private void booking(Client client, Room room) throws NotFoundException, WrongArgumentException {
         if (!client.validate().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
