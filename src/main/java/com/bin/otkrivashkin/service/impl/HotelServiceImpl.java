@@ -23,6 +23,7 @@ public class HotelServiceImpl implements HotelService {
         listOfHotels = new ArrayList<>();
     }
 
+    @Override
     public void getMainOptions() {
 
         List<String> strings = Arrays.asList(
@@ -41,6 +42,7 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
+    @Override
     public void getHotelOptions() {
         List<String> strings = Arrays.asList(
                 "1 - add hotel",
@@ -56,6 +58,7 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
+    @Override
     public void getRoomOptions() {
         List<String> strings = Arrays.asList(
                 "1 - add rooms",
@@ -69,6 +72,7 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
+    @Override
     public void getClientOptions(){
         List<String> strings = Arrays.asList(
                 "1 - add client",
@@ -82,6 +86,7 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
+    @Override
     public void getBookingOptions() {
         List<String> strings = Arrays.asList(
                 "1 - book client",
@@ -93,6 +98,7 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
+    @Override
     public void getJournalOptions() {
         List<String> strings = Arrays.asList(
                 "1 - print client",

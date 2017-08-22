@@ -24,4 +24,10 @@ public interface ClientService {
     void deleteClient(Client client) throws NotFoundException;
 
     void addClients(List<Client> clients);
+
+    void printClients();
+
+    int getClientId(Client clientToEdit);
+
+    void setClient(int clientId, Client clientToEdit);
 }

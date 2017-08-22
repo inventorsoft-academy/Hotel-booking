@@ -7,6 +7,7 @@ import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.HotelService;
+import com.bin.otkrivashkin.service.RoomService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.*;
@@ -23,11 +24,13 @@ public class TextFileManager implements FileManager {
     private HotelService hotelService;
     private ClientService clientService;
     private BookingService bookingService;
+    private RoomService roomService;
 
-    public TextFileManager(HotelService hotelService, ClientService clientService, BookingService bookingService) {
+    public TextFileManager(HotelService hotelService, ClientService clientService, BookingService bookingService, RoomService roomService) {
         this.hotelService = hotelService;
         this.clientService = clientService;
         this.bookingService = bookingService;
+        this.roomService = roomService;
     }
 
     private static final String HOTEL_PATH = "src\\main\\java\\resources\\hotels\\";
@@ -47,7 +50,7 @@ public class TextFileManager implements FileManager {
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
 
-            for (Room room : hotel.getRooms()) {
+            for (Room room : roomService.getRooms()) {
                 writer.write( ROOM_PREFIX +
                         room.getType() + "," +
                         room.getNumber() + "," +
@@ -153,7 +156,7 @@ public class TextFileManager implements FileManager {
                 }
             }
         }
-        hotel.addRooms(rooms);
+        roomService.addRooms(rooms);
         clientService.addClients(clients);
         bookingService.addBooking(roomViaClient);
 

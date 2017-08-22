@@ -9,6 +9,18 @@ import java.util.List;
 
 public interface HotelService {
 
+    void getMainOptions();
+
+    void getHotelOptions();
+
+    void getRoomOptions();
+
+    void getClientOptions();
+
+    void getBookingOptions();
+
+    void getJournalOptions();
+
     void add(Hotel hotel) throws IOException;
 
     Hotel getHotel(String hotelName) throws NotFoundException;

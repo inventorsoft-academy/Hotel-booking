@@ -36,4 +36,10 @@ public interface BookingService {
     Map<Room, Client> getBooking();
 
     void addBooking(Map<Room, Client> roomViaClient);
+
+    void registrationClients();
+
+    void cancelRegistration(String name);
+
+    void cancelRegistration(int roomNumber);
 }

@@ -4,12 +4,15 @@ import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
+import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
-import com.bin.otkrivashkin.service.impl.HotelServiceImpl;
-import com.bin.otkrivashkin.service.impl.JournalServiceImpl;
-import com.bin.otkrivashkin.util.Factory;
+import com.bin.otkrivashkin.service.BookingService;
+import com.bin.otkrivashkin.service.ClientService;
+import com.bin.otkrivashkin.service.HotelService;
+import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.service.impl.*;
+import com.bin.otkrivashkin.util.FileManager;
 import com.bin.otkrivashkin.util.TextFileManager;
-import com.bin.otkrivashkin.util.Printer;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.IOException;
@@ -17,15 +20,20 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+
     private static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
+    private static String hotelName;
+    private static HotelService hotelService = new HotelServiceImpl();
+    private static RoomService roomService = new RoomServiceImpl();
+    private static ClientService clientService = new ClientServiceImpl();
+    private static BookingService bookingService = new BookingServiceImpl(roomService, clientService);
+
+    private static FileManager fileManager = new TextFileManager(hotelService, clientService, bookingService, roomService);
+    private static Scanner scanner = new Scanner(System.in);
+
 
     public static void main(String[] args) {
 
-        String hotelName = "";
-        HotelServiceImpl hotelServiceImpl = new HotelServiceImpl();
-        Printer printer = new Printer();
-        TextFileManager fileManager = new TextFileManager(hotelServiceImpl);
-        Scanner scanner = new Scanner(System.in);
 
         boolean inMain = true;
         while (inMain) {
@@ -41,7 +49,7 @@ public class Main {
 
             switch (mainOption) {
                 case 0:
-                    hotelServiceImpl.getMainOptions();
+                    hotelService.getMainOptions();
                     break;
                 case 1:
                     boolean inHotel = true;
@@ -58,19 +66,53 @@ public class Main {
 
                         switch (hotelOption) {
                             case 0:
-                                hotelServiceImpl.getHotelOptions();
+                                hotelService.getHotelOptions();
                                 break;
-                            case 1:
-                                hotelName = createHotel(hotelServiceImpl, printer);
+                            case 1: // add hotel
+                                System.out.println("Enter name of the hotel");
+                                hotelName = scanner.next();
+                                Hotel hotel = new Hotel();
+                                try {
+                                    hotel.setName(hotelName);
+                                } catch (WrongNumberArgsException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    hotelService.add(hotel);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                                 break;
-                            case 2:
-                                hotelName = getHotel(hotelServiceImpl, printer);
+                            case 2: // get hotel
+                                // TODO print list of hotels
+                                System.out.println("Enter name of the hotel");
+                                hotelName = scanner.next();
+                                try {
+                                    hotelService.getHotel(hotelName);
+                                } catch (NotFoundException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case 3:
-                                editHotel(hotelServiceImpl, printer);
+                                System.out.println("Enter new name of the hotel");
+
+                                String newHotelName = scanner.next();
+                                try {
+                                    hotelService.updateHotel(hotelName, newHotelName);
+                                } catch (NotFoundException | WrongNumberArgsException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case 4:
-                                deleteHotel(hotelServiceImpl, printer);
+                                System.out.println("Enter new name of the hotel");
+                                hotelName = scanner.next();
+                                try {
+                                    hotelService.deleteHotel(hotelName);
+                                } catch (NotFoundException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case 300:
                                 inHotel = false;
@@ -83,7 +125,7 @@ public class Main {
                 case 2:
                     boolean inRoom = true;
                     while (inRoom) {
-                        printer.print("room branch");
+                        logger.info("room branch");
                         int roomOption = 999;
                         try {
                             roomOption = scanner.nextInt();
@@ -93,20 +135,71 @@ public class Main {
                         }
 
                         switch (roomOption) {
-                            case 0:
-                                hotelServiceImpl.getRoomOptions();
+                            case 0: // add rooms
+                                hotelService.getRoomOptions();
                                 break;
                             case 1:
-                                addRooms(hotelName, hotelServiceImpl, printer);
+                                System.out.println("Enter count of rooms");
+                                int count = scanner.nextInt();
+                                System.out.println("Choose type of the room(s)");
+                                roomService.printTypes();
+                                int option = scanner.nextInt();
+                                RoomType outTypeRoom = roomService.getRoomType(option);
+                                try {
+                                    roomService.addRooms(count, outTypeRoom);
+                                } catch (WrongNumberArgsException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
-                            case 2:
-                                getRooms(hotelName, hotelServiceImpl, printer);
+                            case 2: // get rooms
+                                roomService.printRooms();
                                 break;
                             case 3:
-                                editRooms(hotelName, hotelServiceImpl, printer);
+                                System.out.println("Enter a number of the room.");
+                                int roomNUmber = scanner.nextInt();
+
+                                Room room = roomService.editRoom(roomNUmber);
+
+                                boolean inEditMode = true;
+                                while (inEditMode) {
+                                    System.out.println("1 - change type\n 2 - change price\n 3 - change status\n 100 - save & exit");
+                                    int roomEditOption = scanner.nextInt();
+
+                                    boolean newStatus = room.isAvailable();
+                                    double newPrice = room.getPrice();
+                                    RoomType inTypeRoom = room.getType();
+                                    switch (roomEditOption) {
+                                        case 1:
+                                            System.out.println("choose new type");
+                                            roomService.printTypes();
+                                            option = scanner.nextInt();
+                                            inTypeRoom = roomService.getRoomType(option);
+                                            break;
+                                        case 2:
+                                            System.out.println("set new price");
+                                            newPrice = scanner.nextDouble();
+                                            break;
+                                        case 3:
+                                            System.out.println("set new status for the room");
+                                            newStatus = scanner.nextBoolean();
+                                            break;
+                                        case 4:
+                                            room.setAvailable(newStatus);
+                                            room.setPrice(newPrice);
+                                            room.setType(inTypeRoom);
+                                            int roomId = roomService.getRoomId(room);
+                                            roomService.setRoom(roomId, room);
+                                            inEditMode = false;
+                                            break;
+                                        default:
+                                            //
+                                    }
+                                }
                                 break;
                             case 4:
-                                deleteRooms(hotelName, hotelServiceImpl, printer);
+                                System.out.println("Enter number of the room");
+                                int roomNumber = scanner.nextInt();
+                                roomService.deleteRoom(roomNumber);
                                 break;
                             case 300:
                                 inRoom = false;
@@ -119,8 +212,8 @@ public class Main {
                 case 3:
                     boolean inClient = true;
                     while (inClient) {
-                        printer.print("client branch");
 
+                        logger.info("client branch");
                         int clientOption = 999;
 
                         try {
@@ -132,19 +225,121 @@ public class Main {
 
                         switch (clientOption) {
                             case 0:
-                                hotelServiceImpl.getClientOptions();
+                                hotelService.getClientOptions();
                                 break;
-                            case 1:
-                                addClient(hotelName, hotelServiceImpl, printer);
+                            case 1:// add
+                                System.out.println("Enter the first name");
+                                String firstName = scanner.next();
+                                System.out.println("Enter the last name");
+                                String lastName = scanner.next();
+                                System.out.println("Enter starting amount of money");
+                                double amountOfMoney = scanner.nextDouble();
+                                Client client = new Client(firstName, lastName, amountOfMoney);
+
+                                try {
+                                    clientService.addClient(client);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
-                            case 2:
-                                getClients(hotelName, hotelServiceImpl, printer);
+                            case 2: // get
+                                clientService.printClients();
                                 break;
-                            case 3:
-                                editClient(hotelName, hotelServiceImpl, printer);
+                            case 3: // edit
+                                System.out.println("select client to edit");
+                                clientService.printClients();
+                                System.out.println("Edit by\n 1 - first name\n 2 - last name");
+                                boolean inEditMode = true;
+                                while (inEditMode) {
+                                    int editClientOption = scanner.nextInt();
+                                    switch (editClientOption) {
+                                        case 1:
+                                            System.out.println("Enter the first name");
+                                            String firstNameEditMode = scanner.next();
+
+                                            Client clientToEdit = null;
+
+                                            try {
+                                                clientToEdit = clientService.getClient(firstNameEditMode);
+                                            } catch (IOException | NotFoundException e) {
+                                                e.printStackTrace();
+                                            }
+                                            System.out.println("1 - edit first name\n 2 - edit last name\n 3 - edit amount of money\n 4 - save & exit");
+                                            boolean editingClient = true;
+
+                                            String newFirstName = clientToEdit.getFirstName();
+                                            String newLastName = clientToEdit.getLastName();
+                                            double cash = clientToEdit.getCash();
+                                            while (editingClient) {
+
+                                                int inEditingClient = scanner.nextInt();
+                                                switch (inEditingClient) {
+                                                    case 1:
+                                                        System.out.println("Enter new first name");
+                                                        newFirstName = scanner.next();
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("enter new last name");
+                                                        newLastName = scanner.next();
+                                                        break;
+                                                    case 3:
+                                                        System.out.println("enter new amount of money");
+                                                        cash = scanner.nextDouble();
+                                                        break;
+                                                    case 4:
+                                                        try {
+                                                            clientToEdit.setFirstName(newFirstName);
+                                                            clientToEdit.setLastName(newLastName);
+                                                            clientToEdit.setCash(cash);
+                                                        } catch (WrongArgumentException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                        int clientId = clientService.getClientId(clientToEdit);
+                                                        clientService.setClient(clientId, clientToEdit);
+                                                        editingClient = false;
+                                                        break;
+                                                    default:
+                                                        //
+                                                }
+                                            }
+                                            break;
+                                        case 2:
+                                            // same as by first name
+                                            break;
+                                        case 4:
+                                            inEditMode = false;
+                                            break;
+                                        default:
+                                            //
+                                    }
+                                }
                                 break;
-                            case 4:
-                                deleteClient(hotelName, hotelServiceImpl, printer);
+                            case 4: // delete
+                                System.out.println("DELETE CLIENT BY\n 1 - FIRST NAME\n 2 - LAST NAME\n");
+                                int deleteOption = scanner.nextInt();
+                                switch (deleteOption) {
+                                    case 1:
+                                        System.out.println("Enter the first name of the client");
+                                        String firstNameToDelete = scanner.next();
+                                        try {
+                                            clientService.deleteClient(firstNameToDelete);
+                                        } catch (IOException | NotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case 2:
+                                        System.out.println("Enter the last name of the client");
+                                        String lastNameToDelete = scanner.next();
+                                        try {
+                                            clientService.deleteClient(lastNameToDelete);
+                                        } catch (IOException | NotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    default:
+                                        //
+                                }
                                 break;
                             case 300:
                                 inClient = false;
@@ -157,12 +352,11 @@ public class Main {
                 case 4:
                     boolean inBooking = true;
                     while (inBooking) {
-                        printer.print("booking branch");
-
+                        logger.info("booking branch");
                         int bookingOption = 999;
 
                         try {
-                            bookingOption = printer.scanInt();
+                            bookingOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
                             logger.warning("wrong argument");
                             scanner.next();
@@ -170,13 +364,76 @@ public class Main {
 
                         switch (bookingOption) {
                             case 0:
-                                hotelServiceImpl.getBookingOptions();
+                                hotelService.getBookingOptions();
                                 break;
-                            case 1:
-                                bookClient(hotelName, hotelServiceImpl, printer);
+                            case 1: // add
+
+                                System.out.println("Which client to book?");
+                                clientService.printClients();
+                                System.out.println("Enter the first name or the last name of the client");
+                                String clientName = scanner.next();
+
+                                Client client = null;
+
+                                try {
+                                    client = clientService.getClient(clientName);
+                                } catch (IOException | NotFoundException e) {
+                                    e.printStackTrace();
+                                }
+
+                                System.out.println("Which room to book?");
+                                roomService.printRooms();
+                                System.out.println("Enter number of the room");
+                                int roomToBookOption = scanner.nextInt();
+
+                                Room room = null;
+
+                                try {
+                                    room = roomService.getRoom(roomToBookOption);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                System.out.println("How many days will you stay in the hotel?");
+
+                                int days = scanner.nextInt();
+
+                                try {
+                                    bookingService.bookClient(client, room, days);
+                                } catch (NotFoundException | WrongArgumentException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
-                            case 2:
-                                getRoomWithClients(hotelName, hotelServiceImpl, printer);
+                            case 2: // cancel reservation
+                                bookingService.registrationClients();
+                                System.out.println("Cancel reservation by\n 1 - first name or last name\n 2 - room number\n 3 - return to the previous menu");
+
+                                boolean inRegister = true;
+                                while (inRegister) {
+
+                                    int registerOption = scanner.nextInt();
+                                    switch (registerOption) {
+                                        case 1:
+                                            System.out.println("enter the first name or the last name");
+                                            String name = scanner.next();
+                                            bookingService.cancelRegistration(name);
+                                            break;
+                                        case 2:
+                                            System.out.println("Enter the number of the room");
+                                            int roomNumber = scanner.nextInt();
+                                            bookingService.cancelRegistration(roomNumber);
+                                            break;
+                                        case 3:
+                                            inRegister = false;
+                                            break;
+                                        default:
+                                            //
+                                    }
+                                }
+                                break;
+                            case 3:
+                                // print rooms and clients
+                                bookingService.registrationClients();
                                 break;
                             case 300:
                                 inBooking = false;
@@ -187,9 +444,19 @@ public class Main {
                     }
                     break;
                 case 5:
+
+                    /*
+                    * print all rooms
+                    * print all available rooms
+                    * print all notAvailable rooms
+                    * print all unregistered clients
+                    * print all registered clients
+                    *
+                    * */
+
                     boolean inJournal = true;
                     while (inJournal) {
-                        printer.print("journal branch");
+                        logger.info("journal branch");
 
                         int journalOption = 999;
 
@@ -202,15 +469,10 @@ public class Main {
 
                         switch (journalOption) {
                             case 0:
-                                hotelServiceImpl.getJournalOptions();
+                                hotelService.getJournalOptions();
                                 break;
                             case 1:
-                                JournalServiceImpl journalService = new JournalServiceImpl(hotelServiceImpl);
-                                try {
-                                    journalService.printAll(hotelName);
-                                } catch (NotFoundException e) {
-                                    logger.info(e.getMessage());
-                                }
+
                                 break;
                             case 300:
                                 inJournal = false;
@@ -220,249 +482,28 @@ public class Main {
                         }
                     }
                 case 100: // save
-                    saveTxtFile(hotelName, hotelServiceImpl, fileManager);
-                    printer.printSuccessMessage();
+                    try {
+                        fileManager.saveHotel(hotelService.getHotel(hotelName));
+                    } catch (NotFoundException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 200: // load
+                    System.out.println("Enter the hotel name");
+                    hotelName = scanner.next();
                     try {
-                        hotelName = loadTxtFile(printer, fileManager);
+                        fileManager.loadHotel(hotelName);
                     } catch (WrongNumberArgsException e) {
-                        logger.info(e.getMessage());
+                        e.printStackTrace();
                     }
-                    printer.printSuccessMessage();
                     break;
                 case 300: // exit
                     inMain = false;
-                    printer.print("Good bye");
-                    break;
-                case -1: // get default hotel
-                    hotelName = initDefaultHotel(hotelServiceImpl);
+                    logger.info("exit");
                     break;
                 default:
-                    printer.print("Wrong argument");
+                    //
             }
         }
-    }
-
-    private static void saveTxtFile(String hotelName, HotelServiceImpl hotelServiceImpl, TextFileManager fileManager) {
-        try {
-            fileManager.saveHotel(hotelServiceImpl.getHotel(hotelName));
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void getRoomWithClients(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            printer.print(hotel.getClientRoomMap().toString());
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void bookClient(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("Enter a first name");
-        String firstName = printer.scanString();
-        printer.print("Choose type of the room");
-        printer.printTypes();
-        int typeAsInt = printer.scanInt();
-        RoomType type = printer.getRoomType(typeAsInt);
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.bookClient(firstName, type);
-        } catch (NotFoundException | WrongArgumentException | IOException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void deleteClient(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        String firstName;
-        Hotel hotel;
-        printer.print("Enter first name of the client");
-        firstName = printer.scanString();
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.deleteClient(firstName);
-        } catch (NotFoundException | IOException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void editClient(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("Enter old first name");
-        String oldFirstName = printer.scanString();
-        printer.print("Enter new first name");
-        String newFirstName = printer.scanString();
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.editClient(oldFirstName, newFirstName);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (WrongArgumentException | NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void getClients(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            printer.print(hotel.getClients());
-        } catch (NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void addClient(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("Enter first name");
-        String firstName = printer.scanString();
-        printer.print("Enter last name");
-        String lastName = printer.scanString();
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.addClient(new Client(firstName, lastName));
-        } catch (IOException | NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void deleteRooms(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("enter type of rooms.");
-        printer.printTypes();
-        int deleteTypeAsInt = printer.scanInt();
-        RoomType deletedRoomType = printer.getRoomType(deleteTypeAsInt);
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.deleteRooms(deletedRoomType);
-        } catch (NotFoundException | WrongArgumentException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void editRooms(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("choose old type or rooms.");
-        printer.printTypes();
-        int oldTypeAsInt = printer.scanInt();
-        printer.print("choose new type of rooms.");
-        printer.printTypes();
-        int newTypeAsInt = printer.scanInt();
-        RoomType oldRoomType = printer.getRoomType(oldTypeAsInt);
-        RoomType newRoomType = printer.getRoomType(newTypeAsInt);
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.editRoom(oldRoomType, newRoomType);
-        } catch (NotFoundException | WrongArgumentException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void getRooms(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            printer.print(hotel.getRooms());
-        } catch (NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void addRooms(String hotelName, HotelServiceImpl hotelServiceImpl, Printer printer) {
-        Hotel hotel;
-        printer.print("enter count of rooms.");
-        int countOfRooms = printer.scanInt();
-        printer.print("enter type for room(s).");
-        printer.printTypes();
-        int typeOfRoom = printer.scanInt();
-        RoomType type = printer.getRoomType(typeOfRoom);
-        try {
-            hotel = hotelServiceImpl.getHotel(hotelName);
-            hotel.addRooms(countOfRooms, type);
-        } catch (NotFoundException | WrongNumberArgsException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static void deleteHotel(HotelServiceImpl hotelServiceImpl, Printer printer) {
-        printer.print("enter a name of the hotel");
-        String hotelToDelete = printer.scanString();
-        try {
-            hotelServiceImpl.deleteHotel(hotelToDelete);
-        } catch (NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static String getHotel(HotelServiceImpl hotelServiceImpl, Printer printer) {
-        String hotelName;
-        printer.print("enter a name of the hotel");
-        hotelName = printer.scanString();
-        try {
-            printer.print(hotelServiceImpl.getHotel(hotelName));
-        } catch (NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-        return hotelName;
-    }
-
-    private static void editHotel(HotelServiceImpl hotelServiceImpl, Printer printer) {
-        printer.print("enter old name of the hotel");
-        String oldName = printer.scanString();
-        printer.print("enter new name of the hotel");
-        String newName = printer.scanString();
-        try {
-            hotelServiceImpl.updateHotel(oldName, newName);
-        } catch (NotFoundException | WrongNumberArgsException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private static String createHotel(HotelServiceImpl hotelServiceImpl, Printer printer) {
-        printer.print("enter a name of the hotel");
-        String hotelName;
-        Hotel hotel;
-        hotelName = printer.scanString();
-        hotel = new Hotel();
-        try {
-            hotel.setName(hotelName);
-            hotelServiceImpl.add(hotel);
-        } catch (IOException | WrongNumberArgsException e) {
-            logger.info(e.getMessage());
-        }
-        return hotelName;
-    }
-
-    private static String initDefaultHotel(HotelServiceImpl hotelServiceImpl) {
-        Hotel hotel;
-        String hotelName = "";
-        Factory factory = new Factory(hotelServiceImpl);
-        try {
-            factory.initHotel();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (WrongNumberArgsException e) {
-            e.printStackTrace();
-        }
-        try {
-            hotel = hotelServiceImpl.getHotel("testhotel");
-            hotelName = hotel.getName();
-        } catch (NotFoundException e) {
-            logger.info(e.getMessage());
-        }
-        return hotelName;
-    }
-
-    private static String loadTxtFile(Printer printer, TextFileManager fileManager) throws WrongNumberArgsException {
-        printer.print("enter the hotel name");
-        String hotelName;
-        hotelName = printer.scanString();
-        fileManager.loadHotel(hotelName);
-        return hotelName;
     }
 }

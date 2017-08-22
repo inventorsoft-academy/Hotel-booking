@@ -5,18 +5,28 @@ import com.bin.otkrivashkin.exception.WrongArgumentException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Client implements Validator {
 
+    private int clientId;
     private String firstName;
     private String lastName;
     private double cash;
+
+    private static AtomicInteger uniqueId = new AtomicInteger();
+
     private LocalDate startDate;
     private LocalDate endDate;
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        clientId = uniqueId.getAndIncrement();
+    }
+
+    public int getClientId() {
+        return clientId;
     }
 
     public Client(String firstName, String lastName, double cash) {

@@ -2,9 +2,13 @@ package com.bin.otkrivashkin.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Room implements Validator {
 
+
+    private static AtomicInteger uniqueId = new AtomicInteger();
+    private int roomId;
     private RoomType type;
     private int number;
     private double price;
@@ -15,13 +19,15 @@ public class Room implements Validator {
         this.number = number;
         this.price = price;
         this.available = available;
+        this.roomId = uniqueId.getAndIncrement();
     }
 
-    Room(RoomType type, int number) {
+    public Room(RoomType type, int number) {
         this.type = type;
         this.number = number;
         this.price = setPrice(type);
         this.available = true;
+        this.roomId = uniqueId.getAndIncrement();
     }
 
     private double setPrice(RoomType type) {
@@ -34,6 +40,10 @@ public class Room implements Validator {
             default:
                 return 0;
         }
+    }
+
+    public int getRoomId() {
+        return roomId;
     }
 
     public int getNumber() {

@@ -36,15 +36,31 @@ public interface RoomService {
 
     void editRoom(RoomType oldType, RoomType newType) throws NotFoundException, WrongArgumentException;
 
-    void editRoom(int oldNumberOfRoom, int newNumberOfRoom) throws NotFoundException, WrongNumberArgsException, ChooseAnotherOneException;
+    void editRoom(int oldNumberOfRoom, int newNumberOfRoom) throws Exception;
 
     void editRooms(RoomType oldType, RoomType newType) throws WrongArgumentException;
 
-    void deleteFirstRoom(int numberOfRoom) throws NotFoundException, WrongNumberArgsException;
+    void deleteRoomByNumber(int numberOfRoom) throws Exception;
 
     void deleteFirstRoom(RoomType type) throws NotFoundException, WrongArgumentException;
 
     void deleteRooms(RoomType type) throws WrongArgumentException, NotFoundException;
 
     void deleteRooms();
+
+    void addRooms(List<Room> rooms);
+
+    void printTypes();
+
+    RoomType getRoomType(int typeOfRoom);
+
+    Room editRoom(int roomNUmber);
+
+    void printRooms();
+
+    void deleteRoom(int roomNumber);
+
+    int getRoomId(Room room);
+
+    void setRoom(int roomId, Room room);
 }
