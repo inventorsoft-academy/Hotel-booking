@@ -1,10 +1,14 @@
 package com.bin.otkrivashkin.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class Room implements Validator {
+
 
 
     private static AtomicInteger uniqueId = new AtomicInteger();
@@ -12,6 +16,9 @@ public class Room implements Validator {
     private RoomType type;
     private double price;
     private boolean available;
+
+    public Room() {
+    }
 
     public Room(RoomType type, double price, boolean available) {
         this.type = type;
@@ -43,7 +50,9 @@ public class Room implements Validator {
         return roomId;
     }
 
-
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
 
     public RoomType getType() {
         return type;

@@ -2,11 +2,14 @@ package com.bin.otkrivashkin.model;
 
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+
 @Component
 public class Client implements Validator {
 
@@ -19,6 +22,9 @@ public class Client implements Validator {
 
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public Client() {
+    }
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;

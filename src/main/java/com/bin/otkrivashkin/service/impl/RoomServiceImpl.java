@@ -8,11 +8,13 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class RoomServiceImpl implements RoomService {
 
     private List<Room> rooms;
@@ -51,7 +53,6 @@ public class RoomServiceImpl implements RoomService {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -85,12 +86,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoomById(int roomId) throws Exception {
-        boolean isRemoved = rooms.remove(getRoomById(roomId));
+        rooms.remove(getRoomById(roomId));
     }
 
     @Override
     public void addRooms(List<Room> rooms) {
-        this.rooms = rooms;
+        this.rooms.addAll(rooms);
     }
 
     @Override
