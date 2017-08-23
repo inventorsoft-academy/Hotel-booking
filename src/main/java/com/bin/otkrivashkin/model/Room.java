@@ -10,21 +10,18 @@ public class Room implements Validator {
     private static AtomicInteger uniqueId = new AtomicInteger();
     private int roomId;
     private RoomType type;
-    private int number;
     private double price;
     private boolean available;
 
-    public Room(RoomType type, int number, double price, boolean available) {
+    public Room(RoomType type, double price, boolean available) {
         this.type = type;
-        this.number = number;
         this.price = price;
         this.available = available;
         this.roomId = uniqueId.getAndIncrement();
     }
 
-    public Room(RoomType type, int number) {
+    public Room(RoomType type) {
         this.type = type;
-        this.number = number;
         this.price = setPrice(type);
         this.available = true;
         this.roomId = uniqueId.getAndIncrement();
@@ -46,13 +43,7 @@ public class Room implements Validator {
         return roomId;
     }
 
-    public int getNumber() {
-        return number;
-    }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
 
     public RoomType getType() {
         return type;
@@ -82,7 +73,7 @@ public class Room implements Validator {
     public String toString() {
         return "Room{" +
                 type + "," +
-                number + "," +
+                roomId + "," +
                 price + "," +
                 available
                 + "}"
@@ -96,7 +87,7 @@ public class Room implements Validator {
 
         Room room = (Room) o;
 
-        if (number != room.number) return false;
+        if (roomId != room.roomId) return false;
         if (Double.compare(room.price, price) != 0) return false;
         if (available != room.available) return false;
         return type == room.type;
@@ -106,8 +97,8 @@ public class Room implements Validator {
     public int hashCode() {
         int result;
         long temp;
-        result = type != null ? type.hashCode() : 0;
-        result = 31 * result + number;
+        result = roomId;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         temp = Double.doubleToLongBits(price);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (available ? 1 : 0);

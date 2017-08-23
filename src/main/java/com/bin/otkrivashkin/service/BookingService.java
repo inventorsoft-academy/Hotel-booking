@@ -15,23 +15,8 @@ import java.util.Map;
 public interface BookingService {
 
 
-    void bookClient(Client client) throws NotFoundException, WrongArgumentException;
 
-    void bookClient(Client client, RoomType type) throws NotFoundException, WrongArgumentException;
-
-    void bookClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException;
-
-    void bookClient(String firstName, RoomType type, long days) throws IOException, NotFoundException, WrongArgumentException;
-
-    void bookClient(Client client, double price) throws WrongArgumentException, WrongNumberArgsException, NotEnoughMoneyException, NotFoundException, NegativePriceException;
-
-    void bookClient(String firstName) throws IOException, NotFoundException, WrongArgumentException;
-
-    void bookClient(Client client, Room room) throws NotFoundException, WrongArgumentException;
-
-    void bookClient(String firstName, RoomType type) throws IOException, NotFoundException, WrongArgumentException;
-
-    void unBookClient(Room room, Client client) throws WrongArgumentException;
+    void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException;
 
     Map<Room, Client> getBooking();
 

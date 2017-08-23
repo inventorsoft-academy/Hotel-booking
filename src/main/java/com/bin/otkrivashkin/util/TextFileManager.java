@@ -53,7 +53,7 @@ public class TextFileManager implements FileManager {
             for (Room room : roomService.getRooms()) {
                 writer.write( ROOM_PREFIX +
                         room.getType() + "," +
-                        room.getNumber() + "," +
+                        room.getRoomId() + "," +
                         room.getPrice() + "," +
                         room.isAvailable());
                 writer.newLine();
@@ -72,7 +72,7 @@ public class TextFileManager implements FileManager {
                 Client client = entry.getValue();
                 writer.write(BOOKING_PREFIX +
                         room.getType() + "," +
-                        room.getNumber() + "," +
+                        room.getRoomId() + "," +
                         room.getPrice() + "," +
                         room.isAvailable() + "," +
 
@@ -120,9 +120,11 @@ public class TextFileManager implements FileManager {
                     int number = Integer.parseInt(split[i + 1]);
                     double price = Double.parseDouble(split[i + 2]);
                     boolean available = Boolean.parseBoolean(split[i + 3]);
-                    rooms.add(new Room(type, number, price, available));
+                    rooms.add(new Room(type, price, available));
                 }
             }
+            // TODO fix with save file
+
             if (line.startsWith(CLIENT_PREFIX)) {
                 String substring = line.substring(CLIENT_PREFIX.length());
                 String[] split = substring.split("[,/]");
@@ -150,7 +152,7 @@ public class TextFileManager implements FileManager {
                     LocalDate startDate = LocalDate.parse(split[i + 7]);
                     LocalDate endDate = LocalDate.parse(split[i + 8]);
                     roomViaClient.put(
-                            new Room(type, number, price, available),
+                            new Room(type, price, available),
                             new Client(firstName, lastName, cash, startDate, endDate)
                     );
                 }

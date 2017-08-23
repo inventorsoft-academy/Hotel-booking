@@ -145,29 +145,31 @@ public class Main {
                                 roomService.printTypes();
                                 int option = scanner.nextInt();
                                 RoomType outTypeRoom = roomService.getRoomType(option);
-                                try {
-                                    roomService.addRooms(count, outTypeRoom);
-                                } catch (WrongNumberArgsException e) {
-                                    e.printStackTrace();
-                                }
+
+                                roomService.addRoomsByCount(count, outTypeRoom);
                                 break;
                             case 2: // get rooms
                                 roomService.printRooms();
                                 break;
                             case 3:
-                                System.out.println("Enter a number of the room.");
-                                int roomNUmber = scanner.nextInt();
+                                System.out.println("Enter index of the room.");
+                                int roomIndex = scanner.nextInt();
 
-                                Room room = roomService.editRoom(roomNUmber);
+                                Room roomByIndex = null;
+                                try {
+                                     roomByIndex = roomService.getRoomById(roomIndex);
+                                } catch (NotFoundException e) {
+                                    e.printStackTrace();
+                                }
 
                                 boolean inEditMode = true;
                                 while (inEditMode) {
                                     System.out.println("1 - change type\n 2 - change price\n 3 - change status\n 100 - save & exit");
                                     int roomEditOption = scanner.nextInt();
 
-                                    boolean newStatus = room.isAvailable();
-                                    double newPrice = room.getPrice();
-                                    RoomType inTypeRoom = room.getType();
+                                    boolean newStatus = roomByIndex.isAvailable();
+                                    double newPrice = roomByIndex.getPrice();
+                                    RoomType inTypeRoom = roomByIndex.getType();
                                     switch (roomEditOption) {
                                         case 1:
                                             System.out.println("choose new type");
@@ -184,11 +186,16 @@ public class Main {
                                             newStatus = scanner.nextBoolean();
                                             break;
                                         case 4:
-                                            room.setAvailable(newStatus);
-                                            room.setPrice(newPrice);
-                                            room.setType(inTypeRoom);
-                                            int roomId = roomService.getRoomId(room);
-                                            roomService.setRoom(roomId, room);
+                                            roomByIndex.setAvailable(newStatus);
+                                            roomByIndex.setPrice(newPrice);
+                                            roomByIndex.setType(inTypeRoom);
+                                            int roomId = 0;
+                                            try {
+                                                roomId = roomService.getRoom(roomByIndex).getRoomId();
+                                            } catch (NotFoundException e) {
+                                                e.printStackTrace();
+                                            }
+//                                            roomService.addRoom(roomId, roomByIndex);
                                             inEditMode = false;
                                             break;
                                         default:
@@ -199,7 +206,7 @@ public class Main {
                             case 4:
                                 System.out.println("Enter number of the room");
                                 int roomNumber = scanner.nextInt();
-                                roomService.deleteRoom(roomNumber);
+//                                roomService.deleteRoom(roomNumber);
                                 break;
                             case 300:
                                 inRoom = false;
@@ -389,7 +396,7 @@ public class Main {
                                 Room room = null;
 
                                 try {
-                                    room = roomService.getRoom(roomToBookOption);
+                                    room = roomService.getRoomById(roomToBookOption);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -399,7 +406,7 @@ public class Main {
                                 int days = scanner.nextInt();
 
                                 try {
-                                    bookingService.bookClient(client, room, days);
+                                    bookingService.registerClient(client, room, days);
                                 } catch (NotFoundException | WrongArgumentException e) {
                                     e.printStackTrace();
                                 }
