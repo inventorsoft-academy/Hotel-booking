@@ -7,27 +7,24 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.HotelService;
+import com.bin.otkrivashkin.service.JournalService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JournalServiceImpl {
-
-    private HotelService hotelService;
+public class JournalServiceImpl implements JournalService {
 
     private BookingService bookingService;
-    public JournalServiceImpl(HotelService hotelService, BookingService bookingService) {
-        this.hotelService = hotelService;
+
+    public JournalServiceImpl(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
+    @Override
+    public void printAll() throws NotFoundException {
 
-
-    public void printAll(String hotelName) throws NotFoundException {
-
-        Hotel hotelAsPrint = hotelService.getHotel(hotelName);
         Map<Room, Client> clientRoomMap = bookingService.getRegisterClients();
 
         List<Room> rooms = new ArrayList<>(clientRoomMap.keySet());
@@ -67,5 +64,15 @@ public class JournalServiceImpl {
                     endDate
                     ));
         }
+    }
+
+    @Override
+    public String getInfo(Client client) {
+        return null;
+    }
+
+    @Override
+    public String getInfo(Room room) {
+        return null;
     }
 }

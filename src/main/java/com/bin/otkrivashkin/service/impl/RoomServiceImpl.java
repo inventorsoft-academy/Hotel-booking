@@ -135,7 +135,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void printRooms() {
-
+        System.out.println(String.format("%10s %15s %15s %10s", "ID", "TYPE", "PRICE/DAY", "BUSY?"));
+        for (Room room: rooms) {
+            System.out.println(String.format("%10s %15s %15s %10s",
+                    room.getRoomId(),
+                    room.getType(),
+                    room.getPrice(),
+                    room.isAvailable() ? "NO" : "YES"
+            ));
+        }
     }
 
 

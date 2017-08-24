@@ -1,15 +1,13 @@
 package com.bin.otkrivashkin.main;
 
+import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
-import com.bin.otkrivashkin.service.BookingService;
-import com.bin.otkrivashkin.service.ClientService;
-import com.bin.otkrivashkin.service.HotelService;
-import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.service.*;
 import com.bin.otkrivashkin.service.impl.*;
 import com.bin.otkrivashkin.util.FileManager;
 import com.bin.otkrivashkin.util.JsonFileManager;
@@ -31,6 +29,7 @@ public class Main {
     private static RoomService roomService = new RoomServiceImpl();
     private static ClientService clientService = new ClientServiceImpl();
     private static BookingService bookingService = new BookingServiceImpl(roomService, clientService);
+    private static JournalService journalService = new JournalServiceImpl(bookingService);
 
     private static FileManager fileManager = new TextFileManager(hotelService, clientService, bookingService, roomService);
     private static Scanner scanner = new Scanner(System.in);
@@ -40,8 +39,7 @@ public class Main {
 
         boolean inMain = true;
         while (inMain) {
-            print("main branch");
-
+            System.out.println("\nmain branch\n0 - current branch options\n");
             int mainOption = 999;
 
             try {
@@ -58,7 +56,7 @@ public class Main {
                 case 1:
                     boolean inHotel = true;
                     while (inHotel) {
-                        print("hotel branch");
+                        System.out.println("\nhotel branch\n0 - current branch options\n");
                         int hotelOption = 999;
                         try {
                             hotelOption = scanner.nextInt();
@@ -95,7 +93,7 @@ public class Main {
                 case 2:
                     boolean inRoom = true;
                     while (inRoom) {
-                        System.out.println("room branch");
+                        System.out.println("\nroom branch\n0 - current branch options\n");
                         int roomOption = 999;
                         try {
                             roomOption = scanner.nextInt();
@@ -223,7 +221,12 @@ public class Main {
                                 hotelService.getJournalOptions();
                                 break;
                             case 1:
-                                // get clients
+                                // get all
+                                try {
+                                    journalService.printAll();
+                                } catch (NotFoundException e) {
+                                    logManager.error(e.getMessage());
+                                }
                                 break;
                             case 2:
                                 // get rooms
@@ -246,7 +249,7 @@ public class Main {
                     try {
                         fileManager.saveHotel(hotelService.getHotel(hotelName));
                     } catch (NotFoundException e) {
-                        e.printStackTrace();
+                        logManager.error(e.getMessage());
                     }
                     break;
                 case 200: // load
@@ -255,7 +258,7 @@ public class Main {
                     try {
                         fileManager.loadHotel(hotelName);
                     } catch (WrongNumberArgsException e) {
-                        e.printStackTrace();
+                        logManager.error(e.getMessage());
                     }
                     break;
                 case 300: // exit
@@ -314,7 +317,7 @@ public class Main {
         try {
             bookingService.unregisterClientById(clientId);
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         }
     }
 
@@ -329,7 +332,7 @@ public class Main {
         try {
             client = clientService.getClient(clientName);
         } catch (IOException | NotFoundException e) {
-            e.printStackTrace();
+            logManager.error(e.getLocalizedMessage());
         }
 
         System.out.println("Which room to book?");
@@ -342,7 +345,7 @@ public class Main {
         try {
             room = roomService.getRoomById(roomToBookOption);
         } catch (Exception e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         }
 
         System.out.println("How many days will you stay in the hotel?");
@@ -351,8 +354,8 @@ public class Main {
 
         try {
             bookingService.registerClient(client, room, days);
-        } catch (NotFoundException | WrongArgumentException e) {
-            e.printStackTrace();
+        } catch (NotFoundException | WrongArgumentException | NotEnoughMoneyException e) {
+            logManager.error(e.getMessage());
         }
     }
 
@@ -405,6 +408,7 @@ public class Main {
                     System.out.println("1 - edit first name\n 2 - edit last name\n 3 - edit amount of money\n 4 - save & exit");
                     boolean editingClient = true;
 
+                    assert clientToEdit != null;
                     String newFirstName = clientToEdit.getFirstName();
                     String newLastName = clientToEdit.getLastName();
                     double cash = clientToEdit.getCash();
@@ -430,7 +434,7 @@ public class Main {
                                     clientToEdit.setLastName(newLastName);
                                     clientToEdit.setCash(cash);
                                 } catch (WrongArgumentException e) {
-                                    e.printStackTrace();
+                                    logManager.error(e.getMessage());
                                 }
 
                                 int clientId = clientService.getClientId(clientToEdit);
@@ -471,7 +475,7 @@ public class Main {
         try {
             clientService.addClient(client);
         } catch (IOException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         }
     }
 
@@ -499,35 +503,33 @@ public class Main {
         } catch (NotFoundException e) {
             print(e.getMessage());
         }
-
         boolean inEditMode = true;
         while (inEditMode) {
-            System.out.println("1 - change type\n 2 - change price\n 3 - change status\n 4 - save & exit");
+            System.out.println("1 - change type\n2 - change price\n3 - change status\n4 - save & exit from edit mode");
             int roomEditOption = scanner.nextInt();
 
-            assert roomByIndex != null;
-            boolean newStatus = roomByIndex.isAvailable();
-            double newPrice = roomByIndex.getPrice();
-            RoomType inTypeRoom = roomByIndex.getType();
             switch (roomEditOption) {
                 case 1:
                     System.out.println("choose new type");
                     roomService.printTypes();
                     int editRoomOption = scanner.nextInt();
-                    inTypeRoom = roomService.getRoomType(editRoomOption);
+                    RoomType roomType = roomService.getRoomType(editRoomOption);
+                    assert roomByIndex != null;
+                    roomByIndex.setType(roomType);
                     break;
                 case 2:
                     System.out.println("set new price");
-                    newPrice = scanner.nextDouble();
+                    double price = scanner.nextDouble();
+                    assert roomByIndex != null;
+                    roomByIndex.setPrice(price);
                     break;
                 case 3:
                     System.out.println("set new status for the room");
-                    newStatus = scanner.nextBoolean();
+                    boolean status = scanner.nextBoolean();
+                    assert roomByIndex != null;
+                    roomByIndex.setAvailable(status);
                     break;
                 case 4:
-                    roomByIndex.setAvailable(newStatus);
-                    roomByIndex.setPrice(newPrice);
-                    roomByIndex.setType(inTypeRoom);
                     roomService.editRoom(roomByIndex);
                     inEditMode = false;
                     break;

@@ -34,8 +34,7 @@ public class HotelServiceImpl implements HotelService {
                 "5 - journal options",
                 "100 - save",
                 "200 - load",
-                "300 - exit",
-                "-1 - hotel in one click!"
+                "300 - exit"
         );
         for (String string: strings) {
             System.out.println(string);
@@ -64,7 +63,7 @@ public class HotelServiceImpl implements HotelService {
                 "1 - add rooms",
                 "2 - view rooms",
                 "3 - edit rooms",
-                "4 - delete rooms"
+                "4 - delete room"
         );
 
         for (String string: strings) {

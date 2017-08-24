@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.service.impl;
 
+import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
@@ -25,12 +26,26 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException {
+    public void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+        if (days < 1) return;
         client.setStartDate();
         LocalDate end = LocalDate.now().plusDays(days);
         client.setEndDate(end);
+
+        checkCurrentBalanceOfClient(client, room, days);
+
         register(client, room);
 
+    }
+
+    private void checkCurrentBalanceOfClient(Client client, Room room, long days) throws NotEnoughMoneyException {
+        double totalRoomPricePlusDays = room.getPrice() * days;
+        if (client.getCash() < totalRoomPricePlusDays) {
+            throw new NotEnoughMoneyException("You don't have enough money");
+        } else {
+            double endClientBalance = client.getCash() - totalRoomPricePlusDays;
+            client.setCash(endClientBalance);
+        }
     }
 
     @Override

@@ -12,17 +12,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class Hotel implements Validator {
 
+    private static AtomicInteger uniqueId = new AtomicInteger();
+    private int hotelId;
     private String name;
+    private double totalAmountMoney;
+    private List<Room> rooms;
 
     public Hotel() {
+        hotelId = uniqueId.getAndIncrement();
     }
 
     public String getName() {
         return name;
+    }
+
+    public double getTotalAmountMoney() {
+        return totalAmountMoney;
+    }
+
+    public void setTotalAmountMoney(double totalAmountMoney) {
+        this.totalAmountMoney = totalAmountMoney;
+    }
+
+    public int getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 
     public void setName(String name) throws WrongNumberArgsException {

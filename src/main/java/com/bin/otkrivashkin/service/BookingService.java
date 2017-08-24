@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface BookingService {
 
-    void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException;
+    void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException;
 
     Map<Room, Client> getRegisterClients();
 

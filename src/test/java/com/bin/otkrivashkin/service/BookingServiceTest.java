@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.service;
 
+import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
@@ -108,7 +109,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void getRegisterClientById() throws NotFoundException, WrongArgumentException {
+    public void getRegisterClientById() throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
 
         bookingService.registerClient(bClient, president, 5);
         int clientId = bClient.getClientId();

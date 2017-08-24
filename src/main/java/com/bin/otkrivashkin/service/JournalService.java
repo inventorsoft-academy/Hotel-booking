@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public interface JournalService {
 
+    void printAll() throws NotFoundException;
+
     String getInfo(Client client);
 
     String getInfo(Room room);

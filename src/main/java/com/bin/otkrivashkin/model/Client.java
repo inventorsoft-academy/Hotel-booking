@@ -13,13 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class Client implements Validator {
 
+    private static AtomicInteger uniqueId = new AtomicInteger();
     private int clientId;
     private String firstName;
     private String lastName;
     private double cash;
-
-    private static AtomicInteger uniqueId = new AtomicInteger();
-
     private LocalDate startDate;
     private LocalDate endDate;
 
