@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
 public class Room implements Validator {
-
-
 
     private static AtomicInteger uniqueId = new AtomicInteger();
     private int roomId;
@@ -18,6 +15,7 @@ public class Room implements Validator {
     private boolean available;
 
     public Room() {
+        this.roomId = uniqueId.getAndIncrement();
     }
 
     public Room(RoomType type, double price, boolean available) {
@@ -65,6 +63,7 @@ public class Room implements Validator {
     public double getPrice() {
         return price;
     }
+
 
     public void setPrice(double price) {
         this.price = price;
@@ -118,8 +117,8 @@ public class Room implements Validator {
     public Map<String, String> validate() {
         Map<String,String> res = new HashMap<>();
 
+        if (price < 1) res.put("price", "The price is less than zero");
         if (type == null) res.put("type", "Room type is empty!");
-        if (price <= 0) res.put("price", "The price is less than must to be");
 
         return res;
     }

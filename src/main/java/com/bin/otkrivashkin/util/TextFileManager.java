@@ -43,11 +43,7 @@ public class TextFileManager implements FileManager {
     public void saveHotel(Hotel hotel) {
 
         File file = new File(HOTEL_PATH + hotel.getName() + ".txt");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
 
             for (Room room : roomService.getRooms()) {

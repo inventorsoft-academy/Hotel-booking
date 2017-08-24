@@ -4,6 +4,7 @@ import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
+import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -111,7 +112,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void addRoomsByCount() {
+    public void addRoomsByCount() throws WrongNumberArgsException {
         int count = 11;
 
         for (int i = 0; i < count; i++) {

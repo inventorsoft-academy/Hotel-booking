@@ -25,16 +25,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void addRoom(Room room) {
-
         if (room.validate().isEmpty()) {
             rooms.add(room);
         }
-
     }
 
     @Override
     public Room getRoomById(int roomId) throws NotFoundException {
-
         for (Room room : rooms) {
             if (room.getRoomId() == roomId) {
                 return room;
@@ -45,7 +42,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public boolean editRoom(Room room) throws NotFoundException {
+    public boolean editRoom(Room room) {
         for (Room roomToUpdate : rooms) {
             if (roomToUpdate.getRoomId() == room.getRoomId()) {
                 int indexOf = rooms.indexOf(roomToUpdate);

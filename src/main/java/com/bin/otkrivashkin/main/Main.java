@@ -12,6 +12,8 @@ import com.bin.otkrivashkin.service.HotelService;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.service.impl.*;
 import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.util.JsonFileManager;
+import com.bin.otkrivashkin.util.LogManager;
 import com.bin.otkrivashkin.util.TextFileManager;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
@@ -21,7 +23,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
+    private static LogManager logManager = LogManager.getLogger(Main.class);
+
+
     private static String hotelName;
     private static HotelService hotelService = new HotelServiceImpl();
     private static RoomService roomService = new RoomServiceImpl();
@@ -34,16 +38,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         boolean inMain = true;
         while (inMain) {
-            logger.info("main branch");
+            print("main branch");
+
             int mainOption = 999;
 
             try {
                 mainOption = scanner.nextInt();
             } catch (InputMismatchException e) {
-                logger.info("wrong argument! Only Integer type.");
+                logManager.error("Wrong argument");
                 scanner.next();
             }
 
@@ -54,13 +58,12 @@ public class Main {
                 case 1:
                     boolean inHotel = true;
                     while (inHotel) {
-                        logger.info("hotel branch");
+                        print("hotel branch");
                         int hotelOption = 999;
-
                         try {
                             hotelOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
-                            logger.warning("wrong argument! Only Integer type.");
+                            logManager.error("Wrong argument! Only int.");
                             scanner.next();
                         }
 
@@ -69,31 +72,10 @@ public class Main {
                                 hotelService.getHotelOptions();
                                 break;
                             case 1: // add hotel
-                                System.out.println("Enter name of the hotel");
-                                hotelName = scanner.next();
-                                Hotel hotel = new Hotel();
-                                try {
-                                    hotel.setName(hotelName);
-                                } catch (WrongNumberArgsException e) {
-                                    e.printStackTrace();
-                                }
-
-                                try {
-                                    hotelService.add(hotel);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
+                                addHotel();
                                 break;
                             case 2: // get hotel
-                                // TODO print list of hotels
-                                System.out.println("Enter name of the hotel");
-                                hotelName = scanner.next();
-                                try {
-                                    hotelService.getHotel(hotelName);
-                                } catch (NotFoundException e) {
-                                    e.printStackTrace();
-                                }
+                                getHotelByName();
                                 break;
                             case 3:
                                 System.out.println("Enter new name of the hotel");
@@ -119,18 +101,19 @@ public class Main {
                                 break;
                             default:
                                 //
+                                break;
                         }
                     }
                     break;
                 case 2:
                     boolean inRoom = true;
                     while (inRoom) {
-                        logger.info("room branch");
+                        logManager.info("room branch");
                         int roomOption = 999;
                         try {
                             roomOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
-                            logger.warning("wrong argument.");
+                            logManager.error("wrong argument.");
                             scanner.next();
                         }
 
@@ -157,7 +140,7 @@ public class Main {
 
                                 Room roomByIndex = null;
                                 try {
-                                     roomByIndex = roomService.getRoomById(roomIndex);
+                                    roomByIndex = roomService.getRoomById(roomIndex);
                                 } catch (NotFoundException e) {
                                     e.printStackTrace();
                                 }
@@ -167,6 +150,7 @@ public class Main {
                                     System.out.println("1 - change type\n 2 - change price\n 3 - change status\n 100 - save & exit");
                                     int roomEditOption = scanner.nextInt();
 
+                                    assert roomByIndex != null;
                                     boolean newStatus = roomByIndex.isAvailable();
                                     double newPrice = roomByIndex.getPrice();
                                     RoomType inTypeRoom = roomByIndex.getType();
@@ -200,6 +184,7 @@ public class Main {
                                             break;
                                         default:
                                             //
+                                            break;
                                     }
                                 }
                                 break;
@@ -213,6 +198,7 @@ public class Main {
                                 break;
                             default:
                                 //
+                                break;
                         }
                     }
                     break;
@@ -220,13 +206,13 @@ public class Main {
                     boolean inClient = true;
                     while (inClient) {
 
-                        logger.info("client branch");
+                        logManager.info("client branch");
                         int clientOption = 999;
 
                         try {
                             clientOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
-                            logger.warning("wrong argument");
+                            logManager.error("wrong argument");
                             scanner.next();
                         }
 
@@ -308,6 +294,7 @@ public class Main {
                                                         break;
                                                     default:
                                                         //
+                                                        break;
                                                 }
                                             }
                                             break;
@@ -359,13 +346,13 @@ public class Main {
                 case 4:
                     boolean inBooking = true;
                     while (inBooking) {
-                        logger.info("booking branch");
+                        logManager.info("booking branch");
                         int bookingOption = 999;
 
                         try {
                             bookingOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
-                            logger.warning("wrong argument");
+                            logManager.error("wrong argument");
                             scanner.next();
                         }
 
@@ -435,6 +422,7 @@ public class Main {
                                             break;
                                         default:
                                             //
+                                            break;
                                     }
                                 }
                                 break;
@@ -447,30 +435,22 @@ public class Main {
                                 break;
                             default:
                                 //
+                                break;
                         }
                     }
                     break;
                 case 5:
 
-                    /*
-                    * print all rooms
-                    * print all available rooms
-                    * print all notAvailable rooms
-                    * print all unregistered clients
-                    * print all registered clients
-                    *
-                    * */
-
                     boolean inJournal = true;
                     while (inJournal) {
-                        logger.info("journal branch");
+                        logManager.info("journal branch");
 
                         int journalOption = 999;
 
                         try {
                             journalOption = scanner.nextInt();
                         } catch (InputMismatchException e) {
-                            logger.warning("wrong argument");
+                            logManager.error("wrong argument");
                             scanner.next();
                         }
 
@@ -486,6 +466,7 @@ public class Main {
                                 break;
                             default:
                                 //
+                                break;
                         }
                     }
                 case 100: // save
@@ -506,11 +487,50 @@ public class Main {
                     break;
                 case 300: // exit
                     inMain = false;
-                    logger.info("exit");
+                    logManager.info("exit");
+                    break;
+                case -1:
+                    JsonFileManager jsonManager = new JsonFileManager(roomService);
+                    jsonManager.fileToJson();
                     break;
                 default:
                     //
+                    break;
             }
         }
     }
+
+    private static void getHotelByName() {
+        logManager.info("Enter name of the hotel");
+        hotelName = scanner.next();
+        try {
+            hotelService.getHotel(hotelName);
+        } catch (NotFoundException e) {
+            logManager.error(e.getMessage());
+        }
+    }
+
+    private static void addHotel() {
+        print("Enter name of the hotel");
+        hotelName = scanner.next();
+        Hotel hotel = new Hotel();
+        try {
+            hotel.setName(hotelName);
+        } catch (WrongNumberArgsException e) {
+            logManager.error(e.getMessage());
+        }
+
+        try {
+            hotelService.add(hotel);
+            print("hotel " + hotel.getName() + " added");
+        } catch (IOException e) {
+            logManager.error(e.getMessage());
+        }
+    }
+
+    private static void print(String message) {
+        logManager.setLevel(LogManager.IN_CONSOLE);
+        logManager.info(message);
+    }
+
 }

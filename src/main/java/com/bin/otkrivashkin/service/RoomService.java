@@ -20,7 +20,7 @@ public interface RoomService {
 
     Room getRoomById(int id) throws NotFoundException;
 
-    boolean editRoom(Room room) throws NotFoundException;
+    boolean editRoom(Room room);
 
     List<Room> getRooms();
 
