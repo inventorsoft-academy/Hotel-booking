@@ -46,6 +46,7 @@ public class RoomServiceImpl implements RoomService {
         for (Room roomToUpdate : rooms) {
             if (roomToUpdate.getRoomId() == room.getRoomId()) {
                 int indexOf = rooms.indexOf(roomToUpdate);
+                room.setRoomId(roomToUpdate.getRoomId());
                 rooms.set(indexOf, room);
                 return true;
             }
