@@ -14,17 +14,15 @@ import java.util.Map;
 
 public interface BookingService {
 
-
-
     void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException;
 
-    Map<Room, Client> getBooking();
+    Map<Room, Client> getRegisterClients();
 
-    void addBooking(Map<Room, Client> roomViaClient);
+    void unregisterClientByFirstName(String name);
 
-    void registrationClients();
+    void unregisterClientById(int clientId) throws NotFoundException;
 
-    void cancelRegistration(String name);
+    Client getRegisterClientById(int id) throws NotFoundException;
 
-    void cancelRegistration(int roomNumber);
+    void addMapOfClientsWithRooms(Map<Room, Client> roomViaClient);
 }

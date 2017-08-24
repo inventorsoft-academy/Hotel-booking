@@ -274,11 +274,11 @@ public class Main {
     }
 
     private static void getClients() {
-        bookingService.registrationClients();
+        bookingService.getRegisterClients();
     }
 
     private static void unregisterClient() {
-        bookingService.registrationClients();
+        bookingService.getRegisterClients();
         System.out.println("Cancel reservation by\n 1 - first name or last name\n 2 - room number\n 3 - return to the previous menu");
 
         boolean inRegister = true;
@@ -287,14 +287,10 @@ public class Main {
             int registerOption = scanner.nextInt();
             switch (registerOption) {
                 case 1:
-                    System.out.println("enter the first name or the last name");
-                    String name = scanner.next();
-                    bookingService.cancelRegistration(name);
+                    bookCLient();
                     break;
                 case 2:
-                    System.out.println("Enter the number of the room");
-                    int roomNumber = scanner.nextInt();
-                    bookingService.cancelRegistration(roomNumber);
+                    unbookClient();
                     break;
                 case 3:
                     inRegister = false;
@@ -303,6 +299,22 @@ public class Main {
                     //
                     break;
             }
+        }
+    }
+
+    private static void bookCLient() {
+        System.out.println("enter the first name or the last name");
+        String name = scanner.next();
+        bookingService.unregisterClientByFirstName(name);
+    }
+
+    private static void unbookClient() {
+        System.out.println("Enter id of the client");
+        int clientId = scanner.nextInt();
+        try {
+            bookingService.unregisterClientById(clientId);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
         }
     }
 

@@ -63,7 +63,7 @@ public class TextFileManager implements FileManager {
                 writer.newLine();
             }
 
-            for (Map.Entry<Room, Client> entry : bookingService.getBooking().entrySet()) {
+            for (Map.Entry<Room, Client> entry : bookingService.getRegisterClients().entrySet()) {
                 Room room = entry.getKey();
                 Client client = entry.getValue();
                 writer.write(BOOKING_PREFIX +
@@ -156,7 +156,7 @@ public class TextFileManager implements FileManager {
         }
         roomService.addRooms(rooms);
         clientService.addClients(clients);
-        bookingService.addBooking(roomViaClient);
+        bookingService.addMapOfClientsWithRooms(roomViaClient);
 
         try {
             hotelService.add(hotel);

@@ -1,19 +1,13 @@
 package com.bin.otkrivashkin.service.impl;
 
-import com.bin.otkrivashkin.exception.NegativePriceException;
-import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Room;
-import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,36 +29,56 @@ public class BookingServiceImpl implements BookingService {
         client.setStartDate();
         LocalDate end = LocalDate.now().plusDays(days);
         client.setEndDate(end);
-        booking(client, room);
+        register(client, room);
 
     }
 
     @Override
-    public Map<Room, Client> getBooking() {
-        return null;
+    public Map<Room, Client> getRegisterClients() {
+        return bookingList;
     }
 
     @Override
-    public void addBooking(Map<Room, Client> roomViaClient) {
-
-    }
-
-    @Override
-    public void registrationClients() {
+    public void unregisterClientByFirstName(String name) {
 
     }
 
     @Override
-    public void cancelRegistration(String name) {
+    public void unregisterClientById(int id) throws NotFoundException {
+
+        Client registerClientById = getRegisterClientById(id);
+
+        for (Map.Entry<Room, Client> entry : bookingList.entrySet()) {
+            Client client = entry.getValue();
+            Room room = entry.getKey();
+            if (client.equals(registerClientById)) {
+
+                roomService.getRoom(room).setAvailable(true);
+
+                bookingList.remove(room, client);
+
+            }
+        }
 
     }
 
     @Override
-    public void cancelRegistration(int roomNumber) {
+    public Client getRegisterClientById(int id) throws NotFoundException {
+        for (Map.Entry<Room, Client> entry : bookingList.entrySet()) {
+            Client client = entry.getValue();
+            if (client.getClientId() == id) {
+                return client;
+            }
+        }
+        throw new NotFoundException("Client not found");
+    }
+
+    @Override
+    public void addMapOfClientsWithRooms(Map<Room, Client> roomViaClient) {
 
     }
 
-    private void booking(Client client, Room room) throws NotFoundException, WrongArgumentException {
+    private void register(Client client, Room room) throws NotFoundException, WrongArgumentException {
         if (!client.validate().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }

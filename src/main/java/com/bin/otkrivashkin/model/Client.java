@@ -24,16 +24,13 @@ public class Client implements Validator {
     private LocalDate endDate;
 
     public Client() {
+        clientId = uniqueId.getAndIncrement();
     }
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         clientId = uniqueId.getAndIncrement();
-    }
-
-    public int getClientId() {
-        return clientId;
     }
 
     public Client(String firstName, String lastName, double cash) {
@@ -47,6 +44,10 @@ public class Client implements Validator {
         this.startDate = startDate;
         this.endDate = endDate;
         this.clientId = uniqueId.getAndIncrement();
+    }
+
+    public int getClientId() {
+        return clientId;
     }
 
     public LocalDate getStartDate() {

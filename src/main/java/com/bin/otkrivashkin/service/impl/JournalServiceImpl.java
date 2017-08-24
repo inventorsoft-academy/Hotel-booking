@@ -1,26 +1,17 @@
 package com.bin.otkrivashkin.service.impl;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
-import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.HotelService;
-import com.bin.otkrivashkin.service.JournalService;
-import com.bin.otkrivashkin.util.FileManager;
-import com.bin.otkrivashkin.util.TextFileManager;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class JournalServiceImpl {
 
@@ -37,7 +28,7 @@ public class JournalServiceImpl {
     public void printAll(String hotelName) throws NotFoundException {
 
         Hotel hotelAsPrint = hotelService.getHotel(hotelName);
-        Map<Room, Client> clientRoomMap = bookingService.getBooking();
+        Map<Room, Client> clientRoomMap = bookingService.getRegisterClients();
 
         List<Room> rooms = new ArrayList<>(clientRoomMap.keySet());
         List<Client> clients = new ArrayList<>(clientRoomMap.values());
