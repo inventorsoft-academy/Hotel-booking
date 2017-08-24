@@ -9,6 +9,7 @@ import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,6 +147,10 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    @Override
+    public List<RoomType> getRoomTypes() {
+        return Arrays.asList(RoomType.values());
+    }
 
 
 }

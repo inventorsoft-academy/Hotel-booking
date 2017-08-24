@@ -266,7 +266,7 @@ public class Main {
                     logManager.info("exit");
                     break;
                 case -1:
-                    JsonFileManager jsonManager = new JsonFileManager(roomService);
+                    JsonFileManager jsonManager = new JsonFileManager(roomService, bookingService);
                     jsonManager.fileToJson();
                     break;
                 default:

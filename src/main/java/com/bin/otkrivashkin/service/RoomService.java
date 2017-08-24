@@ -35,4 +35,6 @@ public interface RoomService {
     RoomType getRoomType(int typeOfRoom);
 
     void printRooms();
+
+    List<RoomType> getRoomTypes();
 }

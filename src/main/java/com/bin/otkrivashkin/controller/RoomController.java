@@ -2,15 +2,19 @@ package com.bin.otkrivashkin.controller;
 
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
+import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/json")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET,
+        RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class RoomController {
 
     @Autowired
@@ -27,15 +31,13 @@ public class RoomController {
     }
 
     @RequestMapping(value = "/rooms", method = RequestMethod.POST)
-    public Room addRoom(@ModelAttribute Room room) {
+    public void addRoom(@ModelAttribute Room room) {
         roomService.addRoom(room);
-        return room;
     }
 
     @RequestMapping(value = "/rooms/{id}", method = RequestMethod.DELETE)
-    public List<Room> deleteRoomById(@PathVariable int id) throws Exception {
+    public void deleteRoomById(@PathVariable int id) throws Exception {
         roomService.deleteRoomById(id);
-        return roomService.getRooms();
     }
 
     @RequestMapping(value = "/rooms/{id}", method = RequestMethod.PUT)
@@ -43,6 +45,10 @@ public class RoomController {
         roomService.editRoom(room);
     }
 
+    @GetMapping(value = "/roomTypes")
+    public List<RoomType> getRoomTypes() {
+        return roomService.getRoomTypes();
+    }
 
 
 

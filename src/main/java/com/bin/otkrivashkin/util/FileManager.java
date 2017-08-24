@@ -5,7 +5,7 @@ import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 public interface FileManager {
 
-    void saveHotel(Hotel hotel);
+    void saveObjectsToJson();
 
-    Hotel loadHotel(String hotelName) throws WrongNumberArgsException;
+    void loadObjectsFromJson();
 }
