@@ -1,6 +1,5 @@
 package com.bin.otkrivashkin.service;
 
-import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
@@ -38,10 +37,10 @@ public class RoomServiceTest {
 
     @Test
     public void getRoomById() throws Exception {
-        int roomId = globalRoom.getRoomId();
+        int roomId = globalRoom.getId();
         roomService.addRoom(globalRoom);
         Room room = roomService.getRoom(globalRoom);
-        assertEquals(roomId, room.getRoomId());
+        assertEquals(roomId, room.getId());
     }
 
     @Test
@@ -59,7 +58,7 @@ public class RoomServiceTest {
     public void editRoom() throws Exception {
 
         addRoom();
-        int roomId = globalRoom.getRoomId();
+        int roomId = globalRoom.getId();
 
         Room room = roomService.getRoomById(roomId);
 
@@ -85,7 +84,7 @@ public class RoomServiceTest {
     @Test
     public void deleteRoomById() throws Exception {
         addRoom();
-        int roomId = globalRoom.getRoomId();
+        int roomId = globalRoom.getId();
         roomService.deleteRoomById(roomId);
 
         assertEquals(0, roomService.getRooms().size());

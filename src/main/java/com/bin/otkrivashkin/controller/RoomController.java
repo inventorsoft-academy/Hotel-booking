@@ -7,22 +7,22 @@ import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.FileManager;
 import com.bin.otkrivashkin.util.JsonFileManager;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/json")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET,
         RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class RoomController {
 
-    @Autowired
     private RoomService roomService;
-
-    @Autowired
     private FileManager fileManager;
 
     @GetMapping(value = "/rooms")
@@ -30,28 +30,28 @@ public class RoomController {
         return roomService.getRooms();
     }
 
-    @GetMapping(value = "/rooms/{id}")
+    @GetMapping("/rooms/{id}")
     public Room getRoomById(@PathVariable int id) throws NotFoundException {
         return roomService.getRoomById(id);
     }
 
-    @PostMapping(value = "/rooms")
+    @PostMapping("/rooms")
     public void addRoom(@RequestBody Room room) {
         roomService.addRoom(room);
         fileManager.save();
     }
 
-    @RequestMapping(value = "/rooms/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/rooms/{id}")
     public void deleteRoomById(@PathVariable int id) throws Exception {
         roomService.deleteRoomById(id);
     }
 
-    @RequestMapping(value = "/rooms/{id}", method = RequestMethod.PUT)
+    @PutMapping("/rooms}")
     public void editRoom(@ModelAttribute Room room) {
         roomService.editRoom(room);
     }
 
-    @GetMapping(value = "/roomTypes")
+    @GetMapping("/roomTypes")
     public List<RoomType> getRoomTypes() {
         return roomService.getRoomTypes();
     }

@@ -51,7 +51,7 @@ public class TextFileManager implements FileManager {
             for (Room room : roomService.getRooms()) {
                 writer.write( ROOM_PREFIX +
                         room.getType() + "," +
-                        room.getRoomId() + "," +
+                        room.getId() + "," +
                         room.getPrice() + "," +
                         room.isAvailable());
                 writer.newLine();
@@ -70,7 +70,7 @@ public class TextFileManager implements FileManager {
                 Client client = entry.getValue();
                 writer.write(BOOKING_PREFIX +
                         room.getType() + "," +
-                        room.getRoomId() + "," +
+                        room.getId() + "," +
                         room.getPrice() + "," +
                         room.isAvailable() + "," +
 

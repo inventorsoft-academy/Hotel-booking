@@ -1,15 +1,10 @@
 package com.bin.otkrivashkin.service.impl;
 
-import com.bin.otkrivashkin.exception.ChooseAnotherOneException;
-import com.bin.otkrivashkin.exception.NegativePriceException;
 import com.bin.otkrivashkin.exception.NotFoundException;
-import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +29,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room getRoomById(int roomId) throws NotFoundException {
         for (Room room : rooms) {
-            if (room.getRoomId() == roomId) {
+            if (room.getId() == roomId) {
                 return room;
             }
         }
@@ -45,9 +40,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean editRoom(Room room) {
         for (Room roomToUpdate : rooms) {
-            if (roomToUpdate.getRoomId() == room.getRoomId()) {
+            if (roomToUpdate.getId() == room.getId()) {
                 int indexOf = rooms.indexOf(roomToUpdate);
-                room.setRoomId(roomToUpdate.getRoomId());
+                room.setId(roomToUpdate.getId());
                 rooms.set(indexOf, room);
                 return true;
             }
@@ -139,7 +134,7 @@ public class RoomServiceImpl implements RoomService {
         System.out.println(String.format("%10s %15s %15s %10s", "ID", "TYPE", "PRICE/DAY", "BUSY?"));
         for (Room room: rooms) {
             System.out.println(String.format("%10s %15s %15s %10s",
-                    room.getRoomId(),
+                    room.getId(),
                     room.getType(),
                     room.getPrice(),
                     room.isAvailable() ? "NO" : "YES"
