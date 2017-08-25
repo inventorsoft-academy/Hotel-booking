@@ -8,11 +8,13 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class BookingServiceImpl implements BookingService {
 
     private Map<Room, Client> bookingList;

@@ -4,6 +4,8 @@ import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.util.JsonFileManager;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private FileManager fileManager;
+
     @GetMapping(value = "/rooms")
     public List<Room> getRooms() {
         return roomService.getRooms();
@@ -30,9 +35,10 @@ public class RoomController {
         return roomService.getRoomById(id);
     }
 
-    @RequestMapping(value = "/rooms", method = RequestMethod.POST)
-    public void addRoom(@ModelAttribute Room room) {
+    @PostMapping(value = "/rooms")
+    public void addRoom(@RequestBody Room room) {
         roomService.addRoom(room);
+        fileManager.save();
     }
 
     @RequestMapping(value = "/rooms/{id}", method = RequestMethod.DELETE)
