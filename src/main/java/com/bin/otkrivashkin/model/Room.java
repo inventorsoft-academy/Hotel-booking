@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Room implements Validator, Serializable {
+public class Room implements Validator {
 
     private static AtomicInteger uniqueId = new AtomicInteger();
     private int roomId;
