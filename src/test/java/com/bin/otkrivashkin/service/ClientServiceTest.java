@@ -2,7 +2,6 @@ package com.bin.otkrivashkin.service;
 
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.service.impl.ClientServiceImpl;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +31,7 @@ public class ClientServiceTest {
     public void getClient() throws Exception {
         addClient();
         String firstName = "Igor";
-        Client expected = clientService.getClient(firstName);
+        Client expected = clientService.getClientByFirstName(firstName);
         assertEquals(expected.getLastName(), "Bondarenko");
     }
 
@@ -51,7 +50,7 @@ public class ClientServiceTest {
     public void editClient() throws Exception {
         addClient();
         String oldFirstName = "Igor";
-        Client client = clientService.getClient(oldFirstName);
+        Client client = clientService.getClientByFirstName(oldFirstName);
 
         String newFirstName = "BobbyBob";
         client.setFirstName(newFirstName);
@@ -66,7 +65,7 @@ public class ClientServiceTest {
     public void deleteClient() throws Exception {
         addClient();
         assertEquals(1, clientService.getClients().size());
-        Client igor = clientService.getClient("Igor");
+        Client igor = clientService.getClientByFirstName("Igor");
         clientService.deleteClient(igor);
         int size = clientService.getClients().size();
         assertEquals(0, size);

@@ -8,7 +8,6 @@ import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.HotelService;
 import com.bin.otkrivashkin.service.RoomService;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -39,10 +38,13 @@ public class TextFileManager implements FileManager {
     private static final String BOOKING_PREFIX = "Booking/";
 
 
-    @Override
-    public void saveHotel(Hotel hotel) {
 
-        File file = new File(HOTEL_PATH + hotel.getName() + ".txt");
+
+    // todo save to txt file
+    @Override
+    public void save() {
+        String hotelName = "tempo";
+        File file = new File(HOTEL_PATH + hotelName + ".txt");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
 
@@ -87,9 +89,9 @@ public class TextFileManager implements FileManager {
         }
     }
 
-    @Override
-    public Hotel loadHotel(String hotelName) throws WrongNumberArgsException {
-        File file = new File(HOTEL_PATH + hotelName + ".txt");
+    @Override // todo load from text file
+    public void load() {
+        File file = new File(HOTEL_PATH + "tempo" + ".txt");
 
         List<String> list = new ArrayList<>();
         List<Room> rooms = new ArrayList<>();
@@ -101,11 +103,11 @@ public class TextFileManager implements FileManager {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            if(list.isEmpty())
-                return null;
+            if(list.isEmpty()) {
+                //
+            }
         }
         Hotel hotel = new Hotel();
-        hotel.setName(hotelName);
 
         for (String line : list) {
             if (line.startsWith(ROOM_PREFIX)) {
@@ -163,7 +165,5 @@ public class TextFileManager implements FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return hotel;
     }
 }

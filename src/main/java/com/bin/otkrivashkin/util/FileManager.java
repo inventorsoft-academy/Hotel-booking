@@ -5,7 +5,7 @@ import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 
 public interface FileManager {
 
-    void saveObjectsToJson();
+    void save();
 
-    void loadObjectsFromJson();
+    void load();
 }

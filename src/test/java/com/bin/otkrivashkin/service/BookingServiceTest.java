@@ -70,12 +70,15 @@ public class BookingServiceTest {
     public void registerClient() throws Exception {
 
         bookingService.registerClient(cClient, lux, 5);
-
         int clientId = cClient.getClientId();
-
         Client registerClientById = bookingService.getRegisterClientById(clientId);
-
         assertEquals(cClient, registerClientById);
+
+
+        bookingService.registerClient(aClient, cheap, 2);
+
+        assertEquals(2, bookingService.getRegisterClients().size());
+
 
     }
 

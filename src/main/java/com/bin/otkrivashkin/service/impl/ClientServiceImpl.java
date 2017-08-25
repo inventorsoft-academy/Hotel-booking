@@ -28,7 +28,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClient(String firstName) throws IOException, NotFoundException {
+    public Client getClientByFirstName(String firstName) throws IOException, NotFoundException {
         if (firstName == null || firstName.length() < 3) throw new IOException("The first name is too short!");
 
         for (Client client : clients) {
@@ -64,12 +64,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void editClient(String oldFirstName, String newFirstName) throws IOException, NotFoundException, WrongArgumentException {
-        getClient(oldFirstName).setFirstName(newFirstName);
+        getClientByFirstName(oldFirstName).setFirstName(newFirstName);
     }
 
     @Override
     public void deleteClient(String firstName) throws IOException, NotFoundException {
-        deleteClient(getClient(firstName));
+        deleteClient(getClientByFirstName(firstName));
     }
 
     @Override
@@ -90,7 +90,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void printClients() {
-
+        System.out.println(String.format("%10s %15s %15s %10s", "ID", "FIRST NAME", "LAST NAME", "MONEY"));
+        for (Client client: clients) {
+            System.out.println(String.format("%10s %15s %15s %10s",
+                    client.getClientId(),
+                    client.getFirstName(),
+                    client.getLastName(),
+                    client.getCash()
+            ));
+        }
     }
 
     @Override

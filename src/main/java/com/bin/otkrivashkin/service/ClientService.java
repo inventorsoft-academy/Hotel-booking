@@ -11,7 +11,7 @@ public interface ClientService {
 
     void addClient(Client cLient) throws IOException;
 
-    Client getClient(String firstName) throws IOException, NotFoundException;
+    Client getClientByFirstName(String firstName) throws IOException, NotFoundException;
 
     Client getClient(Client client) throws WrongArgumentException, NotFoundException;
 

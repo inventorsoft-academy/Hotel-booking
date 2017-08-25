@@ -31,7 +31,8 @@ public class Main {
     private static BookingService bookingService = new BookingServiceImpl(roomService, clientService);
     private static JournalService journalService = new JournalServiceImpl(bookingService);
 
-    private static FileManager fileManager = new TextFileManager(hotelService, clientService, bookingService, roomService);
+    private static FileManager textFileManager = new TextFileManager(hotelService, clientService, bookingService, roomService);
+    private static FileManager jsonFileManager = new JsonFileManager(roomService, clientService, bookingService);
     private static Scanner scanner = new Scanner(System.in);
 
 
@@ -246,28 +247,14 @@ public class Main {
                         }
                     }
                 case 100: // save
-                    try {
-                        fileManager.saveHotel(hotelService.getHotel(hotelName));
-                    } catch (NotFoundException e) {
-                        logManager.error(e.getMessage());
-                    }
+                    jsonFileManager.save();
                     break;
                 case 200: // load
-                    System.out.println("Enter the hotel name");
-                    hotelName = scanner.next();
-                    try {
-                        fileManager.loadHotel(hotelName);
-                    } catch (WrongNumberArgsException e) {
-                        logManager.error(e.getMessage());
-                    }
+                    jsonFileManager.load();
                     break;
                 case 300: // exit
                     inMain = false;
                     logManager.info("exit");
-                    break;
-                case -1:
-                    JsonFileManager jsonManager = new JsonFileManager(roomService, bookingService);
-                    jsonManager.fileToJson();
                     break;
                 default:
                     //
@@ -324,20 +311,20 @@ public class Main {
     private static void registerClient() {
         System.out.println("Which client to book?");
         clientService.printClients();
-        System.out.println("Enter the first name or the last name of the client");
+        System.out.println("Enter the first name of the client");
         String clientName = scanner.next();
 
         Client client = null;
 
         try {
-            client = clientService.getClient(clientName);
+            client = clientService.getClientByFirstName(clientName);
         } catch (IOException | NotFoundException e) {
             logManager.error(e.getLocalizedMessage());
         }
 
         System.out.println("Which room to book?");
         roomService.printRooms();
-        System.out.println("Enter number of the room");
+        System.out.println("Enter id of the room");
         int roomToBookOption = scanner.nextInt();
 
         Room room = null;
@@ -401,7 +388,7 @@ public class Main {
                     Client clientToEdit = null;
 
                     try {
-                        clientToEdit = clientService.getClient(firstNameEditMode);
+                        clientToEdit = clientService.getClientByFirstName(firstNameEditMode);
                     } catch (IOException | NotFoundException e) {
                         e.printStackTrace();
                     }

@@ -106,7 +106,9 @@ public class BookingServiceImpl implements BookingService {
             if (room.getType().equals(apartment.getType()) && apartment.isAvailable()) {
                 bookingList.put(apartment, client);
                 room.setAvailable(false);
+                roomService.editRoom(room);
                 clientService.deleteClient(client);
+                System.out.println(bookingList.toString());
                 return;
             }
         }

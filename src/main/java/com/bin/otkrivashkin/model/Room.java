@@ -1,12 +1,11 @@
 package com.bin.otkrivashkin.model;
 
-import org.springframework.stereotype.Component;
-
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Room implements Validator {
+public class Room implements Validator, Serializable {
 
     private static AtomicInteger uniqueId = new AtomicInteger();
     private int roomId;
@@ -27,12 +26,12 @@ public class Room implements Validator {
 
     public Room(RoomType type) {
         this.type = type;
-        this.price = setPrice(type);
+        this.price = setTypeWithPrice(type);
         this.available = true;
         this.roomId = uniqueId.getAndIncrement();
     }
 
-    private double setPrice(RoomType type) {
+    private double setTypeWithPrice(RoomType type) {
         switch (type) {
             case CHEAP: return 100;
             case LUX: return 200;
@@ -43,6 +42,8 @@ public class Room implements Validator {
                 return 0;
         }
     }
+
+
 
     public int getRoomId() {
         return roomId;
