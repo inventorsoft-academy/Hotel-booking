@@ -40,7 +40,7 @@ public class JournalServiceImpl implements JournalService {
         ));
 
         for (int row = 0; row < rooms.size(); row++) {
-            int number = rooms.get(row).getId();
+            int number = rooms.get(row).getRoomId();
             RoomType type = rooms.get(row).getType();
             double price = rooms.get(row).getPrice();
             String available = rooms.get(row).isAvailable() ? "YES" : "NO";

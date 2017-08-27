@@ -1,5 +1,7 @@
 package com.bin.otkrivashkin.service;
 
+import com.bin.otkrivashkin.exception.NotFoundException;
+import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
@@ -37,10 +39,10 @@ public class RoomServiceTest {
 
     @Test
     public void getRoomById() throws Exception {
-        int roomId = globalRoom.getId();
+        int roomId = globalRoom.getRoomId();
         roomService.addRoom(globalRoom);
         Room room = roomService.getRoom(globalRoom);
-        assertEquals(roomId, room.getId());
+        assertEquals(roomId, room.getRoomId());
     }
 
     @Test
@@ -58,7 +60,7 @@ public class RoomServiceTest {
     public void editRoom() throws Exception {
 
         addRoom();
-        int roomId = globalRoom.getId();
+        int roomId = globalRoom.getRoomId();
 
         Room room = roomService.getRoomById(roomId);
 
@@ -66,7 +68,7 @@ public class RoomServiceTest {
         room.setPrice(7777.7);
         room.setType(RoomType.LUX);
 
-        assertEquals(true, roomService.editRoom(room));
+        assertEquals(true, roomService.addRoom(room));
     }
 
     @Test
@@ -84,7 +86,7 @@ public class RoomServiceTest {
     @Test
     public void deleteRoomById() throws Exception {
         addRoom();
-        int roomId = globalRoom.getId();
+        int roomId = globalRoom.getRoomId();
         roomService.deleteRoomById(roomId);
 
         assertEquals(0, roomService.getRooms().size());
@@ -111,14 +113,37 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void addRoomsByCount() throws WrongNumberArgsException {
+    public void addRoomsByCount() throws WrongNumberArgsException, WrongArgumentException {
         int count = 11;
 
         for (int i = 0; i < count; i++) {
             roomService.addRoom(new Room(RoomType.CHEAP, 1234.5, true));
         }
 
-        assertEquals(11, roomService.getRooms().size());
+        assertEquals(count, roomService.getRooms().size());
+    }
+
+    @Test
+    public void editRoomById() throws NotFoundException {
+
+        roomService.addRoom(globalRoom);
+
+
+        assertEquals(globalRoom, roomService.getRoom(globalRoom));
+
+        int roomId = globalRoom.getRoomId();
+
+        globalRoom.setAvailable(false);
+        globalRoom.setPrice(166611.555);
+        globalRoom.setType(RoomType.COUNTRY);
+
+        roomService.editRoom(globalRoom, roomId);
+
+        Room room = roomService.getRoom(globalRoom);
+
+        assertEquals("Ids not equals",roomId, room.getRoomId());
+
+        assertEquals(globalRoom, roomService.getRoomById(roomId));
     }
 
 

@@ -4,6 +4,7 @@ import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.util.LogManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 @Service
 public class RoomServiceImpl implements RoomService {
 
+    private LogManager logManager = LogManager.getLogger(RoomServiceImpl.class);
+
     private List<Room> rooms;
 
     public RoomServiceImpl() {
@@ -20,16 +23,18 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void addRoom(Room room) {
+    public boolean addRoom(Room room) {
         if (room.validate().isEmpty()) {
             rooms.add(room);
+            return true;
         }
+        return false;
     }
 
     @Override
     public Room getRoomById(int roomId) throws NotFoundException {
         for (Room room : rooms) {
-            if (room.getId() == roomId) {
+            if (room.getRoomId() == roomId) {
                 return room;
             }
         }
@@ -40,9 +45,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean editRoom(Room room) {
         for (Room roomToUpdate : rooms) {
-            if (roomToUpdate.getId() == room.getId()) {
+            if (roomToUpdate.getRoomId() == room.getRoomId()) {
                 int indexOf = rooms.indexOf(roomToUpdate);
-                room.setId(roomToUpdate.getId());
+                room.setRoomId(roomToUpdate.getRoomId());
                 rooms.set(indexOf, room);
                 return true;
             }
@@ -71,6 +76,26 @@ public class RoomServiceImpl implements RoomService {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean editRoom(Room room, int id) {
+        Room roomById = null;
+        try {
+            roomById = getRoomById(id);
+            if (roomById != null) {
+                int index = rooms.indexOf(roomById);
+                roomById.setType(room.getType());
+                roomById.setPrice(room.getPrice());
+                roomById.setAvailable(room.isAvailable());
+                rooms.set(index, roomById);
+
+                return true;
+            }
+        } catch (NotFoundException e) {
+            logManager.error(e.getMessage());
+        }
+        return false;
     }
 
     @Override
@@ -132,9 +157,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void printRooms() {
         System.out.println(String.format("%10s %15s %15s %10s", "ID", "TYPE", "PRICE/DAY", "BUSY?"));
-        for (Room room: rooms) {
+        for (Room room : rooms) {
             System.out.println(String.format("%10s %15s %15s %10s",
-                    room.getId(),
+                    room.getRoomId(),
                     room.getType(),
                     room.getPrice(),
                     room.isAvailable() ? "NO" : "YES"

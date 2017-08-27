@@ -10,3 +10,4 @@ public class ApplicationEntryPoint {
         SpringApplication.run(ApplicationEntryPoint.class, args);
     }
 }
+

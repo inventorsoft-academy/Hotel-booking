@@ -7,27 +7,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Room implements Validator {
 
     private static AtomicInteger uniqueId = new AtomicInteger();
-    private int id;
+    private int roomId;
     private RoomType type;
     private double price;
     private boolean available;
 
     public Room() {
-        this.id = uniqueId.getAndIncrement();
+        this.roomId = uniqueId.getAndIncrement();
     }
 
     public Room(RoomType type, double price, boolean available) {
         this.type = type;
         this.price = price;
         this.available = available;
-        this.id = uniqueId.getAndIncrement();
+        this.roomId = uniqueId.getAndIncrement();
     }
 
     public Room(RoomType type) {
         this.type = type;
         this.price = setTypeWithPrice(type);
         this.available = true;
-        this.id = uniqueId.getAndIncrement();
+        this.roomId = uniqueId.getAndIncrement();
     }
 
     private double setTypeWithPrice(RoomType type) {
@@ -42,14 +42,12 @@ public class Room implements Validator {
         }
     }
 
-
-
-    public int getId() {
-        return id;
+    public int getRoomId() {
+        return roomId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
     public RoomType getType() {
@@ -81,7 +79,7 @@ public class Room implements Validator {
     public String toString() {
         return "Room{" +
                 type + "," +
-                id + "," +
+                roomId + "," +
                 price + "," +
                 available
                 + "}"
@@ -95,7 +93,7 @@ public class Room implements Validator {
 
         Room room = (Room) o;
 
-        if (id != room.id) return false;
+        if (roomId != room.roomId) return false;
         if (Double.compare(room.price, price) != 0) return false;
         if (available != room.available) return false;
         return type == room.type;
@@ -105,7 +103,7 @@ public class Room implements Validator {
     public int hashCode() {
         int result;
         long temp;
-        result = id;
+        result = roomId;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         temp = Double.doubleToLongBits(price);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

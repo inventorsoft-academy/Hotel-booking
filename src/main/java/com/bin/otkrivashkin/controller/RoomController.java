@@ -5,14 +5,11 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.FileManager;
-import com.bin.otkrivashkin.util.JsonFileManager;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,8 +23,7 @@ public class RoomController {
     private FileManager fileManager;
 
     @GetMapping(value = "/rooms")
-    public List<Room> getRooms() {
-        return roomService.getRooms();
+    public List<Room> getRooms() { return roomService.getRooms();
     }
 
     @GetMapping("/rooms/{id}")
@@ -38,30 +34,23 @@ public class RoomController {
     @PostMapping("/rooms")
     public void addRoom(@RequestBody Room room) {
         roomService.addRoom(room);
-        fileManager.save();
     }
 
     @DeleteMapping("/rooms/{id}")
-    public void deleteRoomById(@PathVariable int id) throws Exception {
+    public ResponseEntity<Boolean> deleteRoomById(@PathVariable("id")  int id) throws Exception {
         roomService.deleteRoomById(id);
+        return new ResponseEntity<Boolean>(Boolean.TRUE, HttpStatus.OK);
     }
 
-    @PutMapping("/rooms}")
-    public void editRoom(@ModelAttribute Room room) {
-        roomService.editRoom(room);
+    @PutMapping("/rooms/{id}")
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "XZ")
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public void editRoom(@RequestBody Room room, @PathVariable int id) {
+        roomService.editRoom(room, id);
     }
 
-    @GetMapping("/roomTypes")
+    @GetMapping("/rooms/roomTypes")
     public List<RoomType> getRoomTypes() {
         return roomService.getRoomTypes();
     }
-
-
-
-
-
-
-
-
-
 }

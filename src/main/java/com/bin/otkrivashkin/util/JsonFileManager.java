@@ -1,8 +1,6 @@
 package com.bin.otkrivashkin.util;
 
-import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Room;
-import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
@@ -10,11 +8,11 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JsonFileManager implements FileManager {
@@ -41,20 +39,14 @@ public class JsonFileManager implements FileManager {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            // Convert object to JSON string and save into a file directly
             mapper.writeValue(new File(ROOM_PATH), roomService.getRooms());
 
-            System.out.println();
-            // Convert object to JSON string and pretty print
-            String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(roomService.getRooms());
-            System.out.println(jsonInString);
-
         } catch (JsonGenerationException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         }
     }
 
@@ -70,7 +62,7 @@ public class JsonFileManager implements FileManager {
             roomService.addRooms(rooms);
             System.out.println(rooms);
         } catch (IOException e) {
-            e.printStackTrace();
+            logManager.error(e.getMessage());
         }
     }
 }
