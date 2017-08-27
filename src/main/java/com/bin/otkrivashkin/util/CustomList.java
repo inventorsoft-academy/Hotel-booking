@@ -16,7 +16,7 @@ public class CustomList implements List {
 
     @Override
     public int size() {
-        if (elements.length < DEFAULT_CAPACITY) throw new ArithmeticException("What is wrong with you?");
+        if (elements.length < DEFAULT_CAPACITY) throw new ArithmeticException(" less than zero...");
         return elements.length;
     }
 
@@ -37,6 +37,7 @@ public class CustomList implements List {
 
     @Override
     public Iterator iterator() {
+
         return null;
     }
 
@@ -93,11 +94,13 @@ public class CustomList implements List {
 
     @Override
     public int indexOf(Object o) {
+
         return 0;
     }
 
     @Override
     public int lastIndexOf(Object o) {
+
         return 0;
     }
 

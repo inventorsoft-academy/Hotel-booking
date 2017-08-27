@@ -43,8 +43,6 @@ public class RoomController {
     }
 
     @PutMapping("/rooms/{id}")
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "XZ")
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
     public void editRoom(@RequestBody Room room, @PathVariable int id) {
         roomService.editRoom(room, id);
     }
