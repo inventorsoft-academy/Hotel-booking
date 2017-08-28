@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class RoomServiceTest {
     private RoomService roomService;
     private Room globalRoom;
+
     @Before
     public void setUp() throws Exception {
         roomService = new RoomServiceImpl();
@@ -58,7 +59,6 @@ public class RoomServiceTest {
 
     @Test
     public void editRoom() throws Exception {
-
         addRoom();
         int roomId = globalRoom.getRoomId();
 
@@ -95,8 +95,7 @@ public class RoomServiceTest {
         addRoom();
 
         assertEquals(2, roomService.getRooms().size());
-
-    };
+    }
 
     @Test
     public void addRooms() {
@@ -128,7 +127,6 @@ public class RoomServiceTest {
 
         roomService.addRoom(globalRoom);
 
-
         assertEquals(globalRoom, roomService.getRoom(globalRoom));
 
         int roomId = globalRoom.getRoomId();
@@ -141,7 +139,7 @@ public class RoomServiceTest {
 
         Room room = roomService.getRoom(globalRoom);
 
-        assertEquals("Ids not equals",roomId, room.getRoomId());
+        assertEquals("Ids not equals", roomId, room.getRoomId());
 
         assertEquals(globalRoom, roomService.getRoomById(roomId));
     }

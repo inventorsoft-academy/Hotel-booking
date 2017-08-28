@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.util;
 
+import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class JsonFileManager implements FileManager {
@@ -32,15 +34,36 @@ public class JsonFileManager implements FileManager {
         this.bookingService = bookingService;
     }
 
-
-    @Override
-    public void save() {
-
+    private void saveRooms() {
         ObjectMapper mapper = new ObjectMapper();
-
         try {
             mapper.writeValue(new File(ROOM_PATH), roomService.getRooms());
+        } catch (JsonGenerationException e) {
+            logManager.error(e.getMessage());
+        } catch (JsonMappingException e) {
+            logManager.error(e.getMessage());
+        } catch (IOException e) {
+            logManager.error(e.getMessage());
+        }
+    }
 
+    private void saveClients() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(CLIENT_PATH), clientService.getClients());
+        } catch (JsonGenerationException e) {
+            logManager.error(e.getMessage());
+        } catch (JsonMappingException e) {
+            logManager.error(e.getMessage());
+        } catch (IOException e) {
+            logManager.error(e.getMessage());
+        }
+    }
+
+    private void saveRegisterClients() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(REGISTER_PATH), bookingService.getRegisterClients());
         } catch (JsonGenerationException e) {
             logManager.error(e.getMessage());
         } catch (JsonMappingException e) {
@@ -51,16 +74,32 @@ public class JsonFileManager implements FileManager {
     }
 
     @Override
+    public void save() {
+        saveRooms();
+        saveClients();
+        saveRegisterClients();
+    }
+
+    @Override
     public void load() {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            TypeReference<List<Room>> typeRef = new TypeReference<List<Room>>() {
-            };
+            TypeReference<List<Room>> roomRef = new TypeReference<List<Room>>(){};
             List<Room> rooms = mapper.readValue(new File(
-                    ROOM_PATH), typeRef);
+                    ROOM_PATH), roomRef);
             roomService.addRooms(rooms);
             System.out.println(rooms);
+
+            TypeReference<List<Client>> clientRef = new TypeReference<List<Client>>(){};
+            List<Client> clients = mapper.readValue(new File(
+                    CLIENT_PATH), clientRef);
+            clientService.addClients(clients);
+
+            TypeReference<Map<Room, Client>> registerClientsRef = new TypeReference<Map<Room, Client>>(){};
+            Map<Room, Client> registerClients = mapper.readValue(new File(
+                    REGISTER_PATH), registerClientsRef);
+            bookingService.addMapOfClientsWithRooms(registerClients);
         } catch (IOException e) {
             logManager.error(e.getMessage());
         }

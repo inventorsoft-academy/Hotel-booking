@@ -33,12 +33,8 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room getRoomById(int roomId) {
-        for (Room room : rooms) {
-            if (room.getRoomId() == roomId) {
-                return room;
-            }
-        }
-        return null;
+        return rooms.stream()
+                .filter(r -> r.getRoomId() == roomId).findFirst().get();
     }
 
     @Override
@@ -56,36 +52,23 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room getRoom(Room room) throws NotFoundException {
-        if (room.validate().isEmpty()) {
-            for (Room groom : rooms) {
-                if (groom.equals(room)) {
-                    return groom;
-                }
-            }
-        }
-        throw new NotFoundException(room.validate().values().stream().findAny().get());
-
+        if (!room.validate().isEmpty()) throw  new NotFoundException(room.validate().values().stream().findAny().get());
+        return rooms.stream().filter(r -> r.equals(room)).findFirst().get();
     }
 
     @Override
     public Room getRoomByType(RoomType type) {
-        for (Room room : rooms) {
-            if (room.getType().equals(type)) {
-                return room;
-            }
-        }
-        return null;
+        return rooms.stream().filter(r -> r.getType().equals(type)).findFirst().get();
     }
 
     @Override
     public boolean editRoom(Room room, int id) {
         Room roomById = getRoomById(id);
             if (roomById != null) {
-                int index = rooms.indexOf(roomById);
                 roomById.setType(room.getType());
                 roomById.setPrice(room.getPrice());
                 roomById.setAvailable(room.isAvailable());
-                rooms.set(index, roomById);
+                rooms.add(roomById);
                 return true;
             }
         return false;
@@ -98,10 +81,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean deleteRoomById(int roomId) throws Exception {
-        if (rooms.remove(getRoomById(roomId))) {
-            return true;
-        }
-        return false;
+        return rooms.remove(getRoomById(roomId));
     }
 
     @Override
@@ -111,10 +91,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void printTypes() {
-        List<RoomType> types = new ArrayList<>(Arrays.asList(RoomType.values()));
-        for (int i = 0; i < types.size(); i++) {
-            System.out.println(i + " " + types.get(i));
-        }
+        Arrays.stream(RoomType.values()).forEach(System.out::println);
     }
 
     @Override

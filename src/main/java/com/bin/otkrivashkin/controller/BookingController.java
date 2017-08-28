@@ -8,8 +8,8 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.util.FileManager;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -27,6 +27,7 @@ public class BookingController {
     private RoomService roomService;
     private ClientService clientService;
 
+    private FileManager fileManager;
 
     @PostMapping("/{clientId}/{roomId}/{days}")
     public void registerClient(@PathVariable("clientId") int clientId,
@@ -35,6 +36,8 @@ public class BookingController {
         Client clientById = clientService.getClientById(clientId);
         Room roomById = roomService.getRoomById(roomId);
         bookingService.registerClient(clientById, roomById, days);
+        fileManager.save();
+
     }
 
     @GetMapping
