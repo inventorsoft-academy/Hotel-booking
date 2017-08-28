@@ -34,4 +34,10 @@ public interface ClientService {
     void setClient(int clientIndex, Client clientToEdit);
 
     void deleteClients();
+
+    Client getClientById(int id);
+
+    void editClientById(int id, Client client);
+
+    void deleteClientById(int id);
 }

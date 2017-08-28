@@ -2,7 +2,6 @@ package com.bin.otkrivashkin.model;
 
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -101,21 +100,34 @@ public class Client implements Validator {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Client)) return false;
 
         Client client = (Client) o;
 
-        if (!firstName.equals(client.firstName)) return false;
-        return lastName.equals(client.lastName);
+        if (getClientId() != client.getClientId()) return false;
+        if (Double.compare(client.getCash(), getCash()) != 0) return false;
+        if (!getFirstName().equals(client.getFirstName())) return false;
+        if (!getLastName().equals(client.getLastName())) return false;
+        if (getStartDate() != null ? !getStartDate().equals(client.getStartDate()) : client.getStartDate() != null)
+            return false;
+        return getEndDate() != null ? getEndDate().equals(client.getEndDate()) : client.getEndDate() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
+        int result;
+        long temp;
+        result = getClientId();
+        result = 31 * result + getFirstName().hashCode();
+        result = 31 * result + getLastName().hashCode();
+        temp = Double.doubleToLongBits(getCash());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (getStartDate() != null ? getStartDate().hashCode() : 0);
+        result = 31 * result + (getEndDate() != null ? getEndDate().hashCode() : 0);
         return result;
     }
 
