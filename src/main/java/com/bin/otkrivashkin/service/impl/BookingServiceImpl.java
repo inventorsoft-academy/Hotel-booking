@@ -28,8 +28,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
-        if (days < 1) return;
+    public boolean registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+        if (days < 1) return false;
         client.setStartDate();
         LocalDate end = LocalDate.now().plusDays(days);
         client.setEndDate(end);
@@ -37,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
         checkCurrentBalanceOfClient(client, room, days);
 
         register(client, room);
+        return true;
 
     }
 

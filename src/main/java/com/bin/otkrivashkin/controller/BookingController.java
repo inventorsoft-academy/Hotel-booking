@@ -10,6 +10,8 @@ import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.FileManager;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -30,19 +32,27 @@ public class BookingController {
     private FileManager fileManager;
 
     @PostMapping("/{clientId}/{roomId}/{days}")
-    public void registerClient(@PathVariable("clientId") int clientId,
-                               @PathVariable("roomId") int roomId,
-                               @PathVariable("days") int days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+    public ResponseEntity<Boolean> registerClient(@PathVariable("clientId") int clientId,
+                                         @PathVariable("roomId") int roomId,
+                                         @PathVariable("days") int days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+
         Client clientById = clientService.getClientById(clientId);
         Room roomById = roomService.getRoomById(roomId);
-        bookingService.registerClient(clientById, roomById, days);
-        fileManager.save();
-
+        if (bookingService.registerClient(clientById, roomById, days)) {
+            fileManager.save();
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
-    public Map<Room, Client> getRegisterDetails() {
-        return bookingService.getRegisterClients();
+    public ResponseEntity<Map<Room, Client>> getRegisterDetails() {
+        if (bookingService.getRegisterClients() != null) {
+            return new ResponseEntity<>(bookingService.getRegisterClients(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
