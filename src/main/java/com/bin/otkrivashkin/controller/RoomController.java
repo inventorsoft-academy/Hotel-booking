@@ -23,7 +23,11 @@ public class RoomController {
     private FileManager fileManager;
 
     @GetMapping
-    public List<Room> getRooms() { return roomService.getRooms();
+    public ResponseEntity<List<Room>> getRooms() {
+        if (roomService.getRooms() != null) {
+            return new ResponseEntity<>(roomService.getRooms(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/{id}")
@@ -41,7 +45,6 @@ public class RoomController {
             return new ResponseEntity<>(room, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 
     @DeleteMapping("/{id}")
@@ -64,7 +67,10 @@ public class RoomController {
     }
 
     @GetMapping("/roomTypes")
-    public List<RoomType> getRoomTypes() {
-        return roomService.getRoomTypes();
+    public ResponseEntity<List<RoomType>> getRoomTypes() {
+        if (roomService.getRoomTypes() != null) {
+            return new ResponseEntity<>(roomService.getRoomTypes(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
