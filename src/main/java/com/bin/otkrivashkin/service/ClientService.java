@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ClientService {
 
-    void addClient(Client cLient) throws IOException;
+    boolean addClient(Client cLient) throws IOException;
 
     Client getClientByFirstName(String firstName) throws IOException, NotFoundException;
 
@@ -23,9 +23,9 @@ public interface ClientService {
 
     Client getClientById(int id);
 
-    void editClientById(int id, Client client);
+    boolean editClientById(int id, Client client);
 
-    void deleteClientById(int id);
+    boolean deleteClientById(int id);
 
     void deleteClientByFirstName(String firstName);
 

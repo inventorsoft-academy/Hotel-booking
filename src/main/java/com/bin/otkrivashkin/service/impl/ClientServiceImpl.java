@@ -23,12 +23,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void addClient(Client cLient) throws IOException {
+    public boolean addClient(Client cLient) {
         if (cLient.validate().isEmpty()) {
             clients.add(cLient);
-        } else {
-            throw new IOException(String.valueOf(cLient.validate().values()));
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void editClientById(int id, Client client) {
+    public boolean editClientById(int id, Client client) {
         Client clientById = getClientById(id);
 
         if (clientById != null) {
@@ -118,6 +118,7 @@ public class ClientServiceImpl implements ClientService {
                 clientById.setLastName(client.getLastName());
                 clientById.setCash(client.getCash());
                 clients.set(clients.indexOf(clientById), clientById);
+                return true;
             } catch (WrongArgumentException e) {
                 logManager.error(e.getMessage());
             }
@@ -128,11 +129,12 @@ public class ClientServiceImpl implements ClientService {
                 logManager.error(e.getMessage());
             }
         }
+        return false;
     }
 
     @Override
-    public void deleteClientById(int id) {
-        clients.remove(getClientById(id));
+    public boolean deleteClientById(int id) {
+        return clients.remove(getClientById(id));
     }
 
     @Override

@@ -4,22 +4,21 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.FileManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/rooms")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET,
         RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class RoomController {
 
-    @Autowired
     private RoomService roomService;
-    @Autowired
     private FileManager fileManager;
 
     @GetMapping
