@@ -1,11 +1,9 @@
 package com.bin.otkrivashkin.controller;
 
-import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.FileManager;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +19,8 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private FileManager fileManager;
 
     @GetMapping
     public List<Room> getRooms() { return roomService.getRooms();
@@ -37,6 +37,7 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<Room> addRoom(@RequestBody Room room) {
         if (roomService.addRoom(room)) {
+            fileManager.save();
             return new ResponseEntity<>(room, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -46,6 +47,7 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteRoomById(@PathVariable  int id) throws Exception {
         if (roomService.deleteRoomById(id)) {
+            fileManager.save();
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,6 +56,7 @@ public class RoomController {
     @PutMapping("/{id}")
     public ResponseEntity<Room> editRoom(@RequestBody Room room, @PathVariable int id) {
         if (roomService.editRoom(room, id)) {
+            fileManager.save();
             return new ResponseEntity<>(room, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
