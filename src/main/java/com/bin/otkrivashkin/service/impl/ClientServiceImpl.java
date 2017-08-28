@@ -65,16 +65,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void editClient(String oldFirstName, String newFirstName) throws IOException, NotFoundException, WrongArgumentException {
-        getClientByFirstName(oldFirstName).setFirstName(newFirstName);
-    }
-
-    @Override
-    public void deleteClient(String firstName) throws IOException, NotFoundException {
-        deleteClient(getClientByFirstName(firstName));
-    }
-
-    @Override
     public void deleteClient(Client client) throws NotFoundException {
         if (client.validate().keySet().isEmpty()) {
             clients.remove(client);
@@ -103,27 +93,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public int getClientIndex(Client client) {
-        return clients.indexOf(client);
-    }
-
-    @Override
-    public int getClientId(Client clientToEdit) {
-        return clients.stream()
-                .filter(client -> client.equals(clientToEdit))
-                .findFirst()
-                .get()
-                .getClientId();
-    }
-
-    @Override
     public void setClient(int clientIndex, Client client) {
         clients.set(clientIndex, client);
-    }
-
-    @Override
-    public void deleteClients() {
-        clients.clear();
     }
 
     @Override
@@ -162,5 +133,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void deleteClientById(int id) {
         clients.remove(getClientById(id));
+    }
+
+    @Override
+    public void deleteClientByFirstName(String firstName) {
+
     }
 }

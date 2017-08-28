@@ -353,20 +353,12 @@ public class Main {
             case 1:
                 System.out.println("Enter the first name of the client");
                 String firstNameToDelete = scanner.next();
-                try {
-                    clientService.deleteClient(firstNameToDelete);
-                } catch (IOException | NotFoundException e) {
-                    e.printStackTrace();
-                }
+                clientService.deleteClientByFirstName(firstNameToDelete);
                 break;
             case 2:
                 System.out.println("Enter the last name of the client");
                 String lastNameToDelete = scanner.next();
-                try {
-                    clientService.deleteClient(lastNameToDelete);
-                } catch (IOException | NotFoundException e) {
-                    e.printStackTrace();
-                }
+                clientService.deleteClientByFirstName(lastNameToDelete);
                 break;
             default:
                 //
@@ -424,7 +416,12 @@ public class Main {
                                     logManager.error(e.getMessage());
                                 }
 
-                                int clientId = clientService.getClientId(clientToEdit);
+                                int clientId = 0;
+                                try {
+                                    clientId = clientService.getClient(clientToEdit).getClientId();
+                                } catch (WrongArgumentException | NotFoundException e) {
+                                    logManager.error(e.getMessage());
+                                }
                                 clientService.setClient(clientId, clientToEdit);
                                 editingClient = false;
                                 break;
@@ -483,13 +480,7 @@ public class Main {
     private static void editRoom() {
         System.out.println("Enter index of the room.");
         int roomIndex = scanner.nextInt();
-
-        Room roomByIndex = null;
-        try {
-            roomByIndex = roomService.getRoomById(roomIndex);
-        } catch (NotFoundException e) {
-            print(e.getMessage());
-        }
+        Room roomByIndex = roomService.getRoomById(roomIndex);
         boolean inEditMode = true;
         while (inEditMode) {
             System.out.println("1 - change type\n2 - change price\n3 - change status\n4 - save & exit from edit mode");

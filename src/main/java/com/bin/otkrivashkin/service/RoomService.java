@@ -20,11 +20,11 @@ public interface RoomService {
 
     boolean addRoom(Room room);
 
-    Room getRoomById(int id) throws NotFoundException;
+    Room getRoomById(int id);
 
     List<Room> getRooms();
 
-    void deleteRoomById(int roomId) throws Exception;
+    boolean deleteRoomById(int roomId) throws Exception;
 
     void addRooms(List<Room> rooms);
 

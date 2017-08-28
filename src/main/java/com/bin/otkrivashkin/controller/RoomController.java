@@ -27,24 +27,37 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public Room getRoomById(@PathVariable int id) throws NotFoundException {
-        return roomService.getRoomById(id);
+    public ResponseEntity<Room> getRoomById(@PathVariable int id) {
+        if (roomService.getRoomById(id) != null) {
+            return new ResponseEntity<>(roomService.getRoomById(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
-    public void addRoom(@RequestBody Room room) {
-        roomService.addRoom(room);
+    public ResponseEntity<Room> addRoom(@RequestBody Room room) {
+        if (roomService.addRoom(room)) {
+            return new ResponseEntity<>(room, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteRoomById(@PathVariable  int id) throws Exception {
-        roomService.deleteRoomById(id);
-        return new ResponseEntity<Boolean>(Boolean.TRUE, HttpStatus.OK);
+        if (roomService.deleteRoomById(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{id}")
-    public void editRoom(@RequestBody Room room, @PathVariable int id) {
-        roomService.editRoom(room, id);
+    public ResponseEntity<Room> editRoom(@RequestBody Room room, @PathVariable int id) {
+        if (roomService.editRoom(room, id)) {
+            return new ResponseEntity<>(room, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @GetMapping("/roomTypes")

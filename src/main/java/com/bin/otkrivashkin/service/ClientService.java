@@ -17,27 +17,19 @@ public interface ClientService {
 
     List<Client> getClients();
 
-    void editClient(String oldFirstName, String newFirstName) throws IOException, NotFoundException, WrongArgumentException;
-
-    void deleteClient(String firstName) throws IOException, NotFoundException;
-
-    void deleteClient(Client client) throws NotFoundException;
-
     int addClients(List<Client> clients);
 
     void printClients();
-
-    int getClientIndex(Client client);
-
-    int getClientId(Client clientToEdit);
-
-    void setClient(int clientIndex, Client clientToEdit);
-
-    void deleteClients();
 
     Client getClientById(int id);
 
     void editClientById(int id, Client client);
 
     void deleteClientById(int id);
+
+    void deleteClientByFirstName(String firstName);
+
+    void setClient(int clientId, Client client);
+
+    void deleteClient(Client client) throws NotFoundException;
 }

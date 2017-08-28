@@ -32,14 +32,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room getRoomById(int roomId) throws NotFoundException {
+    public Room getRoomById(int roomId) {
         for (Room room : rooms) {
             if (room.getRoomId() == roomId) {
                 return room;
             }
         }
-        throw new NotFoundException("room does not exist.");
-
+        return null;
     }
 
     @Override
@@ -80,21 +79,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean editRoom(Room room, int id) {
-        Room roomById = null;
-        try {
-            roomById = getRoomById(id);
+        Room roomById = getRoomById(id);
             if (roomById != null) {
                 int index = rooms.indexOf(roomById);
                 roomById.setType(room.getType());
                 roomById.setPrice(room.getPrice());
                 roomById.setAvailable(room.isAvailable());
                 rooms.set(index, roomById);
-
                 return true;
             }
-        } catch (NotFoundException e) {
-            logManager.error(e.getMessage());
-        }
         return false;
     }
 
@@ -104,8 +97,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoomById(int roomId) throws Exception {
-        rooms.remove(getRoomById(roomId));
+    public boolean deleteRoomById(int roomId) throws Exception {
+        if (rooms.remove(getRoomById(roomId))) {
+            return true;
+        }
+        return false;
     }
 
     @Override
