@@ -34,6 +34,8 @@ CREATE TABLE public.booking
     booking_id integer NOT NULL DEFAULT nextval('booking_booking_id_seq'::regclass),
     client_id integer NOT NULL DEFAULT nextval('booking_client_id_seq'::regclass),
     room_id integer NOT NULL,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
     CONSTRAINT booking_pkey PRIMARY KEY (booking_id),
     CONSTRAINT "client_id_to_client_Table" FOREIGN KEY (client_id)
         REFERENCES public.clients (client_id) MATCH SIMPLE
@@ -49,3 +51,12 @@ WITH (
 )
 TABLESPACE pg_default;
 
+CREATE INDEX "fki_client_id_to_client_Table"
+    ON public.booking USING btree
+    (client_id)
+    TABLESPACE pg_default;
+
+CREATE INDEX fki_room_id_to_room_table
+    ON public.booking USING btree
+    (room_id)
+    TABLESPACE pg_default;
