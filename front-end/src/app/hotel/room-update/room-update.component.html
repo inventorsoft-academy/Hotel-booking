@@ -1,0 +1,22 @@
+<div class="container" style="width: 35%;">
+  <h1>Update room</h1>
+
+  <form [formGroup]="updateRoomForm" (submit)="updateRoom()">
+    <label for="types">Select room type</label>
+    <select formControlName="type" class="form-control" name="types" id="types">
+      <option [value]="type" *ngFor="let type of roomTypeList">{{type}}</option>
+    </select>
+    <br>
+    <label for="price">Price</label>
+    <input formControlName="price" id="price" class="form-control" [ngModel]="room.price">
+
+    <label for="available">Available</label>
+    <input formControlName="available" id="available" class="form-control">
+    <hr>
+    <button type="submit" class="btn btn-primary" [disabled]="updateRoomForm.invalid">Update room</button>
+  </form>
+
+</div>
+
+
+

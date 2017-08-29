@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Hotel-booking.iml" filepath="$PROJECT_DIR$/Hotel-booking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Hotel-booking.iml" filepath="$PROJECT_DIR$/.idea/Hotel-booking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/back-end/back-end.iml" filepath="$PROJECT_DIR$/back-end/back-end.iml" />
     </modules>
   </component>
 </project>
