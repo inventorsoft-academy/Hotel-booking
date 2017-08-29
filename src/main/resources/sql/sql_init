@@ -1,0 +1,31 @@
+CREATE DATABASE hotel
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
+CREATE TABLE public.rooms
+(
+    room_id serial NOT NULL,
+    type text NOT NULL,
+    price double precision NOT NULL,
+    available boolean NOT NULL DEFAULT true,
+    PRIMARY KEY (room_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.clients
+(
+    client_id serial NOT NULL,
+    first_name text NOT NULL,
+    last_name text NOT NULL,
+    PRIMARY KEY (client_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
