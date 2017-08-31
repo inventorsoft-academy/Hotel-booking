@@ -6,6 +6,8 @@
     <th>Type</th>
     <th>Price</th>
     <th>Available</th>
+    <th></th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -14,12 +16,8 @@
     <td>{{room.type}}</td>
     <td>{{room.price}}</td>
     <td>{{room.available}}</td>
-
-  </tr>
-  <tr *ngFor="let room of roomsList">
-    <td><button (click)="deleteRoomById(room.roomId)">delete</button></td>
+    <td><button md-button (click)="deleteRoomById(room.roomId)">delete</button></td>
     <td><button md-button (click)="updateRoomGet(room.roomId)">update</button></td>
-
   </tr>
   </tbody>
 

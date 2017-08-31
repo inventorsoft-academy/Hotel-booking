@@ -10,6 +10,7 @@ import {HotelModule} from "./hotel/hotel.module";
 import {RoomAddComponent} from "./hotel/room-add/room-add.component";
 import {RoomDetailsComponent} from "./hotel/room-details/room-details.component";
 import {RoomUpdateComponent} from "./hotel/room-update/room-update.component";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 const routes = [
 

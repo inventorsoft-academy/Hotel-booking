@@ -1,31 +1,41 @@
-<div class="container" style="width: 35%;">
-
-    <form [formGroup]="newRoomForm" (submit)="saveRoom()" class="full-width">
-      <md-select formControlName="type" class="form-control" placeholder="Select type" floatPlaceholder="never">
-        <md-option [value]="type" *ngFor="let type of roomTypeList">{{type}}</md-option>
-      </md-select>
-      <br>
-
-      <md-input-container class="full-width">
-        <input mdInput placeholder="Price" formControlName="price">
-        <md-error *ngIf="newRoomForm.get('price').hasError('required')">
-          Please add some money
-        </md-error>
-        <md-error *ngIf="newRoomForm.get('price').hasError('minLength')">
-          Min length <strong>required</strong>
-        </md-error>
-        <md-error *ngIf="newRoomForm.get('price').hasError('min')">
-          Min <strong>required</strong>
-        </md-error>
-      </md-input-container>
-
-      <label for="available">Available</label>
-      <md-checkbox formControlName="available" id="available"  [(ngModel)]="available"  class="form-control">{{available}}</md-checkbox>
-      <hr>
-      <button md-raised-button type="submit" class="btn btn-primary" >Save room</button>
-    </form>
+<div fxLayout="column">
+<div  fxLayout="row" fxLayoutAlign="center start">
+  <form fxLayoutAlign="center start" [formGroup]="newRoomForm" (submit)="saveRoom()" class="full-width">
+    <table class="full-width" cellspacing="0">
+    <tr>
+      <td>
+          <md-select formControlName="type" placeholder="Select type" floatPlaceholder="never" class="full-width">
+            <md-option [value]="type" *ngFor="let type of roomTypeList">{{type}}</md-option>
+          </md-select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-input-container class="full-width">
+          <input mdInput placeholder="Price" formControlName="price">
+          <md-error *ngIf="newRoomForm.get('price').hasError('required')">
+            Please add some money
+          </md-error>
+          <md-error *ngIf="newRoomForm.get('price').hasError('minLength')">
+            Min length <strong>required</strong>
+          </md-error>
+          <md-error *ngIf="newRoomForm.get('price').hasError('min')">
+            Min <strong>required</strong>
+          </md-error>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-checkbox class="full-width" formControlName="available" id="available" [(ngModel)]="available">Is available ?</md-checkbox>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button md-raised-button>Save room</button>
+      </td>
+    </tr>
+    </table>
+  </form>
 </div>
-
-
-
-
+</div>

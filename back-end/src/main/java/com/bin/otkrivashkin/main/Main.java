@@ -14,6 +14,7 @@ import com.bin.otkrivashkin.util.JsonFileManager;
 import com.bin.otkrivashkin.util.LogManager;
 import com.bin.otkrivashkin.util.TextFileManager;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -26,7 +27,8 @@ public class Main {
 
     private static String hotelName;
     private static HotelService hotelService = new HotelServiceImpl();
-    private static RoomService roomService = new RoomServiceImpl();
+    @Autowired
+    private static RoomService roomService;
     private static ClientService clientService = new ClientServiceImpl();
     private static BookingService bookingService = new BookingServiceImpl(roomService, clientService);
     private static JournalService journalService = new JournalServiceImpl(bookingService);

@@ -16,7 +16,6 @@ export class RoomService {
 
   updateRoom(id, obj: {}): Observable<any> {
     const url = `${environment.roomApi}${id}`;
-
     return this.http.put(url, obj).map(res => res.json());
   }
 

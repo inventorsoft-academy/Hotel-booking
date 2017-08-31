@@ -3,7 +3,7 @@ import {Subscription} from "rxjs/Subscription";
 import {FormBuilder, Validators} from "@angular/forms";
 import {RoomService} from "../../common/services/room/room.service";
 import {Room} from "../../common/models/room";
-import {MdSnackBar} from "@angular/material";
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-room-add',

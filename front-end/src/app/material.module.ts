@@ -32,12 +32,13 @@ import {
   MdTabsModule,
   MdToolbarModule,
   MdTooltipModule, StyleModule,
-} from "@angular/material";
-import {CdkTableModule, PlatformModule} from "@angular/cdk";
+} from '@angular/material';
+//import {CdkTableModule, PlatformModule} from '@angular/cdk';
 import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {CommonModule} from "@angular/common";
 import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
 import {HeaderComponent} from "./hotel/header/header.component";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   imports: [
@@ -62,7 +63,6 @@ import {HeaderComponent} from "./hotel/header/header.component";
     MdToolbarModule,
     MdTableModule,
     CompatibilityModule,
-    CdkTableModule,
     MdButtonToggleModule,
     MdDialogModule,
     MdIconModule,
@@ -72,11 +72,10 @@ import {HeaderComponent} from "./hotel/header/header.component";
     MdSlideToggleModule,
     MdSnackBarModule,
     MdTooltipModule,
-    PlatformModule,
-    StyleModule
+    StyleModule,
+    FlexLayoutModule
   ],
   exports: [
-    CdkTableModule,
     MdAutocompleteModule,
     MdButtonModule,
     MdButtonToggleModule,
@@ -108,6 +107,7 @@ import {HeaderComponent} from "./hotel/header/header.component";
     MdTabsModule,
     MdToolbarModule,
     MdTooltipModule,
+    FlexLayoutModule
   ],
   declarations: [],
   providers: []

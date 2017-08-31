@@ -20,9 +20,9 @@ import java.util.Map;
 public class JsonFileManager implements FileManager {
 
     private LogManager logManager = LogManager.getLogger(JsonFileManager.class);
-    private static final String ROOM_PATH = "src\\main\\resources\\json\\rooms.json";
-    private static final String CLIENT_PATH = "src\\main\\resources\\json\\clients.json";
-    private static final String REGISTER_PATH = "src\\main\\resources\\json\\register.json";
+    private static final String ROOM_PATH = "back-end\\src\\main\\resources\\json\\rooms.json";
+    private static final String CLIENT_PATH = "back-end\\src\\main\\resources\\json\\clients.json";
+    private static final String REGISTER_PATH = "back-end\\src\\main\\resources\\json\\register.json";
 
     private RoomService roomService;
     private ClientService clientService;

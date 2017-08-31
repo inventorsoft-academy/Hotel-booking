@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 public class BookingServiceTest {
 
     private BookingService bookingService;
+    @Autowired
     private RoomService roomService;
     private ClientService clientService;
 
@@ -36,7 +37,6 @@ public class BookingServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        roomService = new RoomServiceImpl();
         clientService = new ClientServiceImpl();
 
         bookingService = new BookingServiceImpl(roomService, clientService);

@@ -8,6 +8,7 @@ import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,12 +16,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class RoomServiceTest {
+    @Autowired
     private RoomService roomService;
     private Room globalRoom;
 
     @Before
     public void setUp() throws Exception {
-        roomService = new RoomServiceImpl();
         globalRoom = new Room(RoomType.COUNTRY, 5543.2, true);
     }
 
