@@ -1,12 +1,13 @@
 package com.bin.otkrivashkin.controller;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
-import com.bin.otkrivashkin.util.FileManager;
-import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,10 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-    @Autowired
-    private FileManager fileManager;
 
     @GetMapping
-    public ResponseEntity<List<Room>> getRooms() {
+    @ExceptionHandler(DataManagerException.class)
+    public ResponseEntity<List<Room>> getRooms() throws DataManagerException {
         if (roomService.getRooms() != null) {
             return new ResponseEntity<>(roomService.getRooms(), HttpStatus.OK);
         }
@@ -41,14 +41,16 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<Room> addRoom(@RequestBody Room room) {
+    @ExceptionHandler(DataManagerException.class)
+    public ResponseEntity addRoom(@RequestBody Room room) throws DataManagerException {
         if (roomService.addRoom(room)) {
-            return new ResponseEntity<>(room, HttpStatus.CREATED);
+            return new ResponseEntity(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @DeleteMapping("/{id}")
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<Boolean> deleteRoomById(@PathVariable  int id) throws Exception {
         if (roomService.deleteRoomById(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -56,8 +58,10 @@ public class RoomController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Room> editRoom(@RequestBody Room room, @PathVariable int id) {
+    @PostMapping(value = "/{id}" ,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ExceptionHandler(DataManagerException.class)
+    public ResponseEntity<JSONObject> editRoom(@RequestBody JSONObject room, @PathVariable int id) throws DataManagerException {
+        System.out.println(room);
         if (roomService.editRoom(room, id)) {
             return new ResponseEntity<>(room, HttpStatus.OK);
         }

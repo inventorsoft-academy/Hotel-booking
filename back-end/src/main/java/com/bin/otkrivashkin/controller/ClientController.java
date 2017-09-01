@@ -3,7 +3,7 @@ package com.bin.otkrivashkin.controller;
 
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.service.ClientService;
-import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.util.DataManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ClientController {
 
     private ClientService clientService;
-    private FileManager fileManager;
+    private DataManager dataManager;
 
     @GetMapping
     public ResponseEntity<List<Client>> getClients() {
@@ -40,7 +40,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client) throws IOException {
         if (clientService.addClient(client)) {
-            fileManager.save();
+            dataManager.save();
             return new ResponseEntity<>(client, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +50,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<Client> editClient(@PathVariable int id, @RequestBody Client client) {
         if (clientService.editClientById(id, client)) {
-            fileManager.save();
+            dataManager.save();
             return new ResponseEntity<>(client, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,7 +60,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteClientById(@PathVariable("id") int id) {
         if (clientService.deleteClientById(id)) {
-            fileManager.save();
+            dataManager.save();
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

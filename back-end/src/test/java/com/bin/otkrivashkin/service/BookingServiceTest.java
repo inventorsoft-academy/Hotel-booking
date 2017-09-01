@@ -8,7 +8,6 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.impl.BookingServiceImpl;
 import com.bin.otkrivashkin.service.impl.ClientServiceImpl;
-import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class BookingServiceTest {
 
@@ -44,10 +43,10 @@ public class BookingServiceTest {
         bClient = new Client("Second", "Secondovich", 44335.2);
         cClient = new Client("Third", "Thirdovich", 44335.2);
 
-        lux = new Room(RoomType.LUX, 1444.5, true);
-        cheap = new Room(RoomType.CHEAP, 132.2, true);
-        president = new Room(RoomType.PRESIDENT, 500.2, true);
-        country = new Room(RoomType.COUNTRY, 421.2, true);
+        lux = new Room(1,RoomType.LUX, 1444.5, true);
+        cheap = new Room(1,RoomType.CHEAP, 132.2, true);
+        president = new Room(1,RoomType.PRESIDENT, 500.2, true);
+        country = new Room(1,RoomType.COUNTRY, 421.2, true);
 
         List<Room> roomList = Arrays.asList(
                 lux,
@@ -114,9 +113,6 @@ public class BookingServiceTest {
     @Test
     public void getRegisterClientById() throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
 
-        bookingService.registerClient(bClient, president, 5);
-        int clientId = bClient.getClientId();
 
-        assertEquals(bClient, bookingService.getRegisterClientById(clientId));
     }
 }

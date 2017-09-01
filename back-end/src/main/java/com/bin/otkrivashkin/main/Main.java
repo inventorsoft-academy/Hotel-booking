@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.main;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
@@ -9,10 +10,10 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.*;
 import com.bin.otkrivashkin.service.impl.*;
-import com.bin.otkrivashkin.util.FileManager;
-import com.bin.otkrivashkin.util.JsonFileManager;
+import com.bin.otkrivashkin.util.DataManager;
+import com.bin.otkrivashkin.util.JsonDataManager;
 import com.bin.otkrivashkin.util.LogManager;
-import com.bin.otkrivashkin.util.TextFileManager;
+import com.bin.otkrivashkin.util.TextDataManager;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,12 +34,12 @@ public class Main {
     private static BookingService bookingService = new BookingServiceImpl(roomService, clientService);
     private static JournalService journalService = new JournalServiceImpl(bookingService);
 
-    private static FileManager textFileManager = new TextFileManager(hotelService, clientService, bookingService, roomService);
-    private static FileManager jsonFileManager = new JsonFileManager(roomService, clientService, bookingService);
+    private static DataManager textDataManager = new TextDataManager(hotelService, clientService, bookingService, roomService);
+    private static DataManager jsonDataManager = new JsonDataManager(roomService, clientService, bookingService);
     private static Scanner scanner = new Scanner(System.in);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DataManagerException {
 
         boolean inMain = true;
         while (inMain) {
@@ -249,10 +250,10 @@ public class Main {
                         }
                     }
                 case 100: // save
-                    jsonFileManager.save();
+                    jsonDataManager.save();
                     break;
                 case 200: // load
-                    jsonFileManager.load();
+                    jsonDataManager.load();
                     break;
                 case 300: // exit
                     inMain = false;
@@ -269,7 +270,7 @@ public class Main {
         bookingService.getRegisterClients();
     }
 
-    private static void unregisterClient() {
+    private static void unregisterClient() throws DataManagerException {
         bookingService.getRegisterClients();
         System.out.println("Cancel reservation by\n 1 - first name or last name\n 2 - room number\n 3 - return to the previous menu");
 
@@ -300,7 +301,7 @@ public class Main {
         bookingService.unregisterClientByFirstName(name);
     }
 
-    private static void unbookClient() {
+    private static void unbookClient() throws DataManagerException {
         System.out.println("Enter id of the client");
         int clientId = scanner.nextInt();
         try {
@@ -310,7 +311,7 @@ public class Main {
         }
     }
 
-    private static void registerClient() {
+    private static void registerClient() throws DataManagerException {
         System.out.println("Which client to book?");
         clientService.printClients();
         System.out.println("Enter the first name of the client");
@@ -475,7 +476,7 @@ public class Main {
         }
     }
 
-    private static void getRoom() {
+    private static void getRoom() throws DataManagerException {
         roomService.printRooms();
     }
 

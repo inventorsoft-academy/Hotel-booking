@@ -8,14 +8,44 @@
     </select>
     <br>
     <label for="price">Price</label>
-    <input formControlName="price" id="price" class="form-control" [ngModel]="room.price">
-
-    <label for="available">Available</label>
-    <input formControlName="available" id="available" class="form-control">
+    <input formControlName="price" id="price" class="form-control">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" formControlName="available">
+      Available
+    </label>
     <hr>
-    <button type="submit" class="btn btn-primary" [disabled]="updateRoomForm.invalid">Update room</button>
+    <button class="btn btn-primary" [disabled]="updateRoomForm.invalid">Update room</button>
   </form>
+</div>
 
+<div class="container" style="width: 55%;">
+  <h4>Old values</h4>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Room id</td>
+      <td> {{oldRoom?.roomId}}</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>{{oldRoom?.type}}</td>
+    </tr>
+    <tr>
+      <td>Price</td>
+      <td>{{oldRoom?.price}}</td>
+    </tr>
+    <tr>
+      <td>Available</td>
+      <td>{{oldRoom?.available || 'Nope'}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 

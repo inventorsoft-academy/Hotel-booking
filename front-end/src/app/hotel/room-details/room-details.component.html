@@ -1,7 +1,28 @@
 <div class="container">
-
-  <div>Room Id: {{room?.roomId}}</div>
-  <div>Type: {{room?.type}}</div>
-  <div>Price: {{room?.price}}</div>
-  <div>Available: {{room?.available || 'Nope'}}</div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Room id</td>
+      <td> {{room?.roomId}}</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>{{room?.type}}</td>
+    </tr>
+    <tr>
+      <td>Price</td>
+      <td>{{room?.price}}</td>
+    </tr>
+    <tr>
+      <td>Available</td>
+      <td>{{room?.available || 'Nope'}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>

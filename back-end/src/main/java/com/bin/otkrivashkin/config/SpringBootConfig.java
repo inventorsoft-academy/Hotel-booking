@@ -1,7 +1,7 @@
 package com.bin.otkrivashkin.config;
 
-import com.bin.otkrivashkin.util.DataBaseManagerImpl;
-import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.dao.DataBaseManagerImpl;
+import com.bin.otkrivashkin.util.DataManager;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ public class SpringBootConfig {
 
 
 	@Bean
-	public FileManager fileManager() {
+	public DataManager fileManager() {
 		return new DataBaseManagerImpl();
 	}
 
@@ -22,6 +22,5 @@ public class SpringBootConfig {
 	public DataBaseManagerImpl getDBManager(){
 		return new DataBaseManagerImpl();
 	}
-
 
 }

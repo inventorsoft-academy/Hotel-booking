@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.util;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Hotel;
 import com.bin.otkrivashkin.model.Room;
@@ -18,14 +19,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TextFileManager implements FileManager {
+public class TextDataManager implements DataManager {
 
     private HotelService hotelService;
     private ClientService clientService;
     private BookingService bookingService;
     private RoomService roomService;
 
-    public TextFileManager(HotelService hotelService, ClientService clientService, BookingService bookingService, RoomService roomService) {
+    public TextDataManager(HotelService hotelService, ClientService clientService, BookingService bookingService, RoomService roomService) {
         this.hotelService = hotelService;
         this.clientService = clientService;
         this.bookingService = bookingService;
@@ -48,13 +49,17 @@ public class TextFileManager implements FileManager {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
 
-            for (Room room : roomService.getRooms()) {
-                writer.write( ROOM_PREFIX +
-                        room.getType() + "," +
-                        room.getRoomId() + "," +
-                        room.getPrice() + "," +
-                        room.isAvailable());
-                writer.newLine();
+            try {
+                for (Room room : roomService.getRooms()) {
+					writer.write( ROOM_PREFIX +
+							room.getType() + "," +
+							room.getRoomId() + "," +
+							room.getPrice() + "," +
+							room.isAvailable());
+					writer.newLine();
+				}
+            } catch (DataManagerException e) {
+                e.printStackTrace();
             }
 
             for (Client client : clientService.getClients()) {
@@ -118,7 +123,7 @@ public class TextFileManager implements FileManager {
                     int number = Integer.parseInt(split[i + 1]);
                     double price = Double.parseDouble(split[i + 2]);
                     boolean available = Boolean.parseBoolean(split[i + 3]);
-                    rooms.add(new Room(type, price, available));
+                    rooms.add(new Room(2, type, price, available));
                 }
             }
             // TODO fix with save file
@@ -150,7 +155,7 @@ public class TextFileManager implements FileManager {
                     LocalDate startDate = LocalDate.parse(split[i + 7]);
                     LocalDate endDate = LocalDate.parse(split[i + 8]);
                     roomViaClient.put(
-                            new Room(type, price, available),
+                            new Room(1,type, price, available),
                             new Client(firstName, lastName, cash, startDate, endDate)
                     );
                 }

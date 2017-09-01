@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.util;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Client;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.service.BookingService;
@@ -17,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class JsonFileManager implements FileManager {
+public class JsonDataManager implements DataManager {
 
-    private LogManager logManager = LogManager.getLogger(JsonFileManager.class);
+    private LogManager logManager = LogManager.getLogger(JsonDataManager.class);
     private static final String ROOM_PATH = "back-end\\src\\main\\resources\\json\\rooms.json";
     private static final String CLIENT_PATH = "back-end\\src\\main\\resources\\json\\clients.json";
     private static final String REGISTER_PATH = "back-end\\src\\main\\resources\\json\\register.json";
@@ -28,7 +29,7 @@ public class JsonFileManager implements FileManager {
     private ClientService clientService;
     private BookingService bookingService;
 
-    public JsonFileManager(RoomService roomService, ClientService clientService, BookingService bookingService) {
+    public JsonDataManager(RoomService roomService, ClientService clientService, BookingService bookingService) {
         this.roomService = roomService;
         this.clientService = clientService;
         this.bookingService = bookingService;
@@ -38,11 +39,9 @@ public class JsonFileManager implements FileManager {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(ROOM_PATH), roomService.getRooms());
-        } catch (JsonGenerationException e) {
+        } catch (JsonGenerationException | JsonMappingException e) {
             logManager.error(e.getMessage());
-        } catch (JsonMappingException e) {
-            logManager.error(e.getMessage());
-        } catch (IOException e) {
+        } catch (IOException | DataManagerException e) {
             logManager.error(e.getMessage());
         }
     }

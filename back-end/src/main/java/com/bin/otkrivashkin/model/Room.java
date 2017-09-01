@@ -1,34 +1,39 @@
 package com.bin.otkrivashkin.model;
 
+import lombok.NoArgsConstructor;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
+@NoArgsConstructor
 public class Room implements Validator {
 
-    private static AtomicInteger uniqueId = new AtomicInteger();
     private int roomId;
     private RoomType type;
     private double price;
     private boolean available;
 
-    public Room() {
-        this.roomId = uniqueId.getAndIncrement();
+    public Room(int roomId, RoomType type, double price, boolean available) {
+        this.type = type;
+        this.price = price;
+        this.available = available;
+        this.roomId = roomId;
     }
 
     public Room(RoomType type, double price, boolean available) {
         this.type = type;
         this.price = price;
         this.available = available;
-        this.roomId = uniqueId.getAndIncrement();
+        this.roomId = 0;
     }
 
     public Room(RoomType type) {
         this.type = type;
         this.price = setTypeWithPrice(type);
         this.available = true;
-        this.roomId = uniqueId.getAndIncrement();
     }
+
+
 
     private double setTypeWithPrice(RoomType type) {
         switch (type) {

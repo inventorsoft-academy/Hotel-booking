@@ -1,11 +1,13 @@
 package com.bin.otkrivashkin.service.impl;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
-import com.bin.otkrivashkin.util.DataBaseManagerImpl;
+import com.bin.otkrivashkin.dao.DataBaseManagerImpl;
 import com.bin.otkrivashkin.util.LogManager;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +24,15 @@ public class RoomServiceImpl implements RoomService {
 	private List<Room> rooms;
 
 	@Autowired
-	public RoomServiceImpl(DataBaseManagerImpl fileManager) {
+	public RoomServiceImpl(DataBaseManagerImpl fileManager) throws DataManagerException {
 		this.fileManager = fileManager;
 		this.rooms = fileManager.getAllRooms();
 	}
 
 	@Override
-	public boolean addRoom(Room room) {
+	public boolean addRoom(Room room) throws DataManagerException {
 		if (room.validate().isEmpty()) {
+			room.setRoomId(rooms.size());
 			rooms.add(room);
 			fileManager.saveRoom(room);
 			return true;
@@ -57,37 +60,35 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public Room getRoom(Room room) throws NotFoundException {
+	public Room getRoom(Room room) throws NotFoundException, DataManagerException {
 		if (!room.validate().isEmpty()) throw new NotFoundException(room.validate().values().stream().findAny().get());
-		return rooms.stream().filter(r -> r.equals(room)).findFirst().get();
+		return fileManager.getAllRooms().stream().filter(r -> r.equals(room)).findFirst().get();
 	}
 
 	@Override
-	public Room getRoomByType(RoomType type) {
-		return rooms.stream().filter(r -> r.getType().equals(type)).findFirst().get();
+	public Room getRoomByType(RoomType type) throws DataManagerException {
+		return fileManager.getAllRooms().stream().filter(r -> r.getType().equals(type)).findFirst().get();
 	}
 
 	@Override
-	public boolean editRoom(Room room, int id) {
+	public boolean editRoom(JSONObject room, int id) throws DataManagerException {
 		Room roomById = getRoomById(id);
-		if (roomById != null) {
-			roomById.setType(room.getType());
-			roomById.setPrice(room.getPrice());
-			roomById.setAvailable(room.isAvailable());
-			rooms.add(roomById);
+			if (roomById != null) {
+			fileManager.updateRoom(room, id);
 			return true;
 		}
 		return false;
+
 	}
 
 	@Override
-	public List<Room> getRooms() {
-		return rooms;
+	public List<Room> getRooms() throws DataManagerException {
+		return fileManager.getAllRooms();
 	}
 
 	@Override
 	public boolean deleteRoomById(int roomId) throws Exception {
-		return rooms.remove(getRoomById(roomId));
+		return	fileManager.deleteRoom(roomId);
 	}
 
 	@Override
@@ -134,9 +135,9 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public void printRooms() {
+	public void printRooms() throws DataManagerException {
 		System.out.println(String.format("%10s %15s %15s %10s", "ID", "TYPE", "PRICE/DAY", "BUSY?"));
-		for (Room room : rooms) {
+		for (Room room : fileManager.getAllRooms()) {
 			System.out.println(String.format("%10s %15s %15s %10s",
 					room.getRoomId(),
 					room.getType(),

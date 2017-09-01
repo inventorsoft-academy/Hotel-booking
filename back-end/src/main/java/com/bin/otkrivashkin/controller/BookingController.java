@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.controller;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
@@ -8,7 +9,7 @@ import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.service.BookingService;
 import com.bin.otkrivashkin.service.ClientService;
 import com.bin.otkrivashkin.service.RoomService;
-import com.bin.otkrivashkin.util.FileManager;
+import com.bin.otkrivashkin.util.DataManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +30,17 @@ public class BookingController {
     private RoomService roomService;
     private ClientService clientService;
 
-    private FileManager fileManager;
+    private DataManager dataManager;
 
     @PostMapping("/{clientId}/{roomId}/{days}")
     public ResponseEntity<Boolean> registerClient(@PathVariable("clientId") int clientId,
                                          @PathVariable("roomId") int roomId,
-                                         @PathVariable("days") int days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+                                         @PathVariable("days") int days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException, DataManagerException {
 
         Client clientById = clientService.getClientById(clientId);
         Room roomById = roomService.getRoomById(roomId);
         if (bookingService.registerClient(clientById, roomById, days)) {
-            fileManager.save();
+            dataManager.save();
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else {

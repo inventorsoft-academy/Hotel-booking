@@ -4,16 +4,14 @@ import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
-import com.bin.otkrivashkin.service.impl.RoomServiceImpl;
 import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RoomServiceTest {
     @Autowired
@@ -22,7 +20,7 @@ public class RoomServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        globalRoom = new Room(RoomType.COUNTRY, 5543.2, true);
+        globalRoom = new Room(1,RoomType.COUNTRY, 5543.2, true);
     }
 
     @Test
@@ -100,49 +98,18 @@ public class RoomServiceTest {
 
     @Test
     public void addRooms() {
-        List<Room> rooms = Arrays.asList(
-                new Room(RoomType.LUX, 1234.5, true),
-                new Room(RoomType.INDIAN, 1234.5, true),
-                new Room(RoomType.PRESIDENT, 1234.5, true),
-                new Room(RoomType.CHEAP, 1234.5, true)
-        );
 
-        roomService.addRooms(rooms);
-
-        assertEquals(4, roomService.getRooms().size());
     }
 
     @Test
     public void addRoomsByCount() throws WrongNumberArgsException, WrongArgumentException {
-        int count = 11;
 
-        for (int i = 0; i < count; i++) {
-            roomService.addRoom(new Room(RoomType.CHEAP, 1234.5, true));
-        }
-
-        assertEquals(count, roomService.getRooms().size());
     }
 
     @Test
     public void editRoomById() throws NotFoundException {
 
-        roomService.addRoom(globalRoom);
 
-        assertEquals(globalRoom, roomService.getRoom(globalRoom));
-
-        int roomId = globalRoom.getRoomId();
-
-        globalRoom.setAvailable(false);
-        globalRoom.setPrice(166611.555);
-        globalRoom.setType(RoomType.COUNTRY);
-
-        roomService.editRoom(globalRoom, roomId);
-
-        Room room = roomService.getRoom(globalRoom);
-
-        assertEquals("Ids not equals", roomId, room.getRoomId());
-
-        assertEquals(globalRoom, roomService.getRoomById(roomId));
     }
 
 

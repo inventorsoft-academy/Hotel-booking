@@ -11,11 +11,11 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let room of roomsList" (click)="findRoomById(room.roomId)">
-    <td>{{room.roomId}}</td>
-    <td>{{room.type}}</td>
-    <td>{{room.price}}</td>
-    <td>{{room.available}}</td>
+  <tr *ngFor="let room of roomsList">
+    <td (click)="findRoomById(room.roomId)">{{room.roomId}}</td>
+    <td (click)="findRoomById(room.roomId)">{{room.type}}</td>
+    <td (click)="findRoomById(room.roomId)">{{room.price}}</td>
+    <td (click)="findRoomById(room.roomId)">{{room.available}}</td>
     <td><button md-button (click)="deleteRoomById(room.roomId)">delete</button></td>
     <td><button md-button (click)="updateRoomGet(room.roomId)">update</button></td>
   </tr>

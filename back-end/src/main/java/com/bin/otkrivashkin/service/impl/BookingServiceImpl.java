@@ -1,5 +1,6 @@
 package com.bin.otkrivashkin.service.impl;
 
+import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.exception.NotEnoughMoneyException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.exception.WrongArgumentException;
@@ -28,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException {
+    public boolean registerClient(Client client, Room room, long days) throws NotFoundException, WrongArgumentException, NotEnoughMoneyException, DataManagerException {
         if (days < 1) return false;
         client.setStartDate();
         LocalDate end = LocalDate.now().plusDays(days);
@@ -62,7 +63,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void unregisterClientById(int id) throws NotFoundException {
+    public void unregisterClientById(int id) throws NotFoundException, DataManagerException {
 
         Client registerClientById = getRegisterClientById(id);
 
@@ -96,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    private void register(Client client, Room room) throws NotFoundException, WrongArgumentException {
+    private void register(Client client, Room room) throws NotFoundException, WrongArgumentException, DataManagerException {
         if (!client.validate().isEmpty()) {
             throw new WrongArgumentException(client.validate().values().stream().findAny().get());
         }
