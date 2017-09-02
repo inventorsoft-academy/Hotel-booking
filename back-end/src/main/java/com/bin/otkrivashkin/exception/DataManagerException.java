@@ -1,6 +1,6 @@
 package com.bin.otkrivashkin.exception;
 
-public class DataManagerException  extends Exception{
+public class DataManagerException  extends RuntimeException{
 
 	private String message;
 

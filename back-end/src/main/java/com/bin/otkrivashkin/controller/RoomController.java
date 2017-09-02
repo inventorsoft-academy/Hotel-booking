@@ -4,6 +4,8 @@ import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
+import com.bin.otkrivashkin.util.JsonDataManager;
+import com.bin.otkrivashkin.util.LogManager;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,18 @@ import java.util.List;
 		RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class RoomController {
 
+	private LogManager log = LogManager.getLogger(JsonDataManager.class);
+
 	@Autowired
 	private RoomService roomService;
 
-	@GetMapping
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR, reason="INTERNAL SERVER ERROR")
 	@ExceptionHandler(DataManagerException.class)
+	public void badResponse(Exception e){
+		log.error(e.getMessage());
+	}
+
+	@GetMapping
 	public ResponseEntity<List<Room>> getRooms() throws DataManagerException {
 		if (roomService.getRooms() != null) {
 			return new ResponseEntity<>(roomService.getRooms(), HttpStatus.OK);
@@ -41,7 +50,6 @@ public class RoomController {
 	}
 
 	@PostMapping
-	@ExceptionHandler(DataManagerException.class)
 	public ResponseEntity addRoom(@RequestBody Room room) throws DataManagerException {
 		if (roomService.addRoom(room)) {
 			return new ResponseEntity(HttpStatus.CREATED);
@@ -50,7 +58,6 @@ public class RoomController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Boolean> deleteRoomById(@PathVariable int id) throws Exception {
 		if (roomService.deleteRoomById(id)) {
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -59,7 +66,6 @@ public class RoomController {
 	}
 
 	@PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ExceptionHandler(DataManagerException.class)
 	public ResponseEntity<JSONObject> editRoom(@RequestBody JSONObject room, @PathVariable int id) throws DataManagerException {
 		if (roomService.editRoom(room, id)) {
 			return new ResponseEntity<>(room, HttpStatus.OK);
