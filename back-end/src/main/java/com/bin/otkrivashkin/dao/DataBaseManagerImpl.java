@@ -7,7 +7,6 @@ import com.bin.otkrivashkin.util.ConnectionManager;
 import com.bin.otkrivashkin.util.DataManager;
 import com.bin.otkrivashkin.util.JsonDataManager;
 import com.bin.otkrivashkin.util.LogManager;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -71,15 +70,17 @@ public class DataBaseManagerImpl implements DataManager {
 	}
 
 
-	public void updateRoom(JSONObject object, int id) throws DataManagerException {
+	public void updateRoom(Room room, int id) throws DataManagerException {
 		try {
-			Statement statement = connection.getConnection().createStatement();
-			statement.executeUpdate("UPDATE rooms SET type = \'" + object.get("type").toString().toUpperCase()
-					+ "\', price = " + object.get("price") + ", available = " + object.get("available") + " WHERE room_id = " + id);
+			PreparedStatement preparedStatement = connection.getConnection().prepareStatement("UPDATE rooms SET type = ?, price =?, available = ? WHERE room_id = ?");
+			preparedStatement.setString(1, room.getType().toString());
+			preparedStatement.setDouble(2, room.getPrice());
+			preparedStatement.setBoolean(3, room.isAvailable());
+			preparedStatement.setInt(4, room.getRoomId());
+			preparedStatement.execute();
 		} catch (SQLException e) {
 			throw new DataManagerException(e.getMessage());
 		}
-
 	}
 
 	@Override

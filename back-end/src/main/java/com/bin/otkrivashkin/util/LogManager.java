@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class LogManager {
-    private static final String TEXT_FILE_PATH = "src\\main\\resources\\logs\\log.txt";
+    private static final String TEXT_FILE_PATH = "C:\\Users\\Adam\\Desktop\\GitHub\\Hotel-booking\\back-end\\src\\main\\resources\\logs\\log.txt";
 
     public static final String IN_CONSOLE = "console";
     public static final String IN_FILE = "file";
     public static final String IN_CONSOLE_AND_FILE = "console, file";
-    public String level = IN_FILE;
+    private String level = IN_FILE;
 
 
     private String className;

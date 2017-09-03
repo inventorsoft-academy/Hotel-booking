@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Primary;
 public class SpringBootConfig {
 
 	@Autowired
-	ConnectionManager connectionManager;
+	private ConnectionManager connectionManager;
 
 	@Bean
 	public DataManager fileManager() {

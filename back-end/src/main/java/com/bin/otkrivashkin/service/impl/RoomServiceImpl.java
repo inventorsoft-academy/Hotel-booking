@@ -71,7 +71,7 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public boolean editRoom(JSONObject room, int id) throws DataManagerException {
+	public boolean editRoom(Room room, int id) throws DataManagerException {
 		Room roomById = getRoomById(id);
 			if (roomById != null) {
 			fileManager.updateRoom(room, id);

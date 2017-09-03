@@ -6,7 +6,6 @@ import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
 import com.bin.otkrivashkin.util.JsonDataManager;
 import com.bin.otkrivashkin.util.LogManager;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,9 +26,9 @@ public class RoomController {
 	@Autowired
 	private RoomService roomService;
 
-	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR, reason="INTERNAL SERVER ERROR")
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "INTERNAL SERVER ERROR")
 	@ExceptionHandler(DataManagerException.class)
-	public void badResponse(Exception e){
+	public void badResponse(Exception e) {
 		log.error(e.getMessage());
 	}
 
@@ -65,13 +64,13 @@ public class RoomController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
-	@PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONObject> editRoom(@RequestBody JSONObject room, @PathVariable int id) throws DataManagerException {
+	@PostMapping(value = "/{id}")
+	public ResponseEntity<Room> editRoom(@RequestBody Room room, @PathVariable int id) throws DataManagerException {
+		room.setRoomId(id);
 		if (roomService.editRoom(room, id)) {
 			return new ResponseEntity<>(room, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
 	}
 
 	@GetMapping("/roomTypes")

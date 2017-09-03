@@ -4,8 +4,6 @@ import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.exception.NotFoundException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
-import org.json.simple.JSONObject;
-
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public interface RoomService {
 
     Room getRoomByType(RoomType roomType) throws DataManagerException;
 
-    boolean editRoom(JSONObject room, int id) throws DataManagerException;
+    boolean editRoom(Room room, int id) throws DataManagerException;
 
     boolean editRoom(Room room);
 
