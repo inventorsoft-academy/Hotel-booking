@@ -4,11 +4,9 @@ import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.service.RoomService;
-import com.bin.otkrivashkin.util.JsonDataManager;
 import com.bin.otkrivashkin.util.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +19,7 @@ import java.util.List;
 		RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class RoomController {
 
-	private LogManager log = LogManager.getLogger(JsonDataManager.class);
+	private LogManager log = LogManager.getLogger(RoomController.class);
 
 	@Autowired
 	private RoomService roomService;
@@ -77,6 +75,14 @@ public class RoomController {
 	public ResponseEntity<List<RoomType>> getRoomTypes() {
 		if (roomService.getRoomTypes() != null) {
 			return new ResponseEntity<>(roomService.getRoomTypes(), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping("/available")
+	public ResponseEntity<List<Room>> getAvailableRooms() {
+		if (roomService.getAvailableRooms() != null) {
+			return new ResponseEntity<>(roomService.getAvailableRooms(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}

@@ -4,8 +4,6 @@ import com.bin.otkrivashkin.exception.DataManagerException;
 import com.bin.otkrivashkin.model.Room;
 import com.bin.otkrivashkin.model.RoomType;
 import com.bin.otkrivashkin.util.ConnectionManager;
-import com.bin.otkrivashkin.util.DataManager;
-import com.bin.otkrivashkin.util.JsonDataManager;
 import com.bin.otkrivashkin.util.LogManager;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class DataBaseManagerImpl implements DataManager {
+public class RoomDAO {
 
-	private LogManager log = LogManager.getLogger(JsonDataManager.class);
+	private LogManager log = LogManager.getLogger(RoomDAO.class);
 
 	private ConnectionManager connection;
 
-	public DataBaseManagerImpl(ConnectionManager connection) {
+	public RoomDAO(ConnectionManager connection) {
 		this.connection = connection;
 	}
 
@@ -83,14 +81,49 @@ public class DataBaseManagerImpl implements DataManager {
 		}
 	}
 
-	@Override
-	public void save() {
-
-
+	public List<Room> getAvailableRooms() {
+		List<Room> rooms = new ArrayList<>();
+		try {
+			Statement statement = connection.getConnection().createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM rooms WHERE available = 'true'");
+			while (rs.next()) {
+				rooms.add(new Room(rs.getInt("room_id"), RoomType.valueOf(rs.getString("type")),
+						rs.getDouble("price"), rs.getBoolean("available")));
+			}
+		} catch (SQLException e) {
+			throw new DataManagerException(e.getMessage());
+		}
+		return rooms;
 	}
 
-	@Override
-	public void load() {
+	public boolean setRoomAvailable(int id, boolean available) {
+		try {
+			PreparedStatement preparedStatement = connection.getConnection().prepareStatement("UPDATE rooms SET available = ? WHERE room_id = ?");
+			preparedStatement.setBoolean(1, available);
+			preparedStatement.setInt(2, id);
+			preparedStatement.execute();
+			return true;
+		} catch (SQLException e) {
+			throw new DataManagerException(e.getMessage());
+		}
+	}
 
+	public Room getRoomById(int id) {
+		Room room = null;
+		try {
+			Statement statement = connection.getConnection().createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM rooms WHERE room_id =" + id);
+			while (rs.next()) {
+				room = new Room(rs.getInt("room_id"), RoomType.valueOf(rs.getString("type")),
+						rs.getDouble("price"), rs.getBoolean("available"));
+			}
+		} catch (SQLException e) {
+			throw new DataManagerException(e.getMessage());
+		}
+		if (room == null) {
+			throw new DataManagerException("room not found");
+		} else {
+			return room;
+		}
 	}
 }

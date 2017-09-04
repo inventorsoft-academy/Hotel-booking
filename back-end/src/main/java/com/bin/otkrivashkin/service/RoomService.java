@@ -9,15 +9,9 @@ import java.util.List;
 
 public interface RoomService {
 
-//    boolean saveRoom(Room room);
-
-    Room getRoom(Room room) throws NotFoundException, DataManagerException;
-
-    Room getRoomByType(RoomType roomType) throws DataManagerException;
+    List<Room> getAvailableRooms();
 
     boolean editRoom(Room room, int id) throws DataManagerException;
-
-    boolean editRoom(Room room);
 
     boolean addRoom(Room room) throws DataManagerException;
 
@@ -27,15 +21,6 @@ public interface RoomService {
 
     boolean deleteRoomById(int roomId) throws Exception;
 
-    void addRooms(List<Room> rooms);
-
-    void printTypes();
-
-    void addRoomsByCount(int count, RoomType type);
-
-    RoomType getRoomType(int typeOfRoom);
-
-    void printRooms() throws DataManagerException;
 
     List<RoomType> getRoomTypes();
 }
